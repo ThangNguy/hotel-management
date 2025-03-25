@@ -1,0 +1,190 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "F:\\Dev\\BE\\tnvn-dev\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0AE4E188-25C6-4212-99F8-333B37E592BD}|HotelManagement.API\\HotelManagement.API.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0AE4E188-25C6-4212-99F8-333B37E592BD}|HotelManagement.API\\HotelManagement.API.csproj|solutionrelative:hotelmanagement.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0AE4E188-25C6-4212-99F8-333B37E592BD}|HotelManagement.API\\HotelManagement.API.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{0AE4E188-25C6-4212-99F8-333B37E592BD}|HotelManagement.API\\HotelManagement.API.csproj|solutionrelative:hotelmanagement.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B00EE1-3DD2-44DF-A8CB-3C480EB831AC}|HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.infrastructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1B00EE1-3DD2-44DF-A8CB-3C480EB831AC}|HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj|solutionrelative:hotelmanagement.infrastructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B00EE1-3DD2-44DF-A8CB-3C480EB831AC}|HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.infrastructure\\hotelmanagement.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E1B00EE1-3DD2-44DF-A8CB-3C480EB831AC}|HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj|solutionrelative:hotelmanagement.infrastructure\\hotelmanagement.infrastructure.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E1B00EE1-3DD2-44DF-A8CB-3C480EB831AC}|HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.infrastructure\\persistence\\hoteldbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E1B00EE1-3DD2-44DF-A8CB-3C480EB831AC}|HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj|solutionrelative:hotelmanagement.infrastructure\\persistence\\hoteldbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.domain\\entities\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|solutionrelative:hotelmanagement.domain\\entities\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.domain\\entities\\discount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|solutionrelative:hotelmanagement.domain\\entities\\discount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.domain\\entities\\invoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|solutionrelative:hotelmanagement.domain\\entities\\invoice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.domain\\entities\\room.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|solutionrelative:hotelmanagement.domain\\entities\\room.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|f:\\dev\\be\\tnvn-dev\\hotelmanagement.domain\\hotelmanagement.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{1B97254E-FD81-4A24-98C2-F021968E75B6}|HotelManagement.Domain\\HotelManagement.Domain.csproj|solutionrelative:hotelmanagement.domain\\hotelmanagement.domain.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.API\\Program.cs",
+              "RelativeDocumentMoniker": "HotelManagement.API\\Program.cs",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.API\\Program.cs",
+              "RelativeToolTip": "HotelManagement.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T06:49:39.02Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.API\\appsettings.json",
+              "RelativeDocumentMoniker": "HotelManagement.API\\appsettings.json",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.API\\appsettings.json",
+              "RelativeToolTip": "HotelManagement.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-25T06:49:17.737Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DependencyInjection.cs",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Infrastructure\\DependencyInjection.cs",
+              "RelativeDocumentMoniker": "HotelManagement.Infrastructure\\DependencyInjection.cs",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Infrastructure\\DependencyInjection.cs",
+              "RelativeToolTip": "HotelManagement.Infrastructure\\DependencyInjection.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T06:45:56.418Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "HotelDbContext.cs",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Infrastructure\\Persistence\\HotelDbContext.cs",
+              "RelativeDocumentMoniker": "HotelManagement.Infrastructure\\Persistence\\HotelDbContext.cs",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Infrastructure\\Persistence\\HotelDbContext.cs",
+              "RelativeToolTip": "HotelManagement.Infrastructure\\Persistence\\HotelDbContext.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABUAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T06:44:29.218Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HotelManagement.Infrastructure",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj",
+              "RelativeDocumentMoniker": "HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj",
+              "RelativeToolTip": "HotelManagement.Infrastructure\\HotelManagement.Infrastructure.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-25T06:43:52.533Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Invoice.cs",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Invoice.cs",
+              "RelativeDocumentMoniker": "HotelManagement.Domain\\Entities\\Invoice.cs",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Invoice.cs",
+              "RelativeToolTip": "HotelManagement.Domain\\Entities\\Invoice.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T06:42:38.158Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Discount.cs",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Discount.cs",
+              "RelativeDocumentMoniker": "HotelManagement.Domain\\Entities\\Discount.cs",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Discount.cs",
+              "RelativeToolTip": "HotelManagement.Domain\\Entities\\Discount.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T06:42:15.925Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Booking.cs",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Booking.cs",
+              "RelativeDocumentMoniker": "HotelManagement.Domain\\Entities\\Booking.cs",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Booking.cs",
+              "RelativeToolTip": "HotelManagement.Domain\\Entities\\Booking.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T06:41:55.852Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Room.cs",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Room.cs",
+              "RelativeDocumentMoniker": "HotelManagement.Domain\\Entities\\Room.cs",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\Entities\\Room.cs",
+              "RelativeToolTip": "HotelManagement.Domain\\Entities\\Room.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-25T06:41:32.158Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "HotelManagement.Domain",
+              "DocumentMoniker": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\HotelManagement.Domain.csproj",
+              "RelativeDocumentMoniker": "HotelManagement.Domain\\HotelManagement.Domain.csproj",
+              "ToolTip": "F:\\Dev\\BE\\tnvn-dev\\HotelManagement.Domain\\HotelManagement.Domain.csproj",
+              "RelativeToolTip": "HotelManagement.Domain\\HotelManagement.Domain.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-03-25T06:41:15.338Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
