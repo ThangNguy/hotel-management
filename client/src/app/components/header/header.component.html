@@ -1,0 +1,37 @@
+<header class="header">
+  <mat-toolbar color="primary">
+    <div class="container">
+      <div class="logo">
+        <a [routerLink]="['/']">
+          <mat-icon>hotel</mat-icon>
+          <span>{{ 'APP_TITLE' | translate }}</span>
+        </a>
+      </div>
+      
+      <div class="navigation-container">
+        <nav class="navigation">
+          <a mat-button routerLink="/home" routerLinkActive="active">{{ 'HOME' | translate }}</a>
+          <a mat-button routerLink="/rooms" routerLinkActive="active">{{ 'ROOMS' | translate }}</a>
+          <a mat-button routerLink="/amenities" routerLinkActive="active">{{ 'AMENITIES' | translate }}</a>
+          <a mat-button routerLink="/contact" routerLinkActive="active">{{ 'CONTACT' | translate }}</a>
+          <a mat-button routerLink="/admin" routerLinkActive="active">{{ 'ADMIN' | translate }}</a>
+        </nav>
+        
+        <div class="language-selector">
+          <button mat-button [matMenuTriggerFor]="languageMenu" class="language-button">
+            {{ 'LANGUAGE' | translate }}
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </button>
+          <mat-menu #languageMenu="matMenu">
+            <button mat-menu-item (click)="switchLanguage('vi')" [class.active]="currentLang === 'vi'">
+              <span>Tiếng Việt</span>
+            </button>
+            <button mat-menu-item (click)="switchLanguage('en')" [class.active]="currentLang === 'en'">
+              <span>English</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </mat-toolbar>
+</header>

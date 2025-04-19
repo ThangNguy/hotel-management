@@ -1,0 +1,118 @@
+<h2 mat-dialog-title>{{isEdit ? 'Chỉnh sửa phòng' : 'Thêm phòng mới'}}</h2>
+
+<form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tên phòng</mat-label>
+        <input matInput formControlName="name" placeholder="Nhập tên phòng">
+        <mat-error *ngIf="roomForm.get('name')?.hasError('required')">
+          Tên phòng là bắt buộc
+        </mat-error>
+        <mat-error *ngIf="roomForm.get('name')?.hasError('minlength')">
+          Tên phòng phải có ít nhất 3 ký tự
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mô tả phòng</mat-label>
+        <textarea matInput formControlName="description" rows="4" placeholder="Nhập mô tả chi tiết về phòng"></textarea>
+        <mat-error *ngIf="roomForm.get('description')?.hasError('required')">
+          Mô tả phòng là bắt buộc
+        </mat-error>
+        <mat-error *ngIf="roomForm.get('description')?.hasError('minlength')">
+          Mô tả phòng phải có ít nhất 10 ký tự
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row two-columns">
+      <mat-form-field appearance="outline">
+        <mat-label>Giá/đêm (VND)</mat-label>
+        <input matInput type="number" formControlName="price" placeholder="Ví dụ: 1000000">
+        <mat-error *ngIf="roomForm.get('price')?.hasError('required')">
+          Giá phòng là bắt buộc
+        </mat-error>
+        <mat-error *ngIf="roomForm.get('price')?.hasError('min')">
+          Giá phòng không thể là số âm
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Sức chứa (người)</mat-label>
+        <input matInput type="number" formControlName="capacity" placeholder="Ví dụ: 2">
+        <mat-error *ngIf="roomForm.get('capacity')?.hasError('required')">
+          Sức chứa là bắt buộc
+        </mat-error>
+        <mat-error *ngIf="roomForm.get('capacity')?.hasError('min')">
+          Sức chứa phải ít nhất 1 người
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row two-columns">
+      <mat-form-field appearance="outline">
+        <mat-label>Diện tích (m²)</mat-label>
+        <input matInput type="number" formControlName="size" placeholder="Ví dụ: 30">
+        <mat-error *ngIf="roomForm.get('size')?.hasError('required')">
+          Diện tích là bắt buộc
+        </mat-error>
+        <mat-error *ngIf="roomForm.get('size')?.hasError('min')">
+          Diện tích phải lớn hơn 0
+        </mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>URL hình ảnh</mat-label>
+        <input matInput formControlName="imageUrl" placeholder="https://example.com/image.jpg">
+        <mat-error *ngIf="roomForm.get('imageUrl')?.hasError('required')">
+          URL hình ảnh là bắt buộc
+        </mat-error>
+        <mat-error *ngIf="roomForm.get('imageUrl')?.hasError('pattern')">
+          URL hình ảnh không hợp lệ
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tiện nghi phòng</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Tiện nghi">
+          <mat-chip-row *ngFor="let amenity of amenities" (removed)="removeAmenity(amenity)">
+            {{amenity}}
+            <button matChipRemove [attr.aria-label]="'remove ' + amenity">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+          <input placeholder="Thêm tiện nghi..."
+                 [matChipInputFor]="chipGrid"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 (matChipInputTokenEnd)="addAmenity($event)">
+        </mat-chip-grid>
+        <mat-hint>Nhấn Enter hoặc phẩy (,) để thêm tiện nghi mới</mat-hint>
+      </mat-form-field>
+    </div>
+    
+    <div *ngIf="isEdit && data?.room" class="preview-section">
+      <h3>Xem trước hình ảnh</h3>
+      <div class="image-preview">
+        <img [src]="roomForm.get('imageUrl')?.value || data.room?.imageUrl" 
+             alt="Hình ảnh phòng" 
+             [class.invalid]="roomForm.get('imageUrl')?.invalid">
+        <div class="invalid-overlay" *ngIf="roomForm.get('imageUrl')?.invalid">
+          <mat-icon>broken_image</mat-icon>
+          <span>Hình ảnh không hợp lệ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Hủy</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="roomForm.invalid">
+      {{isEdit ? 'Cập nhật' : 'Thêm'}}
+    </button>
+  </div>
+</form>

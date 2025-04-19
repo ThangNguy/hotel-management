@@ -1,0 +1,66 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <a [routerLink]="['/']">
+          <mat-icon>hotel</mat-icon>
+          <span>{{ 'APP_TITLE' | translate }}</span>
+        </a>
+        <p class="tagline">{{ 'WELCOME_MESSAGE' | translate }}</p>
+      </div>
+      
+      <div class="footer-links">
+        <div class="link-column">
+          <h3>{{ 'APP_TITLE' | translate }}</h3>
+          <ul>
+            <li><a routerLink="/about">{{ 'ABOUT_US' | translate }}</a></li>
+            <li><a routerLink="/rooms">{{ 'ROOMS' | translate }}</a></li>
+            <li><a routerLink="/amenities">{{ 'AMENITIES' | translate }}</a></li>
+            <li><a routerLink="/contact">{{ 'CONTACT' | translate }}</a></li>
+          </ul>
+        </div>
+        
+        <div class="link-column">
+          <h3>{{ 'SERVICES' | translate }}</h3>
+          <ul>
+            <li><a routerLink="/restaurant">{{ 'RESTAURANT' | translate }}</a></li>
+            <li><a routerLink="/spa">{{ 'SPA' | translate }}</a></li>
+            <li><a routerLink="/gym">{{ 'GYM' | translate }}</a></li>
+            <li><a routerLink="/pool">{{ 'POOL' | translate }}</a></li>
+          </ul>
+        </div>
+        
+        <div class="link-column">
+          <h3>{{ 'SUPPORT' | translate }}</h3>
+          <ul>
+            <li><a routerLink="/faq">{{ 'FAQ' | translate }}</a></li>
+            <li><a routerLink="/terms">{{ 'TERMS' | translate }}</a></li>
+            <li><a routerLink="/privacy">{{ 'PRIVACY' | translate }}</a></li>
+            <li><a routerLink="/careers">{{ 'CAREERS' | translate }}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div class="copyright">
+        {{ 'FOOTER_COPYRIGHT' | translate }}
+      </div>
+      
+      <div class="social-links">
+        <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="social-icon">
+          <mat-icon>facebook</mat-icon>
+        </a>
+        <a href="https://twitter.com" target="_blank" aria-label="Twitter" class="social-icon">
+          <mat-icon>twitter</mat-icon>
+        </a>
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="social-icon">
+          <mat-icon>photo_camera</mat-icon>
+        </a>
+        <a href="https://youtube.com" target="_blank" aria-label="YouTube" class="social-icon">
+          <mat-icon>smart_display</mat-icon>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

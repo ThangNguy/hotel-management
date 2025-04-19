@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>{{room.name}}</h2>
+<mat-dialog-content class="room-detail-content">
+  <div class="room-images">
+    <img [src]="room.imageUrl" [alt]="room.name" class="main-image">
+    <!-- Có thể thêm hình ảnh gallery trong tương lai -->
+  </div>
+  
+  <div class="room-info">
+    <div class="price-section">
+      <span class="price">{{formatPrice(room.price)}}</span>
+      <span class="per-night">/ đêm</span>
+    </div>
+    
+    <div class="details-section">
+      <div class="detail-item">
+        <mat-icon>people</mat-icon>
+        <span>Số lượng: {{room.capacity}} người</span>
+      </div>
+      <div class="detail-item">
+        <mat-icon>aspect_ratio</mat-icon>
+        <span>Diện tích: {{room.size}} m²</span>
+      </div>
+    </div>
+    
+    <div class="description-section">
+      <h3>Mô tả</h3>
+      <p>{{room.description}}</p>
+    </div>
+    
+    <div class="amenities-section">
+      <h3>Tiện nghi phòng</h3>
+      <div class="amenities-grid">
+        @for (amenity of room.amenities; track amenity) {
+          <div class="amenity-item">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{amenity}}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Đóng</button>
+  <button mat-raised-button color="primary">Đặt phòng ngay</button>
+</mat-dialog-actions>

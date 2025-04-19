@@ -1,0 +1,127 @@
+<h2 mat-dialog-title>{{ isEdit ? ('BOOKING.EDIT_TITLE' | translate) : ('BOOKING.CREATE_TITLE' | translate) }}</h2>
+
+<form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
+  <mat-dialog-content>
+    <div class="form-container">
+      <!-- Guest Information -->
+      <h3>{{ 'BOOKING.GUEST_INFO' | translate }}</h3>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.GUEST_NAME' | translate }}</mat-label>
+          <input matInput formControlName="guestName" required>
+          <mat-error *ngIf="bookingForm.get('guestName')?.hasError('required')">
+            {{ 'VALIDATION.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.EMAIL' | translate }}</mat-label>
+          <input matInput formControlName="guestEmail" type="email" required>
+          <mat-error *ngIf="bookingForm.get('guestEmail')?.hasError('required')">
+            {{ 'VALIDATION.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="bookingForm.get('guestEmail')?.hasError('email')">
+            {{ 'VALIDATION.EMAIL_INVALID' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.PHONE' | translate }}</mat-label>
+          <input matInput formControlName="guestPhone" required>
+          <mat-error *ngIf="bookingForm.get('guestPhone')?.hasError('required')">
+            {{ 'VALIDATION.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Room and Dates -->
+      <h3>{{ 'BOOKING.RESERVATION_DETAILS' | translate }}</h3>
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.ROOM' | translate }}</mat-label>
+          <mat-select formControlName="roomId" required (selectionChange)="validateRoomCapacity()">
+            <mat-option *ngFor="let room of availableRooms" [value]="room.id">
+              {{ room.name }} ({{ getFormattedPrice(room.price) }})
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="bookingForm.get('roomId')?.hasError('required')">
+            {{ 'VALIDATION.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row date-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.CHECK_IN' | translate }}</mat-label>
+          <input matInput [matDatepicker]="checkInPicker" formControlName="checkInDate" [min]="minDate" required
+                 (dateChange)="updateCheckOutMinDate()">
+          <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+          <mat-datepicker #checkInPicker></mat-datepicker>
+          <mat-error *ngIf="bookingForm.get('checkInDate')?.hasError('required')">
+            {{ 'VALIDATION.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.CHECK_OUT' | translate }}</mat-label>
+          <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOutDate" [min]="minCheckOutDate" required>
+          <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+          <mat-datepicker #checkOutPicker></mat-datepicker>
+          <mat-error *ngIf="bookingForm.get('checkOutDate')?.hasError('required')">
+            {{ 'VALIDATION.REQUIRED' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.GUESTS' | translate }}</mat-label>
+          <input matInput type="number" formControlName="numberOfGuests" required min="1" (change)="validateRoomCapacity()">
+          <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('required')">
+            {{ 'VALIDATION.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('min')">
+            {{ 'VALIDATION.MIN_GUESTS' | translate }}
+          </mat-error>
+          <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('exceedsCapacity')">
+            {{ 'VALIDATION.EXCEEDS_CAPACITY' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="isEdit" class="form-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'BOOKING.STATUS' | translate }}</mat-label>
+          <mat-select formControlName="status" required>
+            <mat-option *ngFor="let status of bookingStatuses" [value]="status">
+              {{ getStatusLabel(status) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'BOOKING.SPECIAL_REQUESTS' | translate }}</mat-label>
+          <textarea matInput formControlName="specialRequests" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="!isRoomAvailable" class="availability-warning">
+        <mat-icon color="warn">warning</mat-icon>
+        <span>{{ 'BOOKING.ROOM_NOT_AVAILABLE_WARNING' | translate }}</span>
+      </div>
+    </div>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">{{ 'COMMON.CANCEL' | translate }}</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid || !isRoomAvailable">
+      {{ isEdit ? ('COMMON.UPDATE' | translate) : ('COMMON.SAVE' | translate) }}
+    </button>
+  </mat-dialog-actions>
+</form>

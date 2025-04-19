@@ -1,0 +1,22 @@
+<section class="amenities-section" id="amenities">
+  <div class="container">
+    <div class="section-header">
+      <h2>Tiện Nghi & Dịch Vụ</h2>
+      <p>Khám phá những tiện nghi và dịch vụ cao cấp tại khách sạn của chúng tôi</p>
+    </div>
+    
+    <div class="amenities-grid">
+      @for (amenity of amenities; track amenity.name) {
+        <div class="amenity-card">
+          <div class="amenity-icon">
+            <mat-icon>{{amenity.icon}}</mat-icon>
+          </div>
+          <div class="amenity-content">
+            <h3>{{amenity.name}}</h3>
+            <p>{{amenity.description}}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

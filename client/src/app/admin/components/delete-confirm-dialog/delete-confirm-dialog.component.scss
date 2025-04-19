@@ -1,0 +1,13 @@
+.warning {
+  color: #f44336;
+  font-weight: 500;
+  margin-top: 16px;
+}
+
+mat-dialog-actions {
+  margin-top: 24px;
+  
+  button {
+    min-width: 100px;
+  }
+}

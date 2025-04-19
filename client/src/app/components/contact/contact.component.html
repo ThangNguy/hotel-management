@@ -1,0 +1,106 @@
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <h2>Liên Hệ Với Chúng Tôi</h2>
+      <p>Hãy liên hệ với chúng tôi để nhận sự hỗ trợ tốt nhất</p>
+    </div>
+    
+    <div class="contact-wrapper">
+      <div class="contact-info">
+        <div class="contact-info-item">
+          <mat-icon>location_on</mat-icon>
+          <div>
+            <h3>Địa chỉ</h3>
+            <p>123 Đường Lê Lợi, Quận 1, TP Hồ Chí Minh</p>
+          </div>
+        </div>
+        
+        <div class="contact-info-item">
+          <mat-icon>phone</mat-icon>
+          <div>
+            <h3>Điện thoại</h3>
+            <p>+84 28 1234 5678</p>
+          </div>
+        </div>
+        
+        <div class="contact-info-item">
+          <mat-icon>email</mat-icon>
+          <div>
+            <h3>Email</h3>
+            <!-- <p>info@luxuryhotel.com</p> -->
+          </div>
+        </div>
+        
+        <div class="contact-info-item">
+          <mat-icon>access_time</mat-icon>
+          <div>
+            <h3>Giờ làm việc</h3>
+            <p>24/7 - Luôn sẵn sàng phục vụ bạn</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="contact-form">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Gửi thắc mắc của bạn</mat-card-title>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Họ và tên</mat-label>
+                <input matInput formControlName="fullName">
+                <mat-error *ngIf="contactForm.get('fullName')?.hasError('required')">
+                  Vui lòng nhập họ tên
+                </mat-error>
+                <mat-error *ngIf="contactForm.get('fullName')?.hasError('minlength')">
+                  Họ tên phải có ít nhất 3 ký tự
+                </mat-error>
+              </mat-form-field>
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" formControlName="email">
+                  <mat-error *ngIf="contactForm.get('email')?.hasError('required')">
+                    Vui lòng nhập email
+                  </mat-error>
+                  <mat-error *ngIf="contactForm.get('email')?.hasError('email')">
+                    Email không hợp lệ
+                  </mat-error>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>Số điện thoại</mat-label>
+                  <input matInput type="tel" formControlName="phone">
+                  <mat-error *ngIf="contactForm.get('phone')?.hasError('required')">
+                    Vui lòng nhập số điện thoại
+                  </mat-error>
+                  <mat-error *ngIf="contactForm.get('phone')?.hasError('pattern')">
+                    Số điện thoại phải có 10-11 số
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nội dung</mat-label>
+                <textarea matInput rows="5" formControlName="message"></textarea>
+                <mat-error *ngIf="contactForm.get('message')?.hasError('required')">
+                  Vui lòng nhập nội dung
+                </mat-error>
+                <mat-error *ngIf="contactForm.get('message')?.hasError('minlength')">
+                  Nội dung phải có ít nhất 10 ký tự
+                </mat-error>
+              </mat-form-field>
+              
+              <button mat-raised-button color="primary" type="submit" class="submit-button">
+                Gửi
+              </button>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</section>

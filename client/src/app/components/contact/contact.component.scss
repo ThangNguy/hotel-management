@@ -1,0 +1,152 @@
+.contact-section {
+  padding: 80px 0;
+  background-color: #f9f9f9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+.contact-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 40px;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.contact-info-item {
+  display: flex;
+  align-items: flex-start;
+  
+  mat-icon {
+    color: #1976d2;
+    font-size: 28px;
+    height: 28px;
+    width: 28px;
+    margin-right: 16px;
+    margin-top: 4px;
+  }
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  p {
+    margin: 0;
+    color: #666;
+    line-height: 1.5;
+  }
+}
+
+.contact-form {
+  mat-card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    
+    mat-card-header {
+      margin-bottom: 24px;
+      
+      mat-card-title {
+        font-size: 1.5rem;
+        color: #333;
+      }
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  
+  mat-form-field {
+    flex: 1;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  margin-top: 16px;
+}
+
+// Google Maps placeholder - can be implemented later
+.map-container {
+  height: 300px;
+  margin-top: 50px;
+  background-color: #e9e9e9;
+  border-radius: 8px;
+  position: relative;
+  
+  &:after {
+    content: 'Google Maps will be integrated here';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #666;
+    font-style: italic;
+  }
+}
+
+@media (max-width: 992px) {
+  .contact-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-info {
+    order: 2;
+  }
+  
+  .contact-form {
+    order: 1;
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-header h2 {
+    font-size: 2rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}

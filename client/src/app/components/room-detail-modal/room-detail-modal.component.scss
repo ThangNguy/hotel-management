@@ -1,0 +1,115 @@
+.room-detail-content {
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.room-images {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+  
+  .main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.price-section {
+  margin-bottom: 20px;
+  
+  .price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1976d2;
+  }
+  
+  .per-night {
+    font-size: 1rem;
+    color: #777;
+  }
+}
+
+.details-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+  
+  .detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 150px;
+    
+    mat-icon {
+      color: #666;
+    }
+    
+    span {
+      color: #333;
+      font-weight: 500;
+    }
+  }
+}
+
+h3 {
+  color: #333;
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.description-section {
+  margin-bottom: 20px;
+  
+  p {
+    color: #666;
+    line-height: 1.6;
+  }
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  
+  .amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+      color: #4CAF50;
+    }
+    
+    span {
+      color: #555;
+    }
+  }
+}
+
+mat-dialog-actions {
+  padding-top: 16px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .room-images {
+    height: 200px;
+  }
+  
+  .price-section .price {
+    font-size: 1.5rem;
+  }
+  
+  .amenities-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

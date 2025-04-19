@@ -1,0 +1,257 @@
+.admin-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// Sidebar styles
+.sidebar-container {
+  width: 250px;
+  background-color: #1c2a48;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%);
+  
+  &.open {
+    transform: translateX(0);
+  }
+}
+
+.sidebar-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #192440;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .hotel-name {
+    margin: 0;
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .close-button {
+    color: white;
+  }
+}
+
+.sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+}
+
+.nav-section {
+  padding: 16px 0;
+  
+  a {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    
+    mat-icon {
+      margin-right: 16px;
+      opacity: 0.8;
+    }
+    
+    span {
+      font-size: 16px;
+    }
+    
+    &:hover, &.active {
+      background-color: rgba(255, 255, 255, 0.08);
+      color: white;
+      
+      mat-icon {
+        opacity: 1;
+      }
+    }
+    
+    &.active {
+      border-left: 4px solid #2196f3;
+    }
+  }
+}
+
+.user-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Main content styles
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+  width: 100%;
+  transition: all 0.3s ease;
+  background-color: #f7f9fc;
+}
+
+.top-bar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+  
+  .menu-button {
+    margin-right: 16px;
+  }
+  
+  .mobile-title {
+    font-size: 20px;
+    margin: 0;
+  }
+  
+  .flex-spacer {
+    flex: 1;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    
+    .welcome-text {
+      margin-right: 12px;
+      font-size: 14px;
+      
+      @media (max-width: 600px) {
+        display: none;
+      }
+    }
+  }
+}
+
+.content-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+// Drawer open state
+.drawer-open {
+  .sidebar-container {
+    transform: translateX(0);
+  }
+  
+  .main-container {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+  }
+}
+
+.admin-toolbar {
+  display: flex;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    
+    .toolbar-title {
+      margin-left: 8px;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+  }
+  
+  .toolbar-links {
+    display: flex;
+    gap: 8px;
+    
+    a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      height: 64px;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+      
+      &.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-bottom-color: #ffffff;
+      }
+      
+      mat-icon {
+        margin-right: 4px;
+      }
+    }
+  }
+  
+  .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    .user-name {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.admin-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f5f5f5;
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .admin-toolbar {
+    .toolbar-links {
+      a span {
+        display: none;
+      }
+    }
+    
+    .toolbar-right {
+      .user-name {
+        display: none;
+      }
+    }
+  }
+  
+  .drawer-open {
+    .sidebar-container {
+      transform: translateX(0);
+    }
+    
+    .main-container {
+      margin-left: 0;
+      width: 100%;
+      
+      &:before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+      }
+    }
+  }
+}

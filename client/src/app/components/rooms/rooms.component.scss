@@ -1,0 +1,160 @@
+.rooms-section {
+  padding: 80px 0;
+  background-color: #f9f9f9;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+  
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #333;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.room-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.room-image {
+  height: 200px;
+  object-fit: cover;
+}
+
+mat-card-content {
+  flex-grow: 1;
+  padding: 16px;
+  
+  h3 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+  }
+}
+
+.room-description {
+  color: #666;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.room-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  
+  .amenity-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #555;
+    background-color: #f1f1f1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    
+    .amenity-icon {
+      font-size: 14px;
+      height: 14px;
+      width: 14px;
+      margin-right: 4px;
+      color: #4CAF50;
+    }
+  }
+  
+  .amenity-more {
+    font-size: 0.8rem;
+    color: #777;
+    font-style: italic;
+  }
+}
+
+.room-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+}
+
+.room-info {
+  display: flex;
+  gap: 16px;
+  
+  div {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #555;
+    
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+      margin-right: 4px;
+    }
+  }
+}
+
+.room-price {
+  text-align: right;
+  
+  .price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1976d2;
+  }
+  
+  .per-night {
+    font-size: 0.9rem;
+    color: #777;
+  }
+}
+
+@media (max-width: 768px) {
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header h2 {
+    font-size: 2rem;
+  }
+}

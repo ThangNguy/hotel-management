@@ -1,0 +1,48 @@
+.form-section {
+  margin-bottom: 24px;
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+}
+
+.form-row {
+  margin-bottom: 16px;
+  
+  &.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-dialog-content {
+  max-height: 70vh;
+}
+
+mat-dialog-actions {
+  margin-top: 24px;
+  padding: 16px 0;
+  
+  button {
+    min-width: 100px;
+  }
+}

@@ -1,0 +1,119 @@
+<section class="rooms-section" id="rooms">
+  <div class="container">
+    <div class="section-header">
+      <h2>{{ 'OUR_ROOMS' | translate }}</h2>
+      <p class="section-subtitle">{{ 'FIND_ROOM' | translate }}</p>
+    </div>
+    
+    <!-- Room search form -->
+    <div class="room-search">
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+        <div class="search-row">
+          <div class="search-field">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'CHECK_IN' | translate }}</mat-label>
+              <input matInput [matDatepicker]="checkInPicker" formControlName="checkInDate" [min]="minDate">
+              <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+              <mat-datepicker #checkInPicker></mat-datepicker>
+              <mat-error *ngIf="searchForm.get('checkInDate')?.hasError('required')">
+                {{ 'REQUIRED_CHECK_IN' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="search-field">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'CHECK_OUT' | translate }}</mat-label>
+              <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOutDate" [min]="minCheckOutDate">
+              <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+              <mat-datepicker #checkOutPicker></mat-datepicker>
+              <mat-error *ngIf="searchForm.get('checkOutDate')?.hasError('required')">
+                {{ 'REQUIRED_CHECK_OUT' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="search-field">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'ADULTS' | translate }}</mat-label>
+              <input matInput type="number" formControlName="adults" min="1" max="10">
+              <mat-error *ngIf="searchForm.get('adults')?.hasError('required')">
+                {{ 'REQUIRED_ADULTS' | translate }}
+              </mat-error>
+              <mat-error *ngIf="searchForm.get('adults')?.hasError('min')">
+                {{ 'MIN_ADULTS' | translate }}
+              </mat-error>
+              <mat-error *ngIf="searchForm.get('adults')?.hasError('max')">
+                {{ 'MAX_ADULTS' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="search-field">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'CHILDREN' | translate }}</mat-label>
+              <input matInput type="number" formControlName="children" min="0" max="10">
+              <mat-error *ngIf="searchForm.get('children')?.hasError('min')">
+                {{ 'MIN_CHILDREN' | translate }}
+              </mat-error>
+              <mat-error *ngIf="searchForm.get('children')?.hasError('max')">
+                {{ 'MAX_CHILDREN' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="search-button">
+            <button mat-raised-button color="primary" type="submit" [disabled]="searchForm.invalid">
+              {{ 'CHECK_AVAILABILITY' | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Rooms display -->
+    <div class="rooms-container">
+      <div *ngIf="isLoading" class="loading">
+        <mat-spinner diameter="60"></mat-spinner>
+        <p>{{ 'COMMON.LOADING' | translate }}</p>
+      </div>
+      
+      <div *ngIf="!isLoading && filteredRooms.length === 0" class="no-rooms">
+        <p>No rooms available for the selected dates.</p>
+      </div>
+      
+      <div *ngIf="!isLoading" class="rooms-grid">
+        <div *ngFor="let room of filteredRooms" class="room-card" (click)="openRoomDetail(room)">
+          <div class="room-image">
+            <img [src]="room.images[0]" [alt]="room.name">
+          </div>
+          <div class="room-info">
+            <h3 class="room-title">{{room.name}}</h3>
+            <p class="room-description">{{room.description}}</p>
+            <div class="room-features">
+              <span class="feature">
+                <mat-icon>people</mat-icon>
+                {{room.capacity}} {{ room.capacity > 1 ? ('ADULTS' | translate) : ('ADULTS' | translate) }}
+              </span>
+              <span class="feature">
+                <mat-icon>straighten</mat-icon>
+                {{room.size}} m²
+              </span>
+            </div>
+            <div class="room-amenities">
+              <span *ngFor="let amenity of room.amenities.slice(0, 3)" class="amenity">{{amenity}}</span>
+              <span *ngIf="room.amenities.length > 3" class="amenity more">+{{room.amenities.length - 3}}</span>
+            </div>
+            <div class="room-price">
+              <span class="price">{{getFormattedPrice(room.price)}}</span>
+              <span class="per-night">/ {{ 'PER_NIGHT' | translate }}</span>
+            </div>
+            <button mat-button color="primary" class="view-details">
+              {{ 'VIEW_DETAILS' | translate }} <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

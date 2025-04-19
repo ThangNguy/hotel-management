@@ -1,0 +1,90 @@
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>{{ 'WELCOME_MESSAGE' | translate }}</h1>
+      <p>{{ 'ELEGANT_EXPERIENCE' | translate }}</p>
+      <div class="hero-buttons">
+        <a mat-raised-button color="primary" routerLink="/rooms" class="cta-button">
+          {{ 'VIEW_ROOMS' | translate }}
+        </a>
+        <a mat-stroked-button color="accent" routerLink="/amenities" class="secondary-button">
+          {{ 'EXPLORE_AMENITIES' | translate }}
+        </a>
+      </div>
+    </div>
+    
+    <div class="booking-form-container">
+      <mat-card class="booking-form-card">
+        <mat-card-header>
+          <mat-card-title>{{ 'FIND_ROOM' | translate }}</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <form [formGroup]="bookingForm" (ngSubmit)="checkAvailability()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'CHECK_IN' | translate }}</mat-label>
+                <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn">
+                <mat-datepicker-toggle matIconSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+                <mat-datepicker #checkInPicker></mat-datepicker>
+                <mat-error *ngIf="bookingForm.get('checkIn')?.invalid">
+                  {{ 'REQUIRED_CHECK_IN' | translate }}
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'CHECK_OUT' | translate }}</mat-label>
+                <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut">
+                <mat-datepicker-toggle matIconSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+                <mat-datepicker #checkOutPicker></mat-datepicker>
+                <mat-error *ngIf="bookingForm.get('checkOut')?.invalid">
+                  {{ 'REQUIRED_CHECK_OUT' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'ADULTS' | translate }}</mat-label>
+                <input matInput type="number" min="1" max="10" formControlName="adults">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="bookingForm.get('adults')?.hasError('required')">
+                  {{ 'REQUIRED_ADULTS' | translate }}
+                </mat-error>
+                <mat-error *ngIf="bookingForm.get('adults')?.hasError('min')">
+                  {{ 'MIN_ADULTS' | translate }}
+                </mat-error>
+                <mat-error *ngIf="bookingForm.get('adults')?.hasError('max')">
+                  {{ 'MAX_ADULTS' | translate }}
+                </mat-error>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline">
+                <mat-label>{{ 'CHILDREN' | translate }}</mat-label>
+                <input matInput type="number" min="0" max="10" formControlName="children">
+                <mat-icon matSuffix>child_care</mat-icon>
+                <mat-error *ngIf="bookingForm.get('children')?.hasError('min')">
+                  {{ 'MIN_CHILDREN' | translate }}
+                </mat-error>
+                <mat-error *ngIf="bookingForm.get('children')?.hasError('max')">
+                  {{ 'MAX_CHILDREN' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
+            <button mat-raised-button color="accent" type="submit" class="search-button">
+              <mat-icon>search</mat-icon>
+              {{ 'CHECK_AVAILABILITY' | translate }}
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</section>
+
+<!-- Rest of landing page components -->
+<app-rooms></app-rooms>
+<app-amenities></app-amenities>
+<app-contact></app-contact>

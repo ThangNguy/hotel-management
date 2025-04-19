@@ -1,0 +1,134 @@
+<div class="dashboard-container">
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p>{{ 'COMMON.LOADING' | translate }}</p>
+  </div>
+  
+  <div class="dashboard-content" [class.loading]="isLoading">
+    <h1 class="page-title">{{ 'ADMIN.DASHBOARD.TITLE' | translate }}</h1>
+    
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <mat-icon>hotel</mat-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{totalRooms}}</span>
+          <span class="stat-label">{{ 'ADMIN.DASHBOARD.STATS.TOTAL_ROOMS' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <mat-icon>meeting_room</mat-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{availableRooms}}</span>
+          <span class="stat-label">{{ 'ADMIN.DASHBOARD.STATS.AVAILABLE_ROOMS' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <mat-icon>analytics</mat-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{occupancyRate | number:'1.0-0'}}%</span>
+          <span class="stat-label">{{ 'ADMIN.DASHBOARD.STATS.OCCUPANCY_RATE' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <mat-icon>book_online</mat-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{totalBookings}}</span>
+          <span class="stat-label">{{ 'ADMIN.DASHBOARD.STATS.TOTAL_BOOKINGS' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <mat-icon>attach_money</mat-icon>
+        </div>
+        <div class="stat-details">
+          <span class="stat-value">{{getFormattedPrice(monthlyRevenue)}}</span>
+          <span class="stat-label">{{ 'ADMIN.DASHBOARD.STATS.MONTHLY_REVENUE' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Bookings Section -->
+    <div class="recent-bookings">
+      <div class="section-header">
+        <h2>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.TITLE' | translate }}</h2>
+        <button mat-button color="primary" routerLink="/admin/bookings">
+          {{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.VIEW_ALL' | translate }}
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+
+      <div class="table-container mat-elevation-z2">
+        <table mat-table [dataSource]="recentBookings" class="bookings-table">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let booking">{{booking.id}}</td>
+          </ng-container>
+
+          <!-- Guest Name Column -->
+          <ng-container matColumnDef="guestName">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.COLUMNS.GUEST' | translate }}</th>
+            <td mat-cell *matCellDef="let booking">{{booking.guestName}}</td>
+          </ng-container>
+
+          <!-- Room Type Column -->
+          <ng-container matColumnDef="roomType">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.COLUMNS.ROOM_TYPE' | translate }}</th>
+            <td mat-cell *matCellDef="let booking">{{booking.roomType}}</td>
+          </ng-container>
+
+          <!-- Check In Column -->
+          <ng-container matColumnDef="checkIn">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.COLUMNS.CHECK_IN' | translate }}</th>
+            <td mat-cell *matCellDef="let booking">{{getFormattedDate(booking.checkInDate)}}</td>
+          </ng-container>
+
+          <!-- Check Out Column -->
+          <ng-container matColumnDef="checkOut">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.COLUMNS.CHECK_OUT' | translate }}</th>
+            <td mat-cell *matCellDef="let booking">{{getFormattedDate(booking.checkOutDate)}}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.COLUMNS.STATUS' | translate }}</th>
+            <td mat-cell *matCellDef="let booking">
+              <span class="status-badge" [ngClass]="getBookingStatusClass(booking.status)">
+                {{getStatusLabel(booking.status)}}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Total Price Column -->
+          <ng-container matColumnDef="totalPrice">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.COLUMNS.TOTAL_PRICE' | translate }}</th>
+            <td mat-cell *matCellDef="let booking">{{getFormattedPrice(booking.totalPrice)}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- No data message -->
+        <div class="no-data-message" *ngIf="recentBookings.length === 0">
+          <mat-icon>info</mat-icon>
+          <p>{{ 'ADMIN.DASHBOARD.RECENT_BOOKINGS.NO_DATA' | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
