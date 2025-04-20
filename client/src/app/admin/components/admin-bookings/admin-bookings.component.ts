@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { HotelService } from '../../../services/hotel.service';
 import { Booking, BookingStatus } from '../../../models/booking.model';
 import { Room } from '../../../models/room.model';
@@ -40,6 +41,7 @@ import { BookingStatusTranslationService } from '../../../services/booking-statu
     MatInputModule,
     MatMenuModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     TranslateModule
   ]
 })

@@ -71,49 +71,69 @@
       </form>
     </div>
     
+    <!-- Loading state -->
+    <div *ngIf="loading" class="loading-container">
+      <app-loading-indicator [message]="'LOADING_ROOMS' | translate"></app-loading-indicator>
+    </div>
+    
+    <!-- Error state -->
+    <div *ngIf="error" class="error-container">
+      <mat-card class="error-card">
+        <mat-card-content>
+          <mat-icon color="warn">error</mat-icon>
+          <p>{{ 'ERROR_LOADING_ROOMS' | translate }}</p>
+          <button mat-raised-button color="primary" (click)="retryLoading()">
+            {{ 'RETRY' | translate }}
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    
     <!-- Rooms display -->
-    <div class="rooms-container">
-      <div *ngIf="isLoading" class="loading">
-        <mat-spinner diameter="60"></mat-spinner>
-        <p>{{ 'COMMON.LOADING' | translate }}</p>
-      </div>
-      
-      <div *ngIf="!isLoading && filteredRooms.length === 0" class="no-rooms">
-        <p>No rooms available for the selected dates.</p>
-      </div>
-      
-      <div *ngIf="!isLoading" class="rooms-grid">
-        <div *ngFor="let room of filteredRooms" class="room-card" (click)="openRoomDetail(room)">
-          <div class="room-image">
-            <img [src]="room.images[0]" [alt]="room.name">
+    <div *ngIf="!loading && !error" class="rooms-grid">
+      <mat-card *ngFor="let room of rooms" class="room-card" (click)="openRoomDetails(room)">
+        <img mat-card-image [src]="room.images[0]" [alt]="room.name" class="room-image">
+        
+        <mat-card-content>
+          <h3 class="room-title">{{room.name}}</h3>
+          <p class="room-description">{{room.description}}</p>
+          
+          <div class="room-features">
+            <div class="feature">
+              <mat-icon>people</mat-icon>
+              <span>{{room.capacity}} {{ 'GUESTS' | translate }}</span>
+            </div>
+            <div class="feature">
+              <mat-icon>straighten</mat-icon>
+              <span>{{room.size}} m²</span>
+            </div>
+            <div class="feature">
+              <mat-icon>hotel</mat-icon>
+              <span>{{room.beds}}</span>
+            </div>
           </div>
-          <div class="room-info">
-            <h3 class="room-title">{{room.name}}</h3>
-            <p class="room-description">{{room.description}}</p>
-            <div class="room-features">
-              <span class="feature">
-                <mat-icon>people</mat-icon>
-                {{room.capacity}} {{ room.capacity > 1 ? ('ADULTS' | translate) : ('ADULTS' | translate) }}
-              </span>
-              <span class="feature">
-                <mat-icon>straighten</mat-icon>
-                {{room.size}} m²
-              </span>
+          
+          <div class="room-amenities">
+            <div *ngFor="let amenity of room.amenities.slice(0, 3)" class="amenity">
+              <span>{{amenity}}</span>
             </div>
-            <div class="room-amenities">
-              <span *ngFor="let amenity of room.amenities.slice(0, 3)" class="amenity">{{amenity}}</span>
-              <span *ngIf="room.amenities.length > 3" class="amenity more">+{{room.amenities.length - 3}}</span>
+            <div *ngIf="room.amenities.length > 3" class="amenity-more">
+              +{{room.amenities.length - 3}}
             </div>
-            <div class="room-price">
-              <span class="price">{{getFormattedPrice(room.price)}}</span>
-              <span class="per-night">/ {{ 'PER_NIGHT' | translate }}</span>
-            </div>
-            <button mat-button color="primary" class="view-details">
-              {{ 'VIEW_DETAILS' | translate }} <mat-icon>arrow_forward</mat-icon>
-            </button>
           </div>
-        </div>
-      </div>
+        </mat-card-content>
+        
+        <mat-card-actions>
+          <div class="room-price">
+            <span class="price">{{formatPrice(room.price)}}</span>
+            <span class="night">/ {{ 'NIGHT' | translate }}</span>
+          </div>
+          <button mat-button color="primary">
+            {{ 'VIEW_DETAILS' | translate }}
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>
 </section>

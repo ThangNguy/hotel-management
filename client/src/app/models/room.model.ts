@@ -9,4 +9,5 @@ export interface Room {
   available: boolean;
   beds: string;
   images: string[];
+  imageUrl?: string; // Added for backward compatibility
 }

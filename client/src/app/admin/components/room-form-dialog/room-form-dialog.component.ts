@@ -54,13 +54,16 @@ export class RoomFormDialogComponent implements OnInit {
       this.amenities = [...room.amenities];
     }
     
+    // Use the first image from the images array as the imageUrl if available
+    const initialImageUrl = room?.images?.length ? room.images[0] : '';
+    
     this.roomForm = this.fb.group({
       name: [room?.name || '', [Validators.required, Validators.minLength(3)]],
       description: [room?.description || '', [Validators.required, Validators.minLength(10)]],
       price: [room?.price || 0, [Validators.required, Validators.min(0)]],
       capacity: [room?.capacity || 1, [Validators.required, Validators.min(1)]],
       size: [room?.size || 0, [Validators.required, Validators.min(1)]],
-      imageUrl: [room?.imageUrl || '', [Validators.required, Validators.pattern('https?://.+')]]
+      imageUrl: [room?.imageUrl || initialImageUrl, [Validators.required, Validators.pattern('https?://.+')]]
     });
   }
   
@@ -92,9 +95,14 @@ export class RoomFormDialogComponent implements OnInit {
     
     const formValue = this.roomForm.value;
     
+    // Convert imageUrl to images array
+    const images = [formValue.imageUrl];
+    
     const room: Partial<Room> = {
       ...formValue,
-      amenities: this.amenities
+      images: images,
+      amenities: this.amenities,
+      available: this.data.room?.available !== undefined ? this.data.room.available : true
     };
     
     if (this.isEdit && this.data.room) {

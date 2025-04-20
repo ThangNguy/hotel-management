@@ -4,4 +4,11 @@
   <router-outlet></router-outlet>
 </div>
 
+<!-- Global loading indicator for API requests -->
+<app-loading-indicator 
+  *ngIf="loadingService.loading$ | async" 
+  [overlay]="true"
+  [message]="(loadingService.loadingMessage$ | async) || null">
+</app-loading-indicator>
+
 <app-footer></app-footer>

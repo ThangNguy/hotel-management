@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { HotelService } from '../../../services/hotel.service';
 import { Room } from '../../../models/room.model';
 import { RoomFormDialogComponent } from '../room-form-dialog/room-form-dialog.component';
@@ -35,6 +36,7 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
     MatInputModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
     TranslateModule
   ]
 })

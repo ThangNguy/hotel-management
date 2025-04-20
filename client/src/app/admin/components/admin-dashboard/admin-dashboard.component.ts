@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgClass, DatePipe, CurrencyPipe } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -25,8 +25,6 @@ import { BookingStatusTranslationService } from '../../../services/booking-statu
     MatButtonModule,
     MatProgressSpinnerModule,
     NgClass,
-    DatePipe,
-    CurrencyPipe,
     RouterLink,
     TranslateModule
   ]

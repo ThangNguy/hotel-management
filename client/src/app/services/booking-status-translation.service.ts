@@ -54,4 +54,38 @@ export class BookingStatusTranslationService {
         return 'BOOKING_STATUS.PENDING';
     }
   }
+
+  getTranslatedStatus(status: BookingStatus): string {
+    switch (status) {
+      case BookingStatus.PENDING:
+        return this.translate.instant('BOOKING_STATUS.PENDING');
+      case BookingStatus.CONFIRMED:
+        return this.translate.instant('BOOKING_STATUS.CONFIRMED');
+      case BookingStatus.CHECKED_IN:
+        return this.translate.instant('BOOKING_STATUS.CHECKED_IN');
+      case BookingStatus.CHECKED_OUT:
+        return this.translate.instant('BOOKING_STATUS.CHECKED_OUT');
+      case BookingStatus.CANCELLED:
+        return this.translate.instant('BOOKING_STATUS.CANCELLED');
+      default:
+        return status;
+    }
+  }
+
+  getStatusColor(status: BookingStatus): string {
+    switch (status) {
+      case BookingStatus.PENDING:
+        return 'orange';
+      case BookingStatus.CONFIRMED:
+        return 'blue';
+      case BookingStatus.CHECKED_IN:
+        return 'green';
+      case BookingStatus.CHECKED_OUT:
+        return 'purple';
+      case BookingStatus.CANCELLED:
+        return 'red';
+      default:
+        return 'gray';
+    }
+  }
 }
