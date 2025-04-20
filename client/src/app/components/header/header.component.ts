@@ -14,14 +14,16 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
   title = 'Luxury Hotel & Resort';
-  currentLang: string;
+  currentLang: string = 'en';
 
   constructor(private translate: TranslateService) {
-    this.currentLang = this.translate.currentLang || 'vi';
+    // Always use English
+    this.translate.use('en');
   }
 
   switchLanguage(language: string) {
-    this.translate.use(language);
-    this.currentLang = language;
+    // Only use English for now - language switcher disabled
+    this.translate.use('en');
+    this.currentLang = 'en';
   }
 }

@@ -17,7 +17,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       },
-      defaultLanguage: 'vi'
+      defaultLanguage: 'en'
     })
   ],
   exports: [TranslateModule]

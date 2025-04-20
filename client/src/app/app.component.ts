@@ -22,24 +22,19 @@ export class AppComponent implements OnInit {
     private translate: TranslateService,
     public loadingService: LoadingService
   ) {
-    // Set default language from browser or use Vietnamese as fallback
-    const browserLang = navigator.language.split('-')[0];
-    const defaultLang = browserLang.match(/en|vi/) ? browserLang : 'vi';
-    
-    // Set available languages
-    translate.addLangs(['en', 'vi']);
-    
-    // Set default language
-    translate.setDefaultLang(defaultLang);
-    translate.use(defaultLang);
+    // Temporarily use only English - multi-language support disabled
+    translate.addLangs(['en']);
+    translate.setDefaultLang('en');
+    translate.use('en');
   }
   
   ngOnInit(): void {
     // Initialize the application
   }
   
-  // Method to change language
+  // Method to change language - temporarily disabled
   switchLanguage(language: string) {
-    this.translate.use(language);
+    // Only use English for now
+    this.translate.use('en');
   }
 }
