@@ -1,3 +1,4 @@
+import { AuthGuard } from './../../admin/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminLayoutComponent } from '../../admin/components/admin-layout/admin-layout.component';
@@ -5,7 +6,7 @@ import { AdminDashboardComponent } from '../../admin/components/admin-dashboard/
 import { AdminRoomsComponent } from '../../admin/components/admin-rooms/admin-rooms.component';
 import { AdminBookingsComponent } from '../../admin/components/admin-bookings/admin-bookings.component';
 import { AdminLoginComponent } from '../../admin/components/admin-login/admin-login.component';
-import { AuthGuard } from './guards/auth.guard';
+
 
 /**
  * Admin module routing configuration

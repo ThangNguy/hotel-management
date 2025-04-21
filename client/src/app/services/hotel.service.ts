@@ -3,7 +3,6 @@ import { Room } from '../models/room.model';
 import { Booking, BookingStatus } from '../models/booking.model';
 import { Observable, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
 import { HttpParams } from '@angular/common/http';
 import { ApiConfigService } from './api-config.service';
 import { RequestService } from './request.service';
@@ -20,7 +19,6 @@ export class HotelService {
   private readonly BOOKINGS_CACHE_KEY = 'hotelBookings';
 
   constructor(
-    private translateService: TranslateService,
     private apiConfigService: ApiConfigService,
     private requestService: RequestService
   ) { }
@@ -37,7 +35,7 @@ export class HotelService {
           // Transform and cache the data
           rooms.forEach(room => this.transformImageUrl(room));
           this.cacheRooms(rooms);
-          return rooms.map(room => this.translateRoom(room));
+          return rooms;
         })
       );
   }
@@ -48,10 +46,7 @@ export class HotelService {
    * @returns Observable of the room or undefined
    */
   getRoomByIdAsync(id: number): Observable<Room | undefined> {
-    return this.requestService.get<Room>(this.apiConfigService.getRoomUrl(id))
-      .pipe(
-        map(room => this.translateRoom(room))
-      );
+    return this.requestService.get<Room>(this.apiConfigService.getRoomUrl(id));
   }
 
   /**
@@ -60,10 +55,7 @@ export class HotelService {
    * @returns Observable of the created room
    */
   addRoom(room: Room): Observable<Room> {
-    return this.requestService.post<Room>(this.apiConfigService.getRoomsUrl(), room)
-      .pipe(
-        map(newRoom => this.translateRoom(newRoom))
-      );
+    return this.requestService.post<Room>(this.apiConfigService.getRoomsUrl(), room);
   }
 
   /**
@@ -72,10 +64,7 @@ export class HotelService {
    * @returns Observable of the updated room
    */
   updateRoom(room: Room): Observable<Room> {
-    return this.requestService.put<Room>(this.apiConfigService.getRoomUrl(room.id), room)
-      .pipe(
-        map(updatedRoom => this.translateRoom(updatedRoom))
-      );
+    return this.requestService.put<Room>(this.apiConfigService.getRoomUrl(room.id), room);
   }
 
   /**
@@ -101,10 +90,7 @@ export class HotelService {
       .set('checkInDate', checkIn.toISOString())
       .set('checkOutDate', checkOut.toISOString());
 
-    return this.requestService.get<Room[]>(this.apiConfigService.getAvailableRoomsUrl(), params)
-      .pipe(
-        map(rooms => rooms.map(room => this.translateRoom(room)))
-      );
+    return this.requestService.get<Room[]>(this.apiConfigService.getAvailableRoomsUrl(), params);
   }
 
   // BOOKINGS API
@@ -170,24 +156,24 @@ export class HotelService {
 
   /**
    * Get available room amenities
-   * @returns Array of amenity translation keys
+   * @returns Array of amenities in English
    */
   getAmenities(): string[] {
     return [
-      'ROOM_AMENITIES_LIST.WIFI',
-      'ROOM_AMENITIES_LIST.AIR_CONDITIONING',
-      'ROOM_AMENITIES_LIST.FLAT_SCREEN_TV',
-      'ROOM_AMENITIES_LIST.MINIBAR',
-      'ROOM_AMENITIES_LIST.SAFE',
-      'ROOM_AMENITIES_LIST.COFFEE_MACHINE',
-      'ROOM_AMENITIES_LIST.MARBLE_BATHROOM',
-      'ROOM_AMENITIES_LIST.BATHTUB',
-      'ROOM_AMENITIES_LIST.BALCONY',
-      'ROOM_AMENITIES_LIST.LIVING_ROOM',
-      'ROOM_AMENITIES_LIST.DESK',
-      'ROOM_AMENITIES_LIST.DINING_ROOM',
-      'ROOM_AMENITIES_LIST.BUTLER',
-      'ROOM_AMENITIES_LIST.KING_BED'
+      'Wi-Fi',
+      'Air Conditioning',
+      'Flat Screen TV',
+      'Minibar',
+      'Safe',
+      'Coffee Machine',
+      'Marble Bathroom',
+      'Bathtub',
+      'Balcony',
+      'Living Room',
+      'Desk',
+      'Dining Room',
+      'Butler Service',
+      'King Bed'
     ];
   }
 
@@ -200,7 +186,7 @@ export class HotelService {
   getRooms(): Room[] {
     const cachedData = this.getCachedRooms();
     if (cachedData) {
-      return cachedData.map(room => this.translateRoom(room));
+      return cachedData;
     }
     return [];
   }
@@ -213,8 +199,7 @@ export class HotelService {
   getRoomById(id: number): Room | undefined {
     const cachedData = this.getCachedRooms();
     if (cachedData) {
-      const room = cachedData.find(r => r.id === id);
-      return room ? this.translateRoom(room) : undefined;
+      return cachedData.find(r => r.id === id);
     }
     return undefined;
   }
@@ -275,21 +260,6 @@ export class HotelService {
   }
 
   // PRIVATE HELPER METHODS
-
-  /**
-   * Translate room data
-   * @param room Room to translate
-   * @returns Translated room
-   */
-  private translateRoom(room: Room): Room {
-    const translatedRoom = { ...room };
-    translatedRoom.name = this.translateService.instant(room.name);
-    translatedRoom.description = this.translateService.instant(room.description);
-    translatedRoom.amenities = room.amenities.map(amenity => 
-      this.translateService.instant(amenity)
-    );
-    return translatedRoom;
-  }
 
   /**
    * Transform image URLs to include base URL

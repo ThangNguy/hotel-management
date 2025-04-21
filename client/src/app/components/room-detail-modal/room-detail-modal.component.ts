@@ -6,7 +6,6 @@ import { Room } from '../../models/room.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HotelService } from '../../services/hotel.service';
 import { ErrorHandlingService } from '../../services/error-handling.service';
-import { TranslateModule } from '@ngx-translate/core';
 import { BookingStatus } from '../../models/booking.model';
 import { LoadingIndicatorComponent } from '../shared/loading-indicator/loading-indicator.component';
 import { MatTabsModule } from '@angular/material/tabs'; // Import MatTabsModule explicitly
@@ -20,7 +19,6 @@ import { ModelMapperService } from '../../core/services/model-mapper.service';
     MaterialModule, 
     MatDialogModule, 
     ReactiveFormsModule, 
-    TranslateModule,
     LoadingIndicatorComponent,
     MatTabsModule // Add MatTabsModule explicitly
   ],

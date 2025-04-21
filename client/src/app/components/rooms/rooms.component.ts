@@ -8,13 +8,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { RoomDetailModalComponent } from '../room-detail-modal/room-detail-modal.component';
 import { LoadingIndicatorComponent } from '../shared/loading-indicator/loading-indicator.component';
 import { Subject, takeUntil } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-rooms',
   standalone: true,
-  imports: [CommonModule, MaterialModule, LoadingIndicatorComponent, TranslateModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, LoadingIndicatorComponent, ReactiveFormsModule],
   templateUrl: './rooms.component.html',
   styleUrl: './rooms.component.scss'
 })

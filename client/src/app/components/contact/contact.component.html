@@ -1,8 +1,8 @@
 <section class="contact-section" id="contact">
   <div class="container">
     <div class="section-header">
-      <h2>Liên Hệ Với Chúng Tôi</h2>
-      <p>Hãy liên hệ với chúng tôi để nhận sự hỗ trợ tốt nhất</p>
+      <h2>Contact Us</h2>
+      <p>Get in touch with us for the best assistance</p>
     </div>
     
     <div class="contact-wrapper">
@@ -10,15 +10,15 @@
         <div class="contact-info-item">
           <mat-icon>location_on</mat-icon>
           <div>
-            <h3>Địa chỉ</h3>
-            <p>123 Đường Lê Lợi, Quận 1, TP Hồ Chí Minh</p>
+            <h3>Address</h3>
+            <p>123 Le Loi Street, District 1, Ho Chi Minh City</p>
           </div>
         </div>
         
         <div class="contact-info-item">
           <mat-icon>phone</mat-icon>
           <div>
-            <h3>Điện thoại</h3>
+            <h3>Phone</h3>
             <p>+84 28 1234 5678</p>
           </div>
         </div>
@@ -27,15 +27,15 @@
           <mat-icon>email</mat-icon>
           <div>
             <h3>Email</h3>
-            <!-- <p>info@luxuryhotel.com</p> -->
+            <!-- <p>info&#64;luxuryhotel.com</p> -->
           </div>
         </div>
         
         <div class="contact-info-item">
           <mat-icon>access_time</mat-icon>
           <div>
-            <h3>Giờ làm việc</h3>
-            <p>24/7 - Luôn sẵn sàng phục vụ bạn</p>
+            <h3>Working Hours</h3>
+            <p>24/7 - Always ready to serve you</p>
           </div>
         </div>
       </div>
@@ -43,19 +43,19 @@
       <div class="contact-form">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Gửi thắc mắc của bạn</mat-card-title>
+            <mat-card-title>Send us your inquiry</mat-card-title>
           </mat-card-header>
           
           <mat-card-content>
             <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Họ và tên</mat-label>
+                <mat-label>Full Name</mat-label>
                 <input matInput formControlName="fullName">
                 <mat-error *ngIf="contactForm.get('fullName')?.hasError('required')">
-                  Vui lòng nhập họ tên
+                  Please enter your name
                 </mat-error>
                 <mat-error *ngIf="contactForm.get('fullName')?.hasError('minlength')">
-                  Họ tên phải có ít nhất 3 ký tự
+                  Name must be at least 3 characters
                 </mat-error>
               </mat-form-field>
               
@@ -64,38 +64,38 @@
                   <mat-label>Email</mat-label>
                   <input matInput type="email" formControlName="email">
                   <mat-error *ngIf="contactForm.get('email')?.hasError('required')">
-                    Vui lòng nhập email
+                    Please enter your email
                   </mat-error>
                   <mat-error *ngIf="contactForm.get('email')?.hasError('email')">
-                    Email không hợp lệ
+                    Invalid email format
                   </mat-error>
                 </mat-form-field>
                 
                 <mat-form-field appearance="outline">
-                  <mat-label>Số điện thoại</mat-label>
+                  <mat-label>Phone Number</mat-label>
                   <input matInput type="tel" formControlName="phone">
                   <mat-error *ngIf="contactForm.get('phone')?.hasError('required')">
-                    Vui lòng nhập số điện thoại
+                    Please enter your phone number
                   </mat-error>
                   <mat-error *ngIf="contactForm.get('phone')?.hasError('pattern')">
-                    Số điện thoại phải có 10-11 số
+                    Phone number must be 10-11 digits
                   </mat-error>
                 </mat-form-field>
               </div>
               
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Nội dung</mat-label>
+                <mat-label>Message</mat-label>
                 <textarea matInput rows="5" formControlName="message"></textarea>
                 <mat-error *ngIf="contactForm.get('message')?.hasError('required')">
-                  Vui lòng nhập nội dung
+                  Please enter your message
                 </mat-error>
                 <mat-error *ngIf="contactForm.get('message')?.hasError('minlength')">
-                  Nội dung phải có ít nhất 10 ký tự
+                  Message must be at least 10 characters
                 </mat-error>
               </mat-form-field>
               
               <button mat-raised-button color="primary" type="submit" class="submit-button">
-                Gửi
+                Send
               </button>
             </form>
           </mat-card-content>

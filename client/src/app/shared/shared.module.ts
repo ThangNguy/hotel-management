@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
-import { TranslateModule } from '@ngx-translate/core';
 
 // Standalone components cần import
 import { LoadingIndicatorComponent } from '../components/shared/loading-indicator/loading-indicator.component';
-import { RatingStarsComponent } from '../components/shared/rating-stars/rating-stars.component';
-import { PriceDisplayComponent } from '../components/shared/price-display/price-display.component';
+
 
 /**
  * Module chứa các components, directives và pipes dùng chung
@@ -22,12 +20,11 @@ import { PriceDisplayComponent } from '../components/shared/price-display/price-
     ReactiveFormsModule,
     RouterModule,
     MaterialModule,
-    TranslateModule,
     
     // Standalone components
     LoadingIndicatorComponent,
-    RatingStarsComponent,
-    PriceDisplayComponent
+    // RatingStarsComponent,
+    // PriceDisplayComponent
   ],
   exports: [
     // Common Angular modules
@@ -36,12 +33,11 @@ import { PriceDisplayComponent } from '../components/shared/price-display/price-
     ReactiveFormsModule,
     RouterModule,
     MaterialModule,
-    TranslateModule,
     
     // Standalone components
     LoadingIndicatorComponent,
-    RatingStarsComponent,
-    PriceDisplayComponent
+    // RatingStarsComponent,
+    // PriceDisplayComponent
   ]
 })
 export class SharedModule { }

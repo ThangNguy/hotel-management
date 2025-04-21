@@ -5,7 +5,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AmenitiesComponent } from '../amenities/amenities.component';
 import { RoomsComponent } from '../rooms/rooms.component';
 import { ContactComponent } from '../contact/contact.component';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-hero',
@@ -16,8 +15,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     ReactiveFormsModule,
     AmenitiesComponent,
     RoomsComponent,
-    ContactComponent,
-    TranslateModule
+    ContactComponent
   ],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.scss'
@@ -26,8 +24,7 @@ export class HeroComponent implements OnInit {
   bookingForm!: FormGroup;
   
   constructor(
-    private fb: FormBuilder,
-    private translateService: TranslateService
+    private fb: FormBuilder
   ) {}
   
   ngOnInit() {
@@ -46,7 +43,7 @@ export class HeroComponent implements OnInit {
   checkAvailability() {
     if (this.bookingForm.valid) {
       console.log('Form submitted with values:', this.bookingForm.value);
-      // Ở đây có thể thêm logic kiểm tra phòng trống thông qua service
+      // Logic to check room availability can be added here via service
     }
   }
 }

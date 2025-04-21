@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from './not-found.component';
+
 import { MaterialModule } from '../../material/material.module';
-import { TranslateModule } from '@ngx-translate/core';
+import { NotFoundComponent } from './not-found.component';
 
 const routes: Routes = [
   { path: '', component: NotFoundComponent }
@@ -15,7 +15,6 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MaterialModule,
-    TranslateModule,
     
     // Import NotFoundComponent as standalone component
     NotFoundComponent

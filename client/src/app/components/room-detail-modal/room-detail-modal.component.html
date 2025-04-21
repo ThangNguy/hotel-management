@@ -4,7 +4,7 @@
   <!-- Tabs for room details and booking -->
   <mat-tab-group [(selectedIndex)]="activeTab">
     <!-- Room Details Tab -->
-    <mat-tab label="{{ 'ROOM_DETAILS' | translate }}">
+    <mat-tab label="Room Details">
       <div class="room-details-container">
         <!-- Room image -->
         <div class="room-image">
@@ -15,31 +15,31 @@
         <div class="room-info">
           <div class="price-section">
             <span class="price">{{formatPrice(room.price || room.pricePerNight || 0)}}</span>
-            <span class="per-night">/ {{ 'NIGHT' | translate }}</span>
+            <span class="per-night">/ Night</span>
           </div>
           
           <div class="details-section">
             <div class="detail-item">
               <mat-icon>people</mat-icon>
-              <span>{{ 'MAX_GUESTS' | translate }}: {{room.capacity || room.maxOccupancy || 1}}</span>
+              <span>Max Guests: {{room.capacity || room.maxOccupancy || 1}}</span>
             </div>
             <div class="detail-item">
               <mat-icon>hotel</mat-icon>
-              <span>{{ 'BEDS' | translate }}: {{room.beds || '-'}}</span>
+              <span>Beds: {{room.beds || '-'}}</span>
             </div>
             <div class="detail-item">
               <mat-icon>straighten</mat-icon>
-              <span>{{ 'ROOM_SIZE' | translate }}: {{room.size || room.sizeSqm || 0}} m²</span>
+              <span>Room Size: {{room.size || room.sizeSqm || 0}} m²</span>
             </div>
           </div>
           
           <div class="description-section">
-            <h3>{{ 'DESCRIPTION' | translate }}</h3>
+            <h3>Description</h3>
             <p>{{room.description}}</p>
           </div>
           
           <div class="amenities-section">
-            <h3>{{ 'AMENITIES' | translate }}</h3>
+            <h3>Amenities</h3>
             <div class="amenities-grid">
               <div *ngFor="let amenity of room.amenities" class="amenity-item">
                 <mat-icon>check_circle</mat-icon>
@@ -52,111 +52,111 @@
     </mat-tab>
     
     <!-- Booking Tab -->
-    <mat-tab label="{{ 'BOOK_NOW' | translate }}">
+    <mat-tab label="Book Now">
       <div class="booking-container">
-        <h3>{{ 'BOOKING_DETAILS' | translate }}</h3>
+        <h3>Booking Details</h3>
         
         <!-- Booking form -->
         <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
           <!-- Dates and guests -->
           <div class="form-row">
             <mat-form-field appearance="outline">
-              <mat-label>{{ 'CHECK_IN_DATE' | translate }}</mat-label>
+              <mat-label>Check-in Date</mat-label>
               <input matInput [matDatepicker]="checkInPicker" formControlName="checkInDate" [min]="minDate">
               <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
               <mat-datepicker #checkInPicker></mat-datepicker>
               <mat-error *ngIf="bookingForm.get('checkInDate')?.hasError('required')">
-                {{ 'REQUIRED_FIELD' | translate }}
+                This field is required
               </mat-error>
             </mat-form-field>
             
             <mat-form-field appearance="outline">
-              <mat-label>{{ 'CHECK_OUT_DATE' | translate }}</mat-label>
+              <mat-label>Check-out Date</mat-label>
               <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOutDate" [min]="minCheckOutDate">
               <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
               <mat-datepicker #checkOutPicker></mat-datepicker>
               <mat-error *ngIf="bookingForm.get('checkOutDate')?.hasError('required')">
-                {{ 'REQUIRED_FIELD' | translate }}
+                This field is required
               </mat-error>
             </mat-form-field>
           </div>
           
           <div class="form-row">
             <mat-form-field appearance="outline">
-              <mat-label>{{ 'NUMBER_OF_GUESTS' | translate }}</mat-label>
+              <mat-label>Number of Guests</mat-label>
               <input matInput type="number" formControlName="numberOfGuests" min="1" [max]="room.capacity || room.maxOccupancy || 1">
               <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('required')">
-                {{ 'REQUIRED_FIELD' | translate }}
+                This field is required
               </mat-error>
               <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('min')">
-                {{ 'MIN_ONE_GUEST' | translate }}
+                At least 1 guest is required
               </mat-error>
               <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('max')">
-                {{ 'MAX_GUESTS_EXCEEDED' | translate: {capacity: room.capacity || room.maxOccupancy || 1} }}
+                Maximum {{room.capacity || room.maxOccupancy || 1}} guests allowed
               </mat-error>
             </mat-form-field>
           </div>
           
           <!-- Guest information -->
-          <h3>{{ 'GUEST_INFORMATION' | translate }}</h3>
+          <h3>Guest Information</h3>
           
           <div class="form-row">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ 'FULL_NAME' | translate }}</mat-label>
+              <mat-label>Full Name</mat-label>
               <input matInput formControlName="guestName">
               <mat-error *ngIf="bookingForm.get('guestName')?.hasError('required')">
-                {{ 'REQUIRED_FIELD' | translate }}
+                This field is required
               </mat-error>
               <mat-error *ngIf="bookingForm.get('guestName')?.hasError('minlength')">
-                {{ 'MIN_NAME_LENGTH' | translate }}
+                Name must be at least 3 characters
               </mat-error>
             </mat-form-field>
           </div>
           
           <div class="form-row">
             <mat-form-field appearance="outline">
-              <mat-label>{{ 'EMAIL' | translate }}</mat-label>
+              <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="guestEmail">
               <mat-error *ngIf="bookingForm.get('guestEmail')?.hasError('required')">
-                {{ 'REQUIRED_FIELD' | translate }}
+                This field is required
               </mat-error>
               <mat-error *ngIf="bookingForm.get('guestEmail')?.hasError('email')">
-                {{ 'INVALID_EMAIL' | translate }}
+                Please enter a valid email address
               </mat-error>
             </mat-form-field>
             
             <mat-form-field appearance="outline">
-              <mat-label>{{ 'PHONE' | translate }}</mat-label>
+              <mat-label>Phone</mat-label>
               <input matInput formControlName="guestPhone">
               <mat-error *ngIf="bookingForm.get('guestPhone')?.hasError('required')">
-                {{ 'REQUIRED_FIELD' | translate }}
+                This field is required
               </mat-error>
               <mat-error *ngIf="bookingForm.get('guestPhone')?.hasError('pattern')">
-                {{ 'INVALID_PHONE' | translate }}
+                Please enter a valid phone number
               </mat-error>
             </mat-form-field>
           </div>
           
           <div class="form-row">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ 'SPECIAL_REQUESTS' | translate }}</mat-label>
+              <mat-label>Special Requests</mat-label>
               <textarea matInput formControlName="specialRequests" rows="3"></textarea>
             </mat-form-field>
           </div>
           
           <!-- Pricing summary -->
           <div class="pricing-summary">
-            <h3>{{ 'PRICE_SUMMARY' | translate }}</h3>
+            <h3>Price Summary</h3>
             <div class="price-row">
-              <span>{{ 'ROOM_PRICE' | translate }}</span>
+              <span>Room Price</span>
               <span>{{formatPrice(room.price || room.pricePerNight || 0)}}</span>
             </div>
             <div class="price-row">
-              <span>{{ 'NUMBER_OF_NIGHTS' | translate }}</span>
+              <span>Number of Nights</span>
               <span>{{numberOfNights}}</span>
             </div>
             <div class="price-row total">
-              <span>{{ 'TOTAL_PRICE' | translate }}</span>
+              <span>Total Price</span>
               <span>{{formatPrice(totalPrice)}}</span>
             </div>
           </div>
@@ -164,11 +164,11 @@
           <!-- Submit button -->
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid || isSubmitting">
-              {{ 'BOOK_NOW' | translate }}
+              Book Now
             </button>
             
             <!-- Loading indicator during submission -->
-            <app-loading-indicator *ngIf="isSubmitting" [diameter]="24" [message]="'PROCESSING' | translate"></app-loading-indicator>
+            <app-loading-indicator *ngIf="isSubmitting" [diameter]="24" [message]="'Processing...'"></app-loading-indicator>
           </div>
         </form>
       </div>
@@ -177,8 +177,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="closeDialog()">{{ 'CLOSE' | translate }}</button>
+  <button mat-button (click)="closeDialog()">Close</button>
   <button *ngIf="activeTab === 0" mat-raised-button color="primary" (click)="activeTab = 1">
-    {{ 'BOOK_NOW' | translate }}
+    Book Now
   </button>
 </mat-dialog-actions>

@@ -17,6 +17,7 @@ import { BookingFormDialogComponent } from '../../admin/components/booking-form-
 import { DeleteConfirmDialogComponent } from '../../admin/components/delete-confirm-dialog/delete-confirm-dialog.component';
 import { AdminRoutingModule } from './admin-routing.module';
 
+
 /**
  * Admin Module for hotel management administrative functions
  */

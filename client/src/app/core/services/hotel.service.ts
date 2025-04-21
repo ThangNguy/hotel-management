@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Room } from '../models/room.model';
-import { Booking, BookingStatus } from '../models/booking.model';
+
 import { Observable, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,6 +7,8 @@ import { HttpParams } from '@angular/common/http';
 import { ApiConfigService } from '../services/api-config.service';
 import { RequestService } from '../services/request.service';
 import { ModelMapperService } from './model-mapper.service';
+import { Room } from '../../models/room.model';
+import { Booking, BookingStatus } from '../../models/booking.model';
 
 /**
  * Service to manage hotel-related operations including rooms and bookings

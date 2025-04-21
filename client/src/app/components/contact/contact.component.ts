@@ -27,11 +27,11 @@ export class ContactComponent implements OnInit {
   submitForm() {
     if (this.contactForm.valid) {
       console.log('Form submitted with values:', this.contactForm.value);
-      // Ở đây có thể thêm logic gửi email hoặc lưu thông tin liên hệ
-      alert('Cảm ơn bạn đã liên hệ với chúng tôi! Chúng tôi sẽ phản hồi sớm nhất có thể.');
+      // Logic to send email or save contact information can be added here
+      alert('Thank you for contacting us! We will respond as soon as possible.');
       this.contactForm.reset();
     } else {
-      // Đánh dấu tất cả các trường là đã chạm vào để hiển thị lỗi
+      // Mark all fields as touched to display validation errors
       Object.keys(this.contactForm.controls).forEach(key => {
         const control = this.contactForm.get(key);
         control?.markAsTouched();

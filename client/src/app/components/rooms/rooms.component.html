@@ -1,13 +1,13 @@
 <section class="rooms-section" id="rooms">
   <div class="container">
     <div class="section-header">
-      <h2>{{ 'OUR_ROOMS' | translate }}</h2>
-      <p class="section-subtitle">{{ 'FIND_ROOM' | translate }}</p>
+      <h2>Our Rooms</h2>
+      <p class="section-subtitle">Find Your Perfect Room</p>
     </div>
         
     <!-- Loading state -->
     <div *ngIf="loading" class="loading-container">
-      <app-loading-indicator [message]="'LOADING_ROOMS' | translate"></app-loading-indicator>
+      <app-loading-indicator [message]="'Loading rooms...'"></app-loading-indicator>
     </div>
     
     <!-- Error state -->
@@ -15,9 +15,9 @@
       <mat-card class="error-card">
         <mat-card-content>
           <mat-icon color="warn">error</mat-icon>
-          <p>{{ 'ERROR_LOADING_ROOMS' | translate }}</p>
+          <p>Error loading rooms. Please try again.</p>
           <button mat-raised-button color="primary" (click)="retryLoading()">
-            {{ 'RETRY' | translate }}
+            Retry
           </button>
         </mat-card-content>
       </mat-card>
@@ -39,7 +39,7 @@
           <div class="room-features">
             <div class="feature">
               <mat-icon>person</mat-icon>
-              <span class="feature-text">{{room.capacity}} {{ 'GUESTS' | translate }}</span>
+              <span class="feature-text">{{room.capacity}} Guests</span>
             </div>
             <div class="feature">
               <mat-icon>aspect_ratio</mat-icon>
@@ -64,11 +64,11 @@
         
         <mat-card-actions>
           <div class="room-price">
-            <span class="price">{{formatPrice(room.price)}}</span>
-            <span class="night">/ {{ 'NIGHT' | translate }}</span>
+            <!-- <span class="price">{{formatPrice(room.price)}}</span> -->
+            <span class="night">/ Night</span>
           </div>
           <button mat-button color="primary" class="details-button">
-            {{ 'VIEW_DETAILS' | translate }}
+            View Details
             <mat-icon>arrow_forward</mat-icon>
           </button>
         </mat-card-actions>

@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { MaterialModule } from '../../material/material.module';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-not-found',
@@ -11,8 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [
     CommonModule,
-    MaterialModule,
-    TranslateModule
+    MaterialModule
   ]
 })
 export class NotFoundComponent {

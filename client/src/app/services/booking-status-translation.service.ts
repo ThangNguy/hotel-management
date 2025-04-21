@@ -1,75 +1,54 @@
 import { Injectable } from '@angular/core';
 import { BookingStatus } from '../models/booking.model';
-import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookingStatusTranslationService {
 
-  constructor(private translate: TranslateService) { }
+  constructor() { }
 
-  // Get translated booking status
+  // Get booking status text as Observable
   getStatusTranslation(status: BookingStatus): Observable<string> {
-    const translationKey = this.getTranslationKey(status);
-    return this.translate.get(translationKey);
+    return of(this.getStatusText(status));
   }
 
-  // Get translated booking status immediately
+  // Get booking status text immediately
   getStatusTranslationSync(status: BookingStatus): string {
-    const translationKey = this.getTranslationKey(status);
-    return this.translate.instant(translationKey);
+    return this.getStatusText(status);
   }
 
-  // Get all booking statuses with translations
+  // Get all booking statuses with text
   getAllStatusesWithTranslations(): Observable<{value: BookingStatus, label: string}[]> {
-    const keys = Object.values(BookingStatus).map(status => this.getTranslationKey(status));
-    
-    return this.translate.get(keys).pipe(
-      map(translations => {
-        return Object.values(BookingStatus).map(status => ({
-          value: status,
-          label: translations[this.getTranslationKey(status)]
-        }));
-      })
+    return of(
+      Object.values(BookingStatus).map(status => ({
+        value: status,
+        label: this.getStatusText(status)
+      }))
     );
   }
 
-  // Helper method to get translation key for a status
-  private getTranslationKey(status: BookingStatus): string {
+  // Helper method to get English text for a status
+  private getStatusText(status: BookingStatus): string {
     switch (status) {
       case BookingStatus.PENDING:
-        return 'BOOKING_STATUS.PENDING';
+        return 'Pending';
       case BookingStatus.CONFIRMED:
-        return 'BOOKING_STATUS.CONFIRMED';
+        return 'Confirmed';
       case BookingStatus.CHECKED_IN:
-        return 'BOOKING_STATUS.CHECKED_IN';
+        return 'Checked In';
       case BookingStatus.CHECKED_OUT:
-        return 'BOOKING_STATUS.CHECKED_OUT';
+        return 'Checked Out';
       case BookingStatus.CANCELLED:
-        return 'BOOKING_STATUS.CANCELLED';
+        return 'Cancelled';
       default:
-        return 'BOOKING_STATUS.PENDING';
+        return 'Pending';
     }
   }
 
   getTranslatedStatus(status: BookingStatus): string {
-    switch (status) {
-      case BookingStatus.PENDING:
-        return this.translate.instant('BOOKING_STATUS.PENDING');
-      case BookingStatus.CONFIRMED:
-        return this.translate.instant('BOOKING_STATUS.CONFIRMED');
-      case BookingStatus.CHECKED_IN:
-        return this.translate.instant('BOOKING_STATUS.CHECKED_IN');
-      case BookingStatus.CHECKED_OUT:
-        return this.translate.instant('BOOKING_STATUS.CHECKED_OUT');
-      case BookingStatus.CANCELLED:
-        return this.translate.instant('BOOKING_STATUS.CANCELLED');
-      default:
-        return status;
-    }
+    return this.getStatusText(status);
   }
 
   getStatusColor(status: BookingStatus): string {

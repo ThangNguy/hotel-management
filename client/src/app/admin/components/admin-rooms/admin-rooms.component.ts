@@ -16,7 +16,6 @@ import { HotelService } from '../../../services/hotel.service';
 import { Room } from '../../../models/room.model';
 import { RoomFormDialogComponent } from '../room-form-dialog/room-form-dialog.component';
 import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-confirm-dialog.component';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-admin-rooms',
@@ -36,8 +35,7 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
     MatInputModule,
     MatCardModule,
     MatProgressSpinnerModule,
-    MatTooltipModule,
-    TranslateModule
+    MatTooltipModule
   ]
 })
 export class AdminRoomsComponent implements OnInit {
@@ -52,8 +50,7 @@ export class AdminRoomsComponent implements OnInit {
   constructor(
     private hotelService: HotelService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -71,10 +68,8 @@ export class AdminRoomsComponent implements OnInit {
         this.isLoading = false;
       },
       error => {
-        this.translate.get('ADMIN.ERRORS.LOAD_ROOMS').subscribe(msg => {
-          this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-            duration: 3000
-          });
+        this.snackBar.open('Error loading rooms', 'Close', {
+          duration: 3000
         });
         this.isLoading = false;
       }
@@ -101,18 +96,14 @@ export class AdminRoomsComponent implements OnInit {
         this.isLoading = true;
         this.hotelService.addRoom(result).subscribe(
           newRoom => {
-            this.translate.get('ADMIN.SUCCESS.ADD_ROOM').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Room added successfully', 'Close', {
+              duration: 3000
             });
             this.loadRooms();
           },
           error => {
-            this.translate.get('ADMIN.ERRORS.ADD_ROOM').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Error adding room', 'Close', {
+              duration: 3000
             });
             this.isLoading = false;
           }
@@ -132,18 +123,14 @@ export class AdminRoomsComponent implements OnInit {
         this.isLoading = true;
         this.hotelService.updateRoom(result).subscribe(
           updatedRoom => {
-            this.translate.get('ADMIN.SUCCESS.UPDATE_ROOM').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Room updated successfully', 'Close', {
+              duration: 3000
             });
             this.loadRooms();
           },
           error => {
-            this.translate.get('ADMIN.ERRORS.UPDATE_ROOM').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Error updating room', 'Close', {
+              duration: 3000
             });
             this.isLoading = false;
           }
@@ -153,61 +140,53 @@ export class AdminRoomsComponent implements OnInit {
   }
   
   deleteRoom(room: Room): void {
-    this.translate.get(['ADMIN.DIALOGS.DELETE_ROOM_TITLE', 'ADMIN.DIALOGS.DELETE_ROOM_MESSAGE']).subscribe(translations => {
-      const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
-        width: '400px',
-        data: {
-          title: translations['ADMIN.DIALOGS.DELETE_ROOM_TITLE'],
-          message: translations['ADMIN.DIALOGS.DELETE_ROOM_MESSAGE']
-        }
-      });
+    const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Delete Room',
+        message: 'Are you sure you want to delete this room?'
+      }
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.isLoading = true;
-          this.hotelService.deleteRoom(room.id).subscribe(
-            success => {
-              if (success) {
-                this.translate.get('ADMIN.SUCCESS.DELETE_ROOM').subscribe(msg => {
-                  this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                    duration: 3000
-                  });
-                });
-                this.loadRooms();
-              } else {
-                this.translate.get('ADMIN.ERRORS.DELETE_ROOM').subscribe(msg => {
-                  this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                    duration: 3000
-                  });
-                });
-                this.isLoading = false;
-              }
-            },
-            error => {
-              this.translate.get('ADMIN.ERRORS.DELETE_ROOM').subscribe(msg => {
-                this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                  duration: 3000
-                });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.isLoading = true;
+        this.hotelService.deleteRoom(room.id).subscribe(
+          success => {
+            if (success) {
+              this.snackBar.open('Room deleted successfully', 'Close', {
+                duration: 3000
+              });
+              this.loadRooms();
+            } else {
+              this.snackBar.open('Error deleting room', 'Close', {
+                duration: 3000
               });
               this.isLoading = false;
             }
-          );
-        }
-      });
+          },
+          error => {
+            this.snackBar.open('Error deleting room', 'Close', {
+              duration: 3000
+            });
+            this.isLoading = false;
+          }
+        );
+      }
     });
   }
   
   getFormattedPrice(price: number): string {
-    return new Intl.NumberFormat(this.translate.currentLang === 'en' ? 'en-US' : 'vi-VN', { 
+    return new Intl.NumberFormat('en-US', { 
       style: 'currency', 
-      currency: this.translate.currentLang === 'en' ? 'USD' : 'VND',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(price);
   }
 
   getAmenitiesDisplay(amenities: string[]): string {
     if (!amenities || amenities.length === 0) {
-      return this.translate.instant('COMMON.NONE');
+      return 'None';
     }
     
     if (amenities.length <= 3) {

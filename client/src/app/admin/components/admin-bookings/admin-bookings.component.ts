@@ -18,7 +18,6 @@ import { Booking, BookingStatus } from '../../../models/booking.model';
 import { Room } from '../../../models/room.model';
 import { BookingFormDialogComponent } from '../booking-form-dialog/booking-form-dialog.component';
 import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-confirm-dialog.component';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { BookingStatusTranslationService } from '../../../services/booking-status-translation.service';
 
 @Component({
@@ -41,8 +40,7 @@ import { BookingStatusTranslationService } from '../../../services/booking-statu
     MatInputModule,
     MatMenuModule,
     MatProgressSpinnerModule,
-    MatTooltipModule,
-    TranslateModule
+    MatTooltipModule
   ]
 })
 export class AdminBookingsComponent implements OnInit {
@@ -61,7 +59,6 @@ export class AdminBookingsComponent implements OnInit {
     private hotelService: HotelService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private translate: TranslateService,
     private bookingStatusService: BookingStatusTranslationService
   ) { }
 
@@ -96,27 +93,23 @@ export class AdminBookingsComponent implements OnInit {
             };
           },
           error => {
-            this.translate.get('ADMIN.ERRORS.LOAD_BOOKINGS').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Error loading bookings', 'Close', {
+              duration: 3000
             });
             this.isLoading = false;
           }
         );
       },
       error => {
-        this.translate.get('ADMIN.ERRORS.LOAD_ROOMS').subscribe(msg => {
-          this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-            duration: 3000
-          });
+        this.snackBar.open('Error loading rooms', 'Close', {
+          duration: 3000
         });
         this.isLoading = false;
       }
     );
   }
 
-  // Helper method để lấy giá trị thuộc tính một cách type-safe
+  // Helper method to get property values type-safe
   getPropertyValue(obj: Booking, prop: string): any {
     switch (prop) {
       case 'id': return obj.id;
@@ -155,18 +148,14 @@ export class AdminBookingsComponent implements OnInit {
         this.isLoading = true;
         this.hotelService.addBooking(result).subscribe(
           newBooking => {
-            this.translate.get('ADMIN.SUCCESS.ADD_BOOKING').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Booking added successfully', 'Close', {
+              duration: 3000
             });
             this.loadData();
           },
           error => {
-            this.translate.get('ADMIN.ERRORS.ADD_BOOKING').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Error adding booking', 'Close', {
+              duration: 3000
             });
             this.isLoading = false;
           }
@@ -186,18 +175,14 @@ export class AdminBookingsComponent implements OnInit {
         this.isLoading = true;
         this.hotelService.updateBooking(result).subscribe(
           updatedBooking => {
-            this.translate.get('ADMIN.SUCCESS.UPDATE_BOOKING').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Booking updated successfully', 'Close', {
+              duration: 3000
             });
             this.loadData();
           },
           error => {
-            this.translate.get('ADMIN.ERRORS.UPDATE_BOOKING').subscribe(msg => {
-              this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                duration: 3000
-              });
+            this.snackBar.open('Error updating booking', 'Close', {
+              duration: 3000
             });
             this.isLoading = false;
           }
@@ -207,38 +192,32 @@ export class AdminBookingsComponent implements OnInit {
   }
 
   deleteBooking(booking: Booking): void {
-    this.translate.get(['ADMIN.DIALOGS.DELETE_BOOKING_TITLE', 'ADMIN.DIALOGS.DELETE_BOOKING_MESSAGE']).subscribe(translations => {
-      const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
-        width: '400px',
-        data: {
-          title: translations['ADMIN.DIALOGS.DELETE_BOOKING_TITLE'],
-          message: `${translations['ADMIN.DIALOGS.DELETE_BOOKING_MESSAGE']} "${booking.guestName}"?`
-        }
-      });
+    const dialogRef = this.dialog.open(DeleteConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Delete Booking',
+        message: `Are you sure you want to delete the booking for "${booking.guestName}"?`
+      }
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.isLoading = true;
-          this.hotelService.deleteBooking(booking.id).subscribe(
-            success => {
-              this.translate.get('ADMIN.SUCCESS.DELETE_BOOKING').subscribe(msg => {
-                this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                  duration: 3000
-                });
-              });
-              this.loadData();
-            },
-            error => {
-              this.translate.get('ADMIN.ERRORS.DELETE_BOOKING').subscribe(msg => {
-                this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-                  duration: 3000
-                });
-              });
-              this.isLoading = false;
-            }
-          );
-        }
-      });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.isLoading = true;
+        this.hotelService.deleteBooking(booking.id).subscribe(
+          success => {
+            this.snackBar.open('Booking deleted successfully', 'Close', {
+              duration: 3000
+            });
+            this.loadData();
+          },
+          error => {
+            this.snackBar.open('Error deleting booking', 'Close', {
+              duration: 3000
+            });
+            this.isLoading = false;
+          }
+        );
+      }
     });
   }
 
@@ -246,18 +225,14 @@ export class AdminBookingsComponent implements OnInit {
     this.isLoading = true;
     this.hotelService.updateBookingStatus(booking.id, status).subscribe(
       updatedBooking => {
-        this.translate.get('ADMIN.SUCCESS.UPDATE_STATUS', { status: this.getStatusLabel(status) }).subscribe(msg => {
-          this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-            duration: 3000
-          });
+        this.snackBar.open(`Status updated to ${this.getStatusLabel(status)}`, 'Close', {
+          duration: 3000
         });
         this.loadData();
       },
       error => {
-        this.translate.get('ADMIN.ERRORS.UPDATE_STATUS').subscribe(msg => {
-          this.snackBar.open(msg, this.translate.instant('COMMON.CLOSE'), {
-            duration: 3000
-          });
+        this.snackBar.open('Error updating booking status', 'Close', {
+          duration: 3000
         });
         this.isLoading = false;
       }
@@ -266,17 +241,17 @@ export class AdminBookingsComponent implements OnInit {
 
   getRoomName(roomId: number): string {
     const room = this.rooms.find(r => r.id === roomId);
-    return room ? room.name : this.translate.instant('COMMON.UNDEFINED');
+    return room ? room.name : 'Undefined';
   }
 
   getFormattedDate(date: Date): string {
-    return new Date(date).toLocaleDateString(this.translate.currentLang === 'en' ? 'en-US' : 'vi-VN');
+    return new Date(date).toLocaleDateString('en-US');
   }
 
   getFormattedPrice(price: number): string {
-    return new Intl.NumberFormat(this.translate.currentLang === 'en' ? 'en-US' : 'vi-VN', { 
+    return new Intl.NumberFormat('en-US', { 
       style: 'currency', 
-      currency: this.translate.currentLang === 'en' ? 'USD' : 'VND',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(price);
   }
