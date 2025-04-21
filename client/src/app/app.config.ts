@@ -1,12 +1,11 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 import { routes } from './app.routes';
 import { CoreModule } from './core/core.module';
-// Removed TranslationModule import
 
 export const appConfig: ApplicationConfig = {
   providers: [
