@@ -5,10 +5,7 @@ import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@a
 import { routes } from './app.routes';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
-
-// Import for translation
 import { HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 // Factory function for translations

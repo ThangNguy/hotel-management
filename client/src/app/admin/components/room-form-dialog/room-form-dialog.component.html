@@ -65,6 +65,16 @@
       </mat-form-field>
       
       <mat-form-field appearance="outline">
+        <mat-label>Loại giường</mat-label>
+        <input matInput formControlName="beds" placeholder="Ví dụ: 1 giường đôi">
+        <mat-error *ngIf="roomForm.get('beds')?.hasError('required')">
+          Thông tin giường là bắt buộc
+        </mat-error>
+      </mat-form-field>
+    </div>
+    
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>URL hình ảnh</mat-label>
         <input matInput formControlName="imageUrl" placeholder="https://example.com/image.jpg">
         <mat-error *ngIf="roomForm.get('imageUrl')?.hasError('required')">
@@ -74,6 +84,21 @@
           URL hình ảnh không hợp lệ
         </mat-error>
       </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <div class="upload-container">
+        <button type="button" mat-raised-button color="accent" (click)="fileInput.click()">
+          <mat-icon>cloud_upload</mat-icon> Upload ảnh
+        </button>
+        <input #fileInput type="file" style="display:none" accept="image/*" (change)="onFileSelected($event)">
+        
+        <mat-progress-bar *ngIf="isUploading" [value]="uploadProgress" class="upload-progress"></mat-progress-bar>
+        
+        <div *ngIf="previewUrl" class="image-preview-container">
+          <img [src]="previewUrl" alt="Xem trước" class="image-preview">
+        </div>
+      </div>
     </div>
     
     <div class="form-row">
@@ -107,11 +132,24 @@
         </div>
       </div>
     </div>
+    
+    <!-- <div *ngIf="roomForm.get('imageUrl')?.value" class="preview-section">
+      <h3>Xem trước hình ảnh</h3>
+      <div class="image-preview">
+        <img [src]="roomForm.get('imageUrl')?.value" 
+             alt="Hình ảnh phòng" 
+             [class.invalid]="roomForm.get('imageUrl')?.invalid">
+        <div class="invalid-overlay" *ngIf="roomForm.get('imageUrl')?.invalid">
+          <mat-icon>broken_image</mat-icon>
+          <span>Hình ảnh không hợp lệ</span>
+        </div>
+      </div>
+    </div> -->
   </div>
   
   <div mat-dialog-actions align="end">
     <button mat-button type="button" (click)="onCancel()">Hủy</button>
-    <button mat-raised-button color="primary" type="submit" [disabled]="roomForm.invalid">
+    <button mat-raised-button color="primary" type="submit" [disabled]="roomForm.invalid || isUploading">
       {{isEdit ? 'Cập nhật' : 'Thêm'}}
     </button>
   </div>

@@ -96,6 +96,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Register Services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 var app = builder.Build();
 
@@ -103,7 +104,31 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+    //app.UseSwaggerUI();
 }
+
+// Ensure the wwwroot folder exists
+var webRootPath = app.Environment.WebRootPath;
+if (string.IsNullOrEmpty(webRootPath))
+{
+    webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+    app.Environment.WebRootPath = webRootPath;
+}
+
+if (!Directory.Exists(webRootPath))
+{
+    Directory.CreateDirectory(webRootPath);
+}
+
+// Create the uploads directory if it doesn't exist
+var uploadsDirectory = Path.Combine(webRootPath, "uploads", "images");
+if (!Directory.Exists(uploadsDirectory))
+{
+    Directory.CreateDirectory(uploadsDirectory);
+}
+
+// Enable static file serving
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
