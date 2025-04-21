@@ -1,106 +1,57 @@
 # Hotel Management System
 
-A full-stack hotel management application built with ASP.NET Core and Angular.
+## Tổng quan về dự án
+Hệ thống quản lý khách sạn cung cấp một nền tảng quản lý hoạt động của khách sạn, bao gồm đặt phòng, quản lý phòng, quản lý khách hàng và các dịch vụ khác.
 
-## Project Structure
+## Kiến trúc ứng dụng
+Dự án được chia thành hai phần chính:
+- **Frontend**: Phát triển bằng Angular
+- **Backend**: Phát triển bằng ASP.NET Core
 
-The project is organized into the following main directories:
+### Cấu trúc Frontend
+Ứng dụng client được tổ chức theo mô hình module với cấu trúc thư mục sau:
+- `/core`: Chứa các services và interceptors cốt lõi
+- `/shared`: Chứa các components, directives và pipes dùng chung
+- `/features`: Chứa các module chức năng riêng biệt (public, admin, not-found)
+- `/models`: Chứa các interfaces và enums
+- `/assets`: Chứa hình ảnh, translations, và các tài nguyên khác
 
-- **client**: Angular frontend application
-- **server**: ASP.NET Core backend application
-- **database**: Database scripts and migrations
+### Cấu trúc Backend
+Backend được xây dựng theo kiến trúc Clean Architecture:
+- `HotelManagement.API`: API endpoints và controllers
+- `HotelManagement.Application`: Business logic và use cases
+- `HotelManagement.Core`: Entities và business rules
+- `HotelManagement.Infrastructure`: Database, external services, and repositories
 
-## Technology Stack
+## Hướng dẫn cài đặt
 
-### Frontend
-- Angular
-- Angular Material
-- SCSS
-- i18n translation support (English and Vietnamese)
+### Yêu cầu
+- Node.js (16.x hoặc cao hơn)
+- Angular CLI (16.x hoặc cao hơn)
+- .NET 7.0 hoặc cao hơn
+- SQL Server (local hoặc remote)
 
-### Backend
-- ASP.NET Core Web API
-- Entity Framework Core
-- Clean Architecture (Core, Application, Infrastructure, API layers)
-- JWT Authentication
-
-## Getting Started
-
-### Prerequisites
-- Node.js and npm
-- .NET 8 SDK
-- SQL Server
-
-### Setup and Running
-
-#### Backend (API)
-1. Navigate to the server directory
-```
-cd server/src/HotelManagement.API
-```
-
-2. Restore dependencies
-```
-dotnet restore
-```
-
-3. Run the API
-```
-dotnet run
-```
-The API will be available at https://localhost:5001 (or http://localhost:5000)
-
-#### Frontend (Angular)
-1. Navigate to the client directory
-```
+### Cài đặt Frontend
+```bash
 cd client
-```
-
-2. Install dependencies
-```
 npm install
+ng serve
 ```
 
-3. Run the development server
+### Cài đặt Backend
+```bash
+cd server/src
+dotnet restore
+dotnet run --project HotelManagement.API
 ```
-npm start
-```
-The application will be available at http://localhost:4200
 
-## Features
+## Quy tắc phát triển
+Xem chi tiết tại [CODING_STANDARDS.md](./CODING_STANDARDS.md)
 
-- User authentication and authorization
-- Room management
-- Booking system
-- Multilingual support (English and Vietnamese)
-- Admin dashboard
-- Responsive design
-
-## Project Architecture
-
-### Backend Architecture
-The backend follows Clean Architecture principles with the following layers:
-- **Core**: Contains domain entities, interfaces, and business logic
-- **Application**: Contains application services, DTOs, and use cases
-- **Infrastructure**: Contains implementations of interfaces, database context, and external services
-- **API**: Contains controllers, middleware, and configuration
-
-### Frontend Architecture
-The frontend is organized into the following structure:
-- **components**: Reusable UI components
-- **services**: Data access and business logic
-- **models**: TypeScript interfaces for domain objects
-- **admin**: Admin dashboard module
-- **assets**: Static files (images, translations)
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a pull request
-
-## License
-
-This project is licensed under the MIT License.
+## Tính năng chính
+- Quản lý đặt phòng
+- Quản lý phòng và loại phòng
+- Giao diện người dùng cho khách hàng đặt phòng
+- Dashboard quản trị
+- Báo cáo và thống kê
+- Đa ngôn ngữ

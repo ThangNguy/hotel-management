@@ -107,13 +107,17 @@ export class AdminDashboardComponent implements OnInit {
         const bookingDate = new Date(booking.checkInDate);
         return bookingDate >= firstDayOfMonth && bookingDate <= currentDate;
       })
-      .reduce((total, booking) => total + booking.totalPrice, 0);
+      .reduce((total, booking) => total + (booking.totalPrice || 0), 0);
   }
 
   private getRecentBookings(bookings: Booking[], count: number): Booking[] {
     // Sort bookings by date (newest first) using createdAt field
     return [...bookings]
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
+      })
       .slice(0, count)
       .map(booking => {
         // Add room type to each booking for the table

@@ -1,19 +1,19 @@
 <section class="amenities-section" id="amenities">
   <div class="container">
     <div class="section-header">
-      <h2>Tiện Nghi & Dịch Vụ</h2>
-      <p>Khám phá những tiện nghi và dịch vụ cao cấp tại khách sạn của chúng tôi</p>
+      <h2>{{ 'AMENITIES.SECTION_TITLE' | translate }}</h2>
+      <p class="section-subtitle">{{ 'AMENITIES.SECTION_SUBTITLE' | translate }}</p>
     </div>
     
     <div class="amenities-grid">
-      @for (amenity of amenities; track amenity.name) {
-        <div class="amenity-card">
+      @for (amenity of amenitiesList; track amenity.name) {
+        <div class="amenity-card" [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="amenity.animationDelay">
           <div class="amenity-icon">
             <mat-icon>{{amenity.icon}}</mat-icon>
           </div>
           <div class="amenity-content">
-            <h3>{{amenity.name}}</h3>
-            <p>{{amenity.description}}</p>
+            <h3>{{ amenity.name | translate }}</h3>
+            <p>{{ amenity.description | translate }}</p>
           </div>
         </div>
       }

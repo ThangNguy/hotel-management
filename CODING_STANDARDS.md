@@ -166,3 +166,70 @@ This document outlines the coding standards and rules for the Hotel Management S
 - Check for adherence to coding standards
 - Verify all tests pass
 - Ensure documentation is updated
+
+# Quy tắc code cho dự án Hotel Management
+
+## Cấu trúc dự án
+Dự án được tổ chức theo cấu trúc module để đảm bảo tính modular và khả năng mở rộng:
+
+- `core`: Chứa các services cốt lõi, interceptors, và guards được dùng xuyên suốt ứng dụng
+- `shared`: Chứa các components, directives và pipes dùng chung 
+- `features`: Chứa các module chức năng riêng biệt của ứng dụng
+  - `public`: Module dành cho phần giao diện người dùng công khai
+  - `admin`: Module dành cho phần quản trị
+  - `not-found`: Module xử lý các đường dẫn không tồn tại
+- `models`: Chứa các interface và enums định nghĩa dữ liệu
+
+## Quy tắc đặt tên
+- **Tên file**: kebab-case (vd: hotel.service.ts, loading-indicator.component.ts)
+- **Tên class**: PascalCase (vd: HotelService, LoadingIndicatorComponent)
+- **Tên biến và phương thức**: camelCase (vd: isLoading, getHotelRooms())
+- **Tên hằng số**: UPPER_SNAKE_CASE (vd: API_URL, MAX_ROOMS)
+- **Tên selector component**: prefix 'app-' + kebab-case (vd: app-hotel-list)
+
+## Quy tắc về viết code
+
+### Services
+- Đặt tên service có hậu tố 'Service' (vd: HotelService)
+- Định nghĩa rõ kiểu trả về cho các phương thức
+- Sử dụng dependency injection thông qua constructor
+- Phân tách logic và tổ chức các phương thức thành từng nhóm rõ ràng
+
+### Components
+- Phân tách logic thành các phương thức nhỏ, tập trung vào một nhiệm vụ
+- Sử dụng lifecycle hooks một cách phù hợp
+- Tránh business logic phức tạp trong component, chuyển vào service
+- Sử dụng OnPush change detection khi có thể
+- Quản lý subscription để tránh memory leak
+
+### Interceptors
+- Tối giản hóa xử lý trong interceptors
+- Xử lý lỗi một cách thống nhất
+
+### Typescript
+- Sử dụng interface để định nghĩa dữ liệu
+- Tránh sử dụng `any` type khi có thể
+- Định nghĩa rõ kiểu dữ liệu cho biến và phương thức
+- Sử dụng generics khi làm việc với collections
+
+### RxJS
+- Sử dụng operators phù hợp cho mỗi trường hợp
+- Ưu tiên sử dụng pipe để xử lý observable
+- Đăng ký và hủy subscription đúng cách
+
+### JSDoc
+- Thêm JSDoc comment cho các interfaces, classes, và phương thức phức tạp
+- Mô tả rõ ràng mục đích, tham số và giá trị trả về
+
+## Nguyên tắc SOLID
+- **Single Responsibility Principle**: Mỗi class chỉ nên có một lý do để thay đổi
+- **Open/Closed Principle**: Class nên mở để mở rộng, đóng để sửa đổi
+- **Liskov Substitution Principle**: Các lớp dẫn xuất phải thay thế được cho lớp cơ sở
+- **Interface Segregation Principle**: Nhiều interface nhỏ tốt hơn một interface lớn
+- **Dependency Inversion Principle**: Phụ thuộc vào abstraction, không phụ thuộc vào implementation
+
+## Quy trình phát triển
+- Viết unit test cho logic nghiệp vụ quan trọng
+- Sử dụng lint và prettier để đảm bảo code style nhất quán
+- Pull request phải được review bởi ít nhất một thành viên khác
+- Commit message phải có ý nghĩa và tuân theo format: `<type>: <description>`

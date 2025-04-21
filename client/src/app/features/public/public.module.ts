@@ -1,0 +1,46 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { MaterialModule } from '../../material/material.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+// Components 
+import { HeroComponent } from '../../components/hero/hero.component';
+import { RoomsComponent } from '../../components/rooms/rooms.component';
+import { AmenitiesComponent } from '../../components/amenities/amenities.component';
+import { ContactComponent } from '../../components/contact/contact.component';
+import { HeaderComponent } from '../../components/header/header.component';
+import { FooterComponent } from '../../components/footer/footer.component';
+
+// Public Module Routes
+const routes: Routes = [
+  { path: 'home', component: HeroComponent },
+  { path: 'rooms', component: RoomsComponent },
+  { path: 'amenities', component: AmenitiesComponent },
+  { path: 'contact', component: ContactComponent },
+];
+
+@NgModule({
+  declarations: [],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    MaterialModule,
+    TranslateModule,
+    ReactiveFormsModule,
+    
+    // Standalone components
+    HeroComponent,
+    RoomsComponent,
+    AmenitiesComponent,
+    ContactComponent,
+    HeaderComponent,
+    FooterComponent
+  ],
+  exports: [
+    HeaderComponent,
+    FooterComponent
+  ]
+})
+export class PublicModule { }

@@ -14,22 +14,22 @@
         <!-- Room info -->
         <div class="room-info">
           <div class="price-section">
-            <span class="price">{{formatPrice(room.price)}}</span>
+            <span class="price">{{formatPrice(room.price || room.pricePerNight || 0)}}</span>
             <span class="per-night">/ {{ 'NIGHT' | translate }}</span>
           </div>
           
           <div class="details-section">
             <div class="detail-item">
               <mat-icon>people</mat-icon>
-              <span>{{ 'MAX_GUESTS' | translate }}: {{room.capacity}}</span>
+              <span>{{ 'MAX_GUESTS' | translate }}: {{room.capacity || room.maxOccupancy || 1}}</span>
             </div>
             <div class="detail-item">
               <mat-icon>hotel</mat-icon>
-              <span>{{ 'BEDS' | translate }}: {{room.beds}}</span>
+              <span>{{ 'BEDS' | translate }}: {{room.beds || '-'}}</span>
             </div>
             <div class="detail-item">
               <mat-icon>straighten</mat-icon>
-              <span>{{ 'ROOM_SIZE' | translate }}: {{room.size}} m²</span>
+              <span>{{ 'ROOM_SIZE' | translate }}: {{room.size || room.sizeSqm || 0}} m²</span>
             </div>
           </div>
           
@@ -84,7 +84,7 @@
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>{{ 'NUMBER_OF_GUESTS' | translate }}</mat-label>
-              <input matInput type="number" formControlName="numberOfGuests" min="1" [max]="room.capacity">
+              <input matInput type="number" formControlName="numberOfGuests" min="1" [max]="room.capacity || room.maxOccupancy || 1">
               <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('required')">
                 {{ 'REQUIRED_FIELD' | translate }}
               </mat-error>
@@ -92,7 +92,7 @@
                 {{ 'MIN_ONE_GUEST' | translate }}
               </mat-error>
               <mat-error *ngIf="bookingForm.get('numberOfGuests')?.hasError('max')">
-                {{ 'MAX_GUESTS_EXCEEDED' | translate: {capacity: room.capacity} }}
+                {{ 'MAX_GUESTS_EXCEEDED' | translate: {capacity: room.capacity || room.maxOccupancy || 1} }}
               </mat-error>
             </mat-form-field>
           </div>
@@ -149,7 +149,7 @@
             <h3>{{ 'PRICE_SUMMARY' | translate }}</h3>
             <div class="price-row">
               <span>{{ 'ROOM_PRICE' | translate }}</span>
-              <span>{{formatPrice(room.price)}}</span>
+              <span>{{formatPrice(room.price || room.pricePerNight || 0)}}</span>
             </div>
             <div class="price-row">
               <span>{{ 'NUMBER_OF_NIGHTS' | translate }}</span>

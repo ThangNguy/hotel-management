@@ -5,8 +5,9 @@ import { Observable, throwError } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpParams } from '@angular/common/http';
-import { ApiConfigService } from './api-config.service';
-import { RequestService } from './request.service';
+import { ApiConfigService } from '../services/api-config.service';
+import { RequestService } from '../services/request.service';
+import { ModelMapperService } from './model-mapper.service';
 
 /**
  * Service to manage hotel-related operations including rooms and bookings
@@ -33,11 +34,12 @@ export class HotelService {
   getRoomsAsync(): Observable<Room[]> {
     return this.requestService.get<Room[]>(this.apiConfigService.getRoomsUrl())
       .pipe(
-        map(rooms => {
+        map((rooms: Room[]) => {
           // Transform and cache the data
-          rooms.forEach(room => this.transformImageUrl(room));
-          this.cacheRooms(rooms);
-          return rooms.map(room => this.translateRoom(room));
+          const mappedRooms = rooms.map(room => ModelMapperService.mapRoom(room));
+          mappedRooms.forEach((room: Room) => this.transformImageUrl(room));
+          this.cacheRooms(mappedRooms);
+          return mappedRooms.map((room: Room) => this.translateRoom(room));
         })
       );
   }
@@ -50,7 +52,7 @@ export class HotelService {
   getRoomByIdAsync(id: number): Observable<Room | undefined> {
     return this.requestService.get<Room>(this.apiConfigService.getRoomUrl(id))
       .pipe(
-        map(room => this.translateRoom(room))
+        map((room: Room) => this.translateRoom(ModelMapperService.mapRoom(room)))
       );
   }
 
@@ -62,7 +64,7 @@ export class HotelService {
   addRoom(room: Room): Observable<Room> {
     return this.requestService.post<Room>(this.apiConfigService.getRoomsUrl(), room)
       .pipe(
-        map(newRoom => this.translateRoom(newRoom))
+        map((newRoom: Room) => this.translateRoom(ModelMapperService.mapRoom(newRoom)))
       );
   }
 
@@ -74,7 +76,7 @@ export class HotelService {
   updateRoom(room: Room): Observable<Room> {
     return this.requestService.put<Room>(this.apiConfigService.getRoomUrl(room.id), room)
       .pipe(
-        map(updatedRoom => this.translateRoom(updatedRoom))
+        map((updatedRoom: Room) => this.translateRoom(ModelMapperService.mapRoom(updatedRoom)))
       );
   }
 
@@ -103,7 +105,7 @@ export class HotelService {
 
     return this.requestService.get<Room[]>(this.apiConfigService.getAvailableRoomsUrl(), params)
       .pipe(
-        map(rooms => rooms.map(room => this.translateRoom(room)))
+        map((rooms: Room[]) => rooms.map((room: Room) => this.translateRoom(room)))
       );
   }
 
@@ -115,7 +117,8 @@ export class HotelService {
   getBookingsAsync(): Observable<Booking[]> {
     return this.requestService.get<Booking[]>(this.apiConfigService.getBookingsUrl())
       .pipe(
-        tap(bookings => this.cacheBookings(bookings))
+        map((bookings: Booking[]) => bookings.map(booking => ModelMapperService.mapBooking(booking))),
+        tap((bookings: Booking[]) => this.cacheBookings(bookings))
       );
   }
 
@@ -125,7 +128,10 @@ export class HotelService {
    * @returns Observable of the booking or undefined
    */
   getBookingByIdAsync(id: number): Observable<Booking | undefined> {
-    return this.requestService.get<Booking>(this.apiConfigService.getBookingUrl(id));
+    return this.requestService.get<Booking>(this.apiConfigService.getBookingUrl(id))
+      .pipe(
+        map((booking: Booking) => ModelMapperService.mapBooking(booking))
+      );
   }
 
   /**
@@ -134,7 +140,10 @@ export class HotelService {
    * @returns Observable of the created booking
    */
   addBooking(booking: Partial<Booking>): Observable<Booking> {
-    return this.requestService.post<Booking>(this.apiConfigService.getBookingsUrl(), booking);
+    return this.requestService.post<Booking>(this.apiConfigService.getBookingsUrl(), booking)
+      .pipe(
+        map((newBooking: Booking) => ModelMapperService.mapBooking(newBooking))
+      );
   }
 
   /**
@@ -143,7 +152,10 @@ export class HotelService {
    * @returns Observable of the updated booking
    */
   updateBooking(booking: Booking): Observable<Booking> {
-    return this.requestService.put<Booking>(this.apiConfigService.getBookingUrl(booking.id), booking);
+    return this.requestService.put<Booking>(this.apiConfigService.getBookingUrl(booking.id), booking)
+      .pipe(
+        map((updatedBooking: Booking) => ModelMapperService.mapBooking(updatedBooking))
+      );
   }
 
   /**
@@ -200,7 +212,7 @@ export class HotelService {
   getRooms(): Room[] {
     const cachedData = this.getCachedRooms();
     if (cachedData) {
-      return cachedData.map(room => this.translateRoom(room));
+      return cachedData.map((room: Room) => this.translateRoom(ModelMapperService.mapRoom(room)));
     }
     return [];
   }
@@ -213,8 +225,8 @@ export class HotelService {
   getRoomById(id: number): Room | undefined {
     const cachedData = this.getCachedRooms();
     if (cachedData) {
-      const room = cachedData.find(r => r.id === id);
-      return room ? this.translateRoom(room) : undefined;
+      const room = cachedData.find((r: Room) => r.id === id);
+      return room ? this.translateRoom(ModelMapperService.mapRoom(room)) : undefined;
     }
     return undefined;
   }
@@ -224,7 +236,11 @@ export class HotelService {
    * @returns Array of bookings
    */
   getBookings(): Booking[] {
-    return this.getCachedBookings() || [];
+    const cachedData = this.getCachedBookings();
+    if (cachedData) {
+      return cachedData.map((booking: Booking) => ModelMapperService.mapBooking(booking));
+    }
+    return [];
   }
 
   /**
@@ -235,7 +251,8 @@ export class HotelService {
   getBookingById(id: number): Booking | undefined {
     const cachedData = this.getCachedBookings();
     if (cachedData) {
-      return cachedData.find(b => b.id === id);
+      const booking = cachedData.find((b: Booking) => b.id === id);
+      return booking ? ModelMapperService.mapBooking(booking) : undefined;
     }
     return undefined;
   }
@@ -253,7 +270,7 @@ export class HotelService {
     const checkInTime = new Date(checkIn).getTime();
     const checkOutTime = new Date(checkOut).getTime();
   
-    const roomBookings = bookings.filter(booking => 
+    const roomBookings = bookings.filter((booking: Booking) => 
       booking.roomId === roomId && 
       booking.status !== BookingStatus.CANCELLED
     );
@@ -282,12 +299,18 @@ export class HotelService {
    * @returns Translated room
    */
   private translateRoom(room: Room): Room {
+    if (!room) return room;
+    
     const translatedRoom = { ...room };
     translatedRoom.name = this.translateService.instant(room.name);
     translatedRoom.description = this.translateService.instant(room.description);
-    translatedRoom.amenities = room.amenities.map(amenity => 
-      this.translateService.instant(amenity)
-    );
+    
+    if (room.amenities && Array.isArray(room.amenities)) {
+      translatedRoom.amenities = room.amenities.map((amenity: string) => 
+        this.translateService.instant(amenity)
+      );
+    }
+    
     return translatedRoom;
   }
 
@@ -298,7 +321,7 @@ export class HotelService {
    */
   private transformImageUrl(room: Room): Room {
     if (room.images && room.images.length > 0) {
-      room.images = room.images.map(image => 
+      room.images = room.images.map((image: string) => 
         `${this.apiConfigService.baseUrl}/${image}`
       );
     }

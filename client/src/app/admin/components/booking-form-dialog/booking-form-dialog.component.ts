@@ -141,7 +141,7 @@ export class BookingFormDialogComponent implements OnInit {
         const nights = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
         
         if (nights > 0) {
-          const totalPrice = room.price * nights;
+          const totalPrice = (room.price || room.pricePerNight || 0) * nights;
           this.bookingForm.get('totalPrice')?.setValue(totalPrice);
         }
       }
@@ -218,7 +218,7 @@ export class BookingFormDialogComponent implements OnInit {
     
     if (roomId && numberOfGuests) {
       const room = this.getRoomById(parseInt(roomId));
-      if (room && numberOfGuests > room.capacity) {
+      if (room && numberOfGuests > (room.capacity || room.maxOccupancy || 1)) {
         this.bookingForm.get('numberOfGuests')?.setErrors({ exceedsCapacity: true });
       }
     }

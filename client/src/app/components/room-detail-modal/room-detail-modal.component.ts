@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { BookingStatus } from '../../models/booking.model';
 import { LoadingIndicatorComponent } from '../shared/loading-indicator/loading-indicator.component';
 import { MatTabsModule } from '@angular/material/tabs'; // Import MatTabsModule explicitly
+import { ModelMapperService } from '../../core/services/model-mapper.service';
 
 @Component({
   selector: 'app-room-detail-modal',
@@ -44,11 +45,17 @@ export class RoomDetailModalComponent implements OnInit {
     private hotelService: HotelService,
     private errorService: ErrorHandlingService
   ) {
+    // Ensure all room properties are properly mapped
+    this.room = ModelMapperService.mapRoom(room);
+    
+    // Use default max capacity if room.capacity is undefined
+    const maxCapacity = this.room.capacity || this.room.maxOccupancy || 1;
+    
     // Initialize booking form
     this.bookingForm = this.fb.group({
       checkInDate: [null, Validators.required],
       checkOutDate: [null, Validators.required],
-      numberOfGuests: [1, [Validators.required, Validators.min(1), Validators.max(room.capacity)]],
+      numberOfGuests: [1, [Validators.required, Validators.min(1), Validators.max(maxCapacity)]],
       guestName: ['', [Validators.required, Validators.minLength(3)]],
       guestEmail: ['', [Validators.required, Validators.email]],
       guestPhone: ['', [Validators.required, Validators.pattern(/^\d{10,11}$/)]],
@@ -92,8 +99,8 @@ export class RoomDetailModalComponent implements OnInit {
       const timeDiff = checkOut.getTime() - checkIn.getTime();
       this.numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
       
-      // Calculate total price
-      this.totalPrice = this.numberOfNights * this.room.price;
+      // Calculate total price (use pricePerNight as fallback)
+      this.totalPrice = this.numberOfNights * (this.room.price || this.room.pricePerNight || 0);
     }
   }
 

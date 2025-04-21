@@ -4,10 +4,13 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { LoadingService } from './services/loading.service';
+import { LoadingService } from './core/services/loading.service';
 import { LoadingIndicatorComponent } from './components/shared/loading-indicator/loading-indicator.component';
 import { AsyncPipe, NgIf } from '@angular/common';
 
+/**
+ * Root component của ứng dụng
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -22,19 +25,30 @@ export class AppComponent implements OnInit {
     private translate: TranslateService,
     public loadingService: LoadingService
   ) {
-    // Temporarily use only English - multi-language support disabled
-    translate.addLangs(['en']);
-    translate.setDefaultLang('en');
-    translate.use('en');
+    // Khởi tạo ngôn ngữ
+    this.initializeLanguage();
   }
   
   ngOnInit(): void {
-    // Initialize the application
+    // Khởi tạo ứng dụng
   }
   
-  // Method to change language - temporarily disabled
-  switchLanguage(language: string) {
-    // Only use English for now
+  /**
+   * Khởi tạo cấu hình ngôn ngữ của ứng dụng
+   */
+  private initializeLanguage(): void {
+    // Tạm thời chỉ sử dụng tiếng Anh - hỗ trợ đa ngôn ngữ đang bị vô hiệu hóa
+    this.translate.addLangs(['en']);
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+  }
+  
+  /**
+   * Phương thức để thay đổi ngôn ngữ - tạm thời bị vô hiệu hóa
+   * @param language Mã ngôn ngữ
+   */
+  switchLanguage(language: string): void {
+    // Chỉ sử dụng tiếng Anh
     this.translate.use('en');
   }
 }

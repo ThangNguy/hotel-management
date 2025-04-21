@@ -45,7 +45,7 @@
           <mat-label>{{ 'BOOKING.ROOM' | translate }}</mat-label>
           <mat-select formControlName="roomId" required (selectionChange)="validateRoomCapacity()">
             <mat-option *ngFor="let room of availableRooms" [value]="room.id">
-              {{ room.name }} ({{ getFormattedPrice(room.price) }})
+              {{ room.name }} ({{ getFormattedPrice(room.price || room.pricePerNight || 0) }})
             </mat-option>
           </mat-select>
           <mat-error *ngIf="bookingForm.get('roomId')?.hasError('required')">
