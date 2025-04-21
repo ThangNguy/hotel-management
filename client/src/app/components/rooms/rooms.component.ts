@@ -9,7 +9,7 @@ import { RoomDetailModalComponent } from '../room-detail-modal/room-detail-modal
 import { LoadingIndicatorComponent } from '../shared/loading-indicator/loading-indicator.component';
 import { Subject, takeUntil } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-rooms',
@@ -24,7 +24,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
   loading = false;
   error = false;
   
-  searchForm: FormGroup;
   minDate = new Date();
   minCheckOutDate = new Date(this.minDate.getTime() + 86400000); // Tomorrow
   
@@ -34,30 +33,7 @@ export class RoomsComponent implements OnInit, OnDestroy {
     private hotelService: HotelService,
     private errorService: ErrorHandlingService,
     private dialog: MatDialog,
-    private fb: FormBuilder
-  ) {
-    // Initialize search form
-    this.searchForm = this.fb.group({
-      checkInDate: [null, Validators.required],
-      checkOutDate: [null, Validators.required],
-      adults: [2, [Validators.required, Validators.min(1), Validators.max(10)]],
-      children: [0, [Validators.min(0), Validators.max(10)]]
-    });
-    
-    // Update min checkout date when check-in date changes
-    this.searchForm.get('checkInDate')?.valueChanges.subscribe(date => {
-      if (date) {
-        const checkInDate = new Date(date);
-        this.minCheckOutDate = new Date(checkInDate.getTime() + 86400000); // Next day
-        
-        // Reset checkout date if it's before the new min date
-        const currentCheckOutDate = this.searchForm.get('checkOutDate')?.value;
-        if (currentCheckOutDate && new Date(currentCheckOutDate) < this.minCheckOutDate) {
-          this.searchForm.get('checkOutDate')?.setValue(null);
-        }
-      }
-    });
-  }
+  ) { }
 
   ngOnInit(): void {
     this.loadRooms();
@@ -88,28 +64,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
       });
   }
 
-  onSearch(): void {
-    if (this.searchForm.valid) {
-      const checkInDate = this.searchForm.get('checkInDate')?.value;
-      const checkOutDate = this.searchForm.get('checkOutDate')?.value;
-      
-      this.loading = true;
-      
-      this.hotelService.getAvailableRoomsAsync(checkInDate, checkOutDate)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (rooms) => {
-            this.filteredRooms = rooms;
-            this.loading = false;
-          },
-          error: (error) => {
-            this.loading = false;
-            this.errorService.handleError(error);
-          }
-        });
-    }
-  }
-
   openRoomDetails(room: Room): void {
     this.dialog.open(RoomDetailModalComponent, {
       width: '800px',
@@ -117,7 +71,6 @@ export class RoomsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Hiển thị giá theo định dạng VND
   formatPrice(price: number): string {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',

@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { Room } from '../models/room.model';
 import { Booking, BookingStatus } from '../models/booking.model';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { ApiConfigService } from './api-config.service';
+import { RequestService } from './request.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ import { ApiConfigService } from './api-config.service';
 export class HotelService {
   constructor(
     private translate: TranslateService,
-    private http: HttpClient,
-    private apiConfig: ApiConfigService
+    private apiConfig: ApiConfigService,
+    private requestService: RequestService
   ) { }
 
   // TRANSLATION HELPER
@@ -143,61 +144,49 @@ export class HotelService {
 
   // ROOMS API
   getRoomsAsync(): Observable<Room[]> {
-    return this.http.get<Room[]>(this.apiConfig.getRoomsUrl())
+    return this.requestService.get<Room[]>(this.apiConfig.getRoomsUrl())
       .pipe(
         map(rooms => {
           // Cache the data
+          rooms.forEach(room => this._transformImageUrl(room));
           window.sessionStorage.setItem('hotelRooms', JSON.stringify(rooms));
           return rooms.map(room => this.translateRoom(room));
-        }),
-        catchError(error => {
-          console.error('Error fetching rooms', error);
-          return throwError(() => new Error('Failed to fetch rooms. Please try again.'));
         })
       );
   }
 
+  private _transformImageUrl(room: Room): Room {
+    if (room.images && room.images.length > 0) {
+      room.images = room.images.map(image => `${this.apiConfig.baseUrl}/${image}`);
+    }
+    return room;
+  }
+
   getRoomByIdAsync(id: number): Observable<Room | undefined> {
-    return this.http.get<Room>(this.apiConfig.getRoomUrl(id))
+    return this.requestService.get<Room>(this.apiConfig.getRoomUrl(id))
       .pipe(
-        map(room => this.translateRoom(room)),
-        catchError(error => {
-          console.error(`Error fetching room with id ${id}`, error);
-          return throwError(() => new Error('Failed to fetch room details. Please try again.'));
-        })
+        map(room => this.translateRoom(room))
       );
   }
 
   addRoom(room: Room): Observable<Room> {
-    return this.http.post<Room>(this.apiConfig.getRoomsUrl(), room)
+    return this.requestService.post<Room>(this.apiConfig.getRoomsUrl(), room)
       .pipe(
-        map(newRoom => this.translateRoom(newRoom)),
-        catchError(error => {
-          console.error('Error adding room', error);
-          return throwError(() => new Error('Failed to add room. Please try again.'));
-        })
+        map(newRoom => this.translateRoom(newRoom))
       );
   }
 
   updateRoom(room: Room): Observable<Room> {
-    return this.http.put<Room>(this.apiConfig.getRoomUrl(room.id), room)
+    return this.requestService.put<Room>(this.apiConfig.getRoomUrl(room.id), room)
       .pipe(
-        map(updatedRoom => this.translateRoom(updatedRoom)),
-        catchError(error => {
-          console.error(`Error updating room with id ${room.id}`, error);
-          return throwError(() => new Error('Failed to update room. Please try again.'));
-        })
+        map(updatedRoom => this.translateRoom(updatedRoom))
       );
   }
 
   deleteRoom(id: number): Observable<boolean> {
-    return this.http.delete<void>(this.apiConfig.getRoomUrl(id))
+    return this.requestService.delete<void>(this.apiConfig.getRoomUrl(id))
       .pipe(
-        map(() => true),
-        catchError(error => {
-          console.error(`Error deleting room with id ${id}`, error);
-          return throwError(() => new Error('Failed to delete room. Please try again.'));
-        })
+        map(() => true)
       );
   }
 
@@ -207,75 +196,37 @@ export class HotelService {
       .set('checkInDate', checkIn.toISOString())
       .set('checkOutDate', checkOut.toISOString());
 
-    return this.http.get<Room[]>(this.apiConfig.getAvailableRoomsUrl(), { params })
+    return this.requestService.get<Room[]>(this.apiConfig.getAvailableRoomsUrl(), params)
       .pipe(
-        map(rooms => rooms.map(room => this.translateRoom(room))),
-        catchError(error => {
-          console.error('Error fetching available rooms', error);
-          return throwError(() => new Error('Failed to fetch available rooms. Please try again.'));
-        })
+        map(rooms => rooms.map(room => this.translateRoom(room)))
       );
   }
 
   // BOOKINGS API
   getBookingsAsync(): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.apiConfig.getBookingsUrl())
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching bookings', error);
-          return throwError(() => new Error('Failed to fetch bookings. Please try again.'));
-        })
-      );
+    return this.requestService.get<Booking[]>(this.apiConfig.getBookingsUrl());
   }
 
   getBookingByIdAsync(id: number): Observable<Booking | undefined> {
-    return this.http.get<Booking>(this.apiConfig.getBookingUrl(id))
-      .pipe(
-        catchError(error => {
-          console.error(`Error fetching booking with id ${id}`, error);
-          return throwError(() => new Error('Failed to fetch booking details. Please try again.'));
-        })
-      );
+    return this.requestService.get<Booking>(this.apiConfig.getBookingUrl(id));
   }
 
   addBooking(booking: Partial<Booking>): Observable<Booking> {
-    return this.http.post<Booking>(this.apiConfig.getBookingsUrl(), booking)
-      .pipe(
-        catchError(error => {
-          console.error('Error adding booking', error);
-          return throwError(() => new Error('Failed to add booking. Please try again.'));
-        })
-      );
+    return this.requestService.post<Booking>(this.apiConfig.getBookingsUrl(), booking);
   }
 
   updateBooking(booking: Booking): Observable<Booking> {
-    return this.http.put<Booking>(this.apiConfig.getBookingUrl(booking.id), booking)
-      .pipe(
-        catchError(error => {
-          console.error(`Error updating booking with id ${booking.id}`, error);
-          return throwError(() => new Error('Failed to update booking. Please try again.'));
-        })
-      );
+    return this.requestService.put<Booking>(this.apiConfig.getBookingUrl(booking.id), booking);
   }
 
   updateBookingStatus(id: number, status: BookingStatus): Observable<Booking | undefined> {
-    return this.http.patch<Booking>(this.apiConfig.getBookingUrl(id), { status })
-      .pipe(
-        catchError(error => {
-          console.error(`Error updating booking status for id ${id}`, error);
-          return throwError(() => new Error('Failed to update booking status. Please try again.'));
-        })
-      );
+    return this.requestService.patch<Booking>(this.apiConfig.getBookingUrl(id), { status });
   }
 
   deleteBooking(id: number): Observable<boolean> {
-    return this.http.delete<void>(this.apiConfig.getBookingUrl(id))
+    return this.requestService.delete<void>(this.apiConfig.getBookingUrl(id))
       .pipe(
-        map(() => true),
-        catchError(error => {
-          console.error(`Error deleting booking with id ${id}`, error);
-          return throwError(() => new Error('Failed to delete booking. Please try again.'));
-        })
+        map(() => true)
       );
   }
 }
