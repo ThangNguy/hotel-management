@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { map, Observable, take } from 'rxjs';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../core/services';
+
 
 /**
  * Guard để bảo vệ các route của admin, yêu cầu người dùng phải đăng nhập

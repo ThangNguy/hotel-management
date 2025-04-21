@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 import { LoadingService } from './core/services/loading.service';
-import { LoadingIndicatorComponent } from './components/shared/loading-indicator/loading-indicator.component';
 import { AsyncPipe, NgIf } from '@angular/common';
+import { FooterComponent } from './features/public/components/footer/footer.component';
+import { HeaderComponent } from './features/public/components/header/header.component';
+import { LoadingIndicatorComponent } from './features/public/components/shared/loading-indicator/loading-indicator.component';
 
 /**
  * Root component of the application

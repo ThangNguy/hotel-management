@@ -6,12 +6,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // Components 
-import { HeroComponent } from '../../components/hero/hero.component';
-import { RoomsComponent } from '../../components/rooms/rooms.component';
-import { AmenitiesComponent } from '../../components/amenities/amenities.component';
-import { ContactComponent } from '../../components/contact/contact.component';
-import { HeaderComponent } from '../../components/header/header.component';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { HeroComponent } from './components/hero/hero.component';
+import { RoomsComponent } from './components/rooms/rooms.component';
+import { AmenitiesComponent } from './components/amenities/amenities.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 // Public Module Routes
 const routes: Routes = [
@@ -21,6 +21,12 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
 ];
 
+/**
+ * Public Module for hotel management frontend
+ * 
+ * NOTE: Đã refactor để đưa tất cả các components vào trong features/public/components
+ * Cấu trúc thư mục hiện tại đã tuân theo chuẩn Angular feature modules
+ */
 @NgModule({
   declarations: [],
   imports: [
@@ -32,7 +38,6 @@ const routes: Routes = [
     
     // Standalone components
     HeroComponent,
-    RoomsComponent,
     AmenitiesComponent,
     ContactComponent,
     HeaderComponent,

@@ -3,9 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
-
-// Standalone components cần import
-import { LoadingIndicatorComponent } from '../components/shared/loading-indicator/loading-indicator.component';
+import { LoadingIndicatorComponent } from '../features/public/components/shared/loading-indicator/loading-indicator.component';
 
 
 /**
