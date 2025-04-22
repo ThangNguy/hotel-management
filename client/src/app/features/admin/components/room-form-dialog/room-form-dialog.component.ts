@@ -119,7 +119,7 @@ export class RoomFormDialogComponent implements OnInit {
     
     // Validate file type
     if (!file.type.includes('image/')) {
-      alert('Chỉ chấp nhận file hình ảnh!');
+      alert('Only image files are accepted!');
       return;
     }
     
@@ -159,7 +159,7 @@ export class RoomFormDialogComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error uploading image:', error);
-          alert('Lỗi khi tải lên hình ảnh. Vui lòng thử lại.');
+          alert('Error uploading image. Please try again.');
         }
       });
   }

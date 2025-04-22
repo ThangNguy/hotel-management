@@ -12,24 +12,29 @@
       <div class="nav-section">
         <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
           <mat-icon>dashboard</mat-icon>
-          <span>Tổng quan</span>
+          <span>Dashboard</span>
         </a>
 
         <a mat-list-item routerLink="/admin/bookings" routerLinkActive="active">
           <mat-icon>event_note</mat-icon>
-          <span>Đặt phòng</span>
+          <span>Bookings</span>
+        </a>
+
+        <a mat-list-item routerLink="/admin/booking-calendar" routerLinkActive="active">
+          <mat-icon>calendar_month</mat-icon>
+          <span>Booking Calendar</span>
         </a>
 
         <a mat-list-item routerLink="/admin/rooms" routerLinkActive="active">
           <mat-icon>hotel</mat-icon>
-          <span>Quản lý phòng</span>
+          <span>Room Management</span>
         </a>
       </div>
 
       <div class="nav-section user-section">
         <a mat-list-item (click)="logout()">
           <mat-icon>logout</mat-icon>
-          <span>Đăng xuất</span>
+          <span>Logout</span>
         </a>
       </div>
     </div>
@@ -48,14 +53,14 @@
       <span class="flex-spacer"></span>
       
       <div class="user-info">
-        <span class="welcome-text">Xin chào, {{userName}}</span>
+        <span class="welcome-text">Hello, {{userName}}</span>
         <button mat-icon-button [matMenuTriggerFor]="userMenu">
           <mat-icon>account_circle</mat-icon>
         </button>
         <mat-menu #userMenu="matMenu">
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
-            <span>Đăng xuất</span>
+            <span>Logout</span>
           </button>
         </mat-menu>
       </div>

@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from '../../material/material.module';
-import { TranslateModule } from '@ngx-translate/core';
 
 // Import components
 import { AdminLayoutComponent } from './components/admin-layout/admin-layout.component';
@@ -16,16 +15,17 @@ import { RoomFormDialogComponent } from './components/room-form-dialog/room-form
 import { BookingFormDialogComponent } from './components/booking-form-dialog/booking-form-dialog.component';
 import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
 import { AdminRoutingModule } from './admin-routing.module';
+import { BookingCalendarComponent } from './components/booking-calendar/booking-calendar.component';
 
 
 /**
  * Admin Module for hotel management administrative functions
  * 
- * NOTE: Đã refactor để đưa tất cả các components vào trong features/admin/components
- * Cấu trúc thư mục hiện tại đã tuân theo chuẩn Angular feature modules
+ * NOTE: All components have been refactored into features/admin/components
+ * The current directory structure follows Angular feature modules standards
  */
 @NgModule({
-  // Không cần declarations vì các components đã là standalone
+  // No declarations needed as components are standalone
   declarations: [],
   imports: [
     CommonModule,
@@ -34,7 +34,6 @@ import { AdminRoutingModule } from './admin-routing.module';
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    TranslateModule,
     
     // Standalone components
     AdminLayoutComponent,
@@ -44,7 +43,8 @@ import { AdminRoutingModule } from './admin-routing.module';
     AdminLoginComponent,
     RoomFormDialogComponent,
     BookingFormDialogComponent,
-    DeleteConfirmDialogComponent
+    DeleteConfirmDialogComponent,
+    BookingCalendarComponent
   ]
 })
 export class AdminModule { }

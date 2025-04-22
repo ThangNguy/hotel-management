@@ -15,8 +15,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 /**
- * CoreModule chứa các services và interceptors được sử dụng 
- * trên toàn bộ ứng dụng
+ * CoreModule contains services and interceptors used
+ * throughout the application
  */
 @NgModule({
   declarations: [],
@@ -40,13 +40,13 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
 })
 export class CoreModule {
   /**
-   * Constructor để đảm bảo CoreModule chỉ được import một lần
-   * @param parentModule Tham chiếu đến CoreModule nếu đã được tải
+   * Constructor to ensure CoreModule is only imported once
+   * @param parentModule Reference to CoreModule if already loaded
    */
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     if (parentModule) {
       throw new Error(
-        'CoreModule đã được tải. Import CoreModule chỉ trong AppModule.');
+        'CoreModule has already been loaded. Import CoreModule only in AppModule.');
     }
   }
 }

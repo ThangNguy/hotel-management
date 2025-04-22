@@ -1,11 +1,11 @@
 /**
  * Barrel file for core services
- * Giúp dễ dàng import nhiều services từ một file
+ * Helps easily import multiple services from a single file
  */
 
 export * from './api-config.service';
 export * from './auth.service';
-export * from './booking-status-translation.service';
+export * from './booking-status.service';
 export * from './error-handling.service';
 export * from './hotel.service';
 export * from './image.service';

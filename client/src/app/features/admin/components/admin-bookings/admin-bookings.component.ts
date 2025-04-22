@@ -15,7 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BookingFormDialogComponent } from '../booking-form-dialog/booking-form-dialog.component';
 import { DeleteConfirmDialogComponent } from '../delete-confirm-dialog/delete-confirm-dialog.component';
-import { HotelService, BookingStatusTranslationService } from '../../../../core/services';
+import { BookingStatusService, HotelService } from '../../../../core/services';
 import { Booking, BookingStatus } from '../../../../models/booking.model';
 import { Room } from '../../../../models/room.model';
 
@@ -58,7 +58,7 @@ export class AdminBookingsComponent implements OnInit {
     private hotelService: HotelService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private bookingStatusService: BookingStatusTranslationService
+    private bookingStatusService: BookingStatusService
   ) { }
 
   ngOnInit(): void {
@@ -256,7 +256,7 @@ export class AdminBookingsComponent implements OnInit {
   }
   
   getStatusLabel(status: BookingStatus): string {
-    return this.bookingStatusService.getStatusTranslationSync(status);
+    return this.bookingStatusService.getStatusLabel(status);
   }
   
   getStatusColor(status: BookingStatus): string {

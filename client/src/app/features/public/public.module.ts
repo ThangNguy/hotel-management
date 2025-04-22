@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MaterialModule } from '../../material/material.module';
-import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // Components 
@@ -24,8 +23,8 @@ const routes: Routes = [
 /**
  * Public Module for hotel management frontend
  * 
- * NOTE: Đã refactor để đưa tất cả các components vào trong features/public/components
- * Cấu trúc thư mục hiện tại đã tuân theo chuẩn Angular feature modules
+ * NOTE: Refactored to move all components into features/public/components
+ * Current directory structure follows Angular feature module standards
  */
 @NgModule({
   declarations: [],
@@ -33,7 +32,6 @@ const routes: Routes = [
     CommonModule,
     RouterModule.forChild(routes),
     MaterialModule,
-    TranslateModule,
     ReactiveFormsModule,
     
     // Standalone components

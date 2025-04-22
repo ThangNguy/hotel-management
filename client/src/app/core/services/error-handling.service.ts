@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Service xử lý lỗi trung tâm cho ứng dụng
@@ -12,8 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class ErrorHandlingService {
   constructor(
-    private snackBar: MatSnackBar,
-    private translateService: TranslateService
+    private snackBar: MatSnackBar
   ) { }
 
   /**
@@ -31,7 +29,7 @@ export class ErrorHandlingService {
    * @returns Thông báo lỗi dễ hiểu
    */
   private getErrorMessage(error: any): string {
-    let errorMessage = this.translateService.instant('ERROR.UNEXPECTED');
+    let errorMessage = 'ERROR.UNEXPECTED';
     
     if (error instanceof HttpErrorResponse) {
       // API error with response body
@@ -58,17 +56,17 @@ export class ErrorHandlingService {
   private getHttpStatusErrorMessage(status: number): string {
     switch (status) {
       case 400:
-        return this.translateService.instant('ERROR.BAD_REQUEST');
+        return 'ERROR.BAD_REQUEST';
       case 401:
-        return this.translateService.instant('ERROR.UNAUTHORIZED');
+        return 'ERROR.UNAUTHORIZED';
       case 403:
-        return this.translateService.instant('ERROR.FORBIDDEN');
+        return 'ERROR.FORBIDDEN';
       case 404:
-        return this.translateService.instant('ERROR.NOT_FOUND');
+        return 'ERROR.NOT_FOUND';
       case 500:
-        return this.translateService.instant('ERROR.SERVER_ERROR');
+        return 'ERROR.SERVER_ERROR';
       default:
-        return this.translateService.instant('ERROR.UNEXPECTED');
+        return 'ERROR.UNEXPECTED';
     }
   }
 
@@ -78,7 +76,7 @@ export class ErrorHandlingService {
    * @param duration Thời gian hiển thị (ms)
    */
   showError(message: string, duration: number = 5000): void {
-    this.snackBar.open(message, this.translateService.instant('COMMON.CLOSE'), {
+    this.snackBar.open(message, 'COMMON.CLOSE', {
       duration: duration,
       panelClass: ['error-snackbar'],
       horizontalPosition: 'center',
@@ -92,7 +90,7 @@ export class ErrorHandlingService {
    * @param duration Thời gian hiển thị (ms)
    */
   showSuccess(message: string, duration: number = 3000): void {
-    this.snackBar.open(message, this.translateService.instant('COMMON.CLOSE'), {
+    this.snackBar.open(message, 'COMMON.CLOSE', {
       duration: duration,
       panelClass: ['success-snackbar'],
       horizontalPosition: 'center',
@@ -106,7 +104,7 @@ export class ErrorHandlingService {
    * @param duration Thời gian hiển thị (ms)
    */
   showWarning(message: string, duration: number = 4000): void {
-    this.snackBar.open(message, this.translateService.instant('COMMON.CLOSE'), {
+    this.snackBar.open(message, 'COMMON.CLOSE', {
       duration: duration,
       panelClass: ['warning-snackbar'],
       horizontalPosition: 'center',

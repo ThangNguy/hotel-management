@@ -5,6 +5,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { AdminRoomsComponent } from './components/admin-rooms/admin-rooms.component';
 import { AdminBookingsComponent } from './components/admin-bookings/admin-bookings.component';
 import { AdminLoginComponent } from './components/admin-login/admin-login.component';
+import { BookingCalendarComponent } from './components/booking-calendar/booking-calendar.component';
 import { AuthGuard } from './guards/auth.guard';
 
 /**
@@ -36,6 +37,10 @@ const routes: Routes = [
       {
         path: 'bookings',
         component: AdminBookingsComponent
+      },
+      {
+        path: 'booking-calendar',
+        component: BookingCalendarComponent
       }
     ]
   }

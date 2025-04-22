@@ -1,0 +1,38 @@
+<div class="booking-calendar-container">
+  <mat-card class="main-card">
+    <mat-card-header>
+      <mat-card-title>Booking Calendar</mat-card-title>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="addBooking()">
+          <mat-icon>add</mat-icon> Add Booking
+        </button>
+      </div>
+    </mat-card-header>
+    
+    <div class="filter-controls">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by status</mat-label>
+        <mat-select [value]="selectedStatuses" multiple (selectionChange)="onStatusFilterChange($event)">
+          <mat-option *ngFor="let status of allStatusOptions" [value]="status.value">
+            <span class="status-dot" [style.background-color]="status.color"></span>
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <button mat-stroked-button (click)="resetFilters()">
+        <mat-icon>refresh</mat-icon> Reset filters
+      </button>
+    </div>
+    
+    <mat-card-content>
+      <div *ngIf="isLoading" class="loading-spinner">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+      </div>
+      
+      <div class="calendar-container" [class.loading]="isLoading">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

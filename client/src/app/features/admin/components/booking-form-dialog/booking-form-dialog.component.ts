@@ -1,8 +1,6 @@
-
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BookingStatus, Booking } from '../../../../models/booking.model';
 import { Room } from '../../../../models/room.model';
 import { HotelService } from '../../../../core/services';
-import { BookingStatusTranslationService } from '../../../../core/services/booking-status-translation.service';
+import { BookingStatusService } from '../../../../core/services/booking-status.service';
 
 
 interface BookingFormData {
@@ -46,8 +44,7 @@ interface BookingFormData {
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
-    MatIconModule,
-    TranslateModule
+    MatIconModule
   ]
 })
 export class BookingFormDialogComponent implements OnInit {
@@ -62,8 +59,7 @@ export class BookingFormDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private hotelService: HotelService,
-    private translate: TranslateService,
-    private bookingStatusService: BookingStatusTranslationService,
+    private bookingStatusService: BookingStatusService,
     public dialogRef: MatDialogRef<BookingFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { 
       mode: 'add' | 'edit', 
@@ -206,9 +202,7 @@ export class BookingFormDialogComponent implements OnInit {
     }
     
     if (!this.checkRoomAvailability()) {
-      this.translate.get('BOOKING.ROOM_NOT_AVAILABLE').subscribe(msg => {
-        alert(msg);
-      });
+      alert('Room is not available for the selected dates');
       return;
     }
     
@@ -247,15 +241,15 @@ export class BookingFormDialogComponent implements OnInit {
   }
   
   getFormattedPrice(price: number): string {
-    return new Intl.NumberFormat(this.translate.currentLang === 'en' ? 'en-US' : 'vi-VN', { 
+    return new Intl.NumberFormat('en-US', { 
       style: 'currency', 
-      currency: this.translate.currentLang === 'en' ? 'USD' : 'VND',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(price);
   }
   
   getStatusLabel(status: BookingStatus): string {
-    return this.bookingStatusService.getStatusTranslationSync(status);
+    return this.bookingStatusService.getStatusLabel(status);
   }
   
   validateRoomCapacity(): void {

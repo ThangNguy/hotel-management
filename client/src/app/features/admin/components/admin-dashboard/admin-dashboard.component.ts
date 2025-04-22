@@ -6,9 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import { HotelService } from '../../../../core/services';
-import { BookingStatusTranslationService } from '../../../../core/services/booking-status-translation.service';
+import { BookingStatusService, HotelService } from '../../../../core/services';
 import { Booking, BookingStatus } from '../../../../models/booking.model';
 import { Room } from '../../../../models/room.model';
 
@@ -25,8 +23,7 @@ import { Room } from '../../../../models/room.model';
     MatButtonModule,
     MatProgressSpinnerModule,
     NgClass,
-    RouterLink,
-    TranslateModule
+    RouterLink
   ]
 })
 export class AdminDashboardComponent implements OnInit {
@@ -46,8 +43,7 @@ export class AdminDashboardComponent implements OnInit {
 
   constructor(
     private hotelService: HotelService,
-    private translate: TranslateService,
-    private bookingStatusService: BookingStatusTranslationService
+    private bookingStatusService: BookingStatusService
   ) { }
 
   ngOnInit(): void {
@@ -124,7 +120,7 @@ export class AdminDashboardComponent implements OnInit {
         const room = this.hotelService.getRoomById(booking.roomId);
         return {
           ...booking,
-          roomType: room ? room.name : this.translate.instant('COMMON.UNDEFINED')
+          roomType: room ? room.name : 'Undefined'
         } as Booking & { roomType: string };
       });
   }
@@ -140,17 +136,17 @@ export class AdminDashboardComponent implements OnInit {
   }
   
   getStatusLabel(status: BookingStatus): string {
-    return this.bookingStatusService.getStatusTranslationSync(status);
+    return this.bookingStatusService.getStatusLabel(status);
   }
   
   getFormattedDate(date: Date): string {
-    return new Date(date).toLocaleDateString(this.translate.currentLang === 'en' ? 'en-US' : 'vi-VN');
+    return new Date(date).toLocaleDateString('en-US');
   }
 
   getFormattedPrice(price: number): string {
-    return new Intl.NumberFormat(this.translate.currentLang === 'en' ? 'en-US' : 'vi-VN', { 
+    return new Intl.NumberFormat('en-US', { 
       style: 'currency', 
-      currency: this.translate.currentLang === 'en' ? 'USD' : 'VND',
+      currency: 'USD',
       minimumFractionDigits: 0
     }).format(price);
   }

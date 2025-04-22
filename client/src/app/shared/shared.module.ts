@@ -7,8 +7,8 @@ import { LoadingIndicatorComponent } from '../features/public/components/shared/
 
 
 /**
- * Module chứa các components, directives và pipes dùng chung
- * trong toàn bộ ứng dụng
+ * Module containing shared components, directives and pipes 
+ * used throughout the application
  */
 @NgModule({
   declarations: [],
