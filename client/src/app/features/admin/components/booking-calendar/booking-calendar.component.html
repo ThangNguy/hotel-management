@@ -20,19 +20,120 @@
         </mat-select>
       </mat-form-field>
       
-      <button mat-stroked-button (click)="resetFilters()">
-        <mat-icon>refresh</mat-icon> Reset filters
+      <button mat-button color="accent" (click)="resetFilters()">
+        <mat-icon>filter_list</mat-icon> Reset Filters
       </button>
     </div>
     
     <mat-card-content>
-      <div *ngIf="isLoading" class="loading-spinner">
-        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
-      </div>
-      
-      <div class="calendar-container" [class.loading]="isLoading">
-        <full-calendar [options]="calendarOptions"></full-calendar>
+      <div class="calendar-wrapper">
+        <div *ngIf="isLoading" class="loading-overlay">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
       </div>
     </mat-card-content>
   </mat-card>
 </div>
+
+<!-- Booking dialog template -->
+<ng-template #bookingDialog>
+  <h2 mat-dialog-title>{{ isEditMode ? 'Edit Booking' : 'Add Booking' }}</h2>
+  <mat-dialog-content>
+    <form [formGroup]="bookingForm">
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Guest Name</mat-label>
+          <input matInput formControlName="guestName" required>
+          <mat-error *ngIf="bookingForm.get('guestName')?.hasError('required')">
+            Guest name is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" required type="email">
+          <mat-error *ngIf="bookingForm.get('email')?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="bookingForm.get('email')?.hasError('email')">
+            Please enter a valid email
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Phone</mat-label>
+          <input matInput formControlName="phone">
+        </mat-form-field>
+      </div>
+
+      <div class="form-row dates">
+        <mat-form-field appearance="fill">
+          <mat-label>Check In</mat-label>
+          <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn" required>
+          <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+          <mat-datepicker #checkInPicker></mat-datepicker>
+          <mat-error *ngIf="bookingForm.get('checkIn')?.hasError('required')">
+            Check in date is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Check Out</mat-label>
+          <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut" required>
+          <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+          <mat-datepicker #checkOutPicker></mat-datepicker>
+          <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required')">
+            Check out date is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Room</mat-label>
+          <mat-select formControlName="roomId" required>
+            <mat-option *ngFor="let room of availableRooms()" [value]="room.id">
+              {{ room.name }} - {{ room.maxOccupancy }} people
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="bookingForm.get('roomId')?.hasError('required')">
+            Room is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status" required>
+            <mat-option *ngFor="let status of bookingStatusList" [value]="status">
+              {{ status }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="bookingForm.get('status')?.hasError('required')">
+            Status is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="notes" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="warn" *ngIf="isEditMode" (click)="deleteBooking()">Delete</button>
+    <button mat-raised-button color="primary" [disabled]="bookingForm.invalid" (click)="saveBooking()">
+      {{ isEditMode ? 'Update' : 'Add' }} Booking
+    </button>
+  </mat-dialog-actions>
+</ng-template>

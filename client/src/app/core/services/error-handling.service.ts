@@ -3,8 +3,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 
 /**
- * Service xử lý lỗi trung tâm cho ứng dụng
- * Cung cấp các phương thức để xử lý và hiển thị lỗi một cách thống nhất
+ * Central error handling service for the application
+ * Provides methods to handle and display errors consistently
  */
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,8 @@ export class ErrorHandlingService {
   ) { }
 
   /**
-   * Xử lý HTTP errors và hiển thị thông báo phù hợp
-   * @param error Lỗi cần xử lý
+   * Handles HTTP errors and displays appropriate messages
+   * @param error Error to handle
    */
   handleError(error: any): void {
     const errorMessage = this.getErrorMessage(error);
@@ -24,12 +24,12 @@ export class ErrorHandlingService {
   }
 
   /**
-   * Trích xuất thông báo lỗi từ các loại lỗi khác nhau
-   * @param error Lỗi cần phân tích
-   * @returns Thông báo lỗi dễ hiểu
+   * Extracts error messages from different error types
+   * @param error Error to analyze
+   * @returns User-friendly error message
    */
   private getErrorMessage(error: any): string {
-    let errorMessage = 'ERROR.UNEXPECTED';
+    let errorMessage = 'An unexpected error occurred';
     
     if (error instanceof HttpErrorResponse) {
       // API error with response body
@@ -37,6 +37,15 @@ export class ErrorHandlingService {
         errorMessage = error.error.message;
       } else if (error.error?.error) {
         errorMessage = error.error.error;
+      } else if (error.error?.title && error.error?.errors) {
+        // Handle validation errors
+        errorMessage = error.error.title;
+        
+        // Add specific validation error details if available
+        const validationErrors = this.extractValidationErrors(error.error.errors);
+        if (validationErrors.length > 0) {
+          errorMessage += ': ' + validationErrors.join(', ');
+        }
       } else {
         // HTTP error with status code
         errorMessage = this.getHttpStatusErrorMessage(error.status);
@@ -49,34 +58,55 @@ export class ErrorHandlingService {
   }
 
   /**
-   * Lấy thông báo lỗi dựa trên mã trạng thái HTTP
-   * @param status Mã trạng thái HTTP
-   * @returns Thông báo lỗi tương ứng
+   * Extracts validation error messages from the errors object
+   * @param errors Validation errors object
+   * @returns Array of validation error messages
+   */
+  private extractValidationErrors(errors: any): string[] {
+    if (!errors) return [];
+    
+    const errorMessages: string[] = [];
+    
+    Object.keys(errors).forEach(key => {
+      if (Array.isArray(errors[key])) {
+        errors[key].forEach((message: string) => {
+          errorMessages.push(message);
+        });
+      }
+    });
+    
+    return errorMessages;
+  }
+
+  /**
+   * Gets error message based on HTTP status code
+   * @param status HTTP status code
+   * @returns Corresponding error message
    */
   private getHttpStatusErrorMessage(status: number): string {
     switch (status) {
       case 400:
-        return 'ERROR.BAD_REQUEST';
+        return 'Bad Request: The server cannot process the request';
       case 401:
-        return 'ERROR.UNAUTHORIZED';
+        return 'Unauthorized: Authentication is required';
       case 403:
-        return 'ERROR.FORBIDDEN';
+        return 'Forbidden: You do not have permission to access this resource';
       case 404:
-        return 'ERROR.NOT_FOUND';
+        return 'Not Found: The requested resource was not found';
       case 500:
-        return 'ERROR.SERVER_ERROR';
+        return 'Server Error: Something went wrong on the server';
       default:
-        return 'ERROR.UNEXPECTED';
+        return 'An unexpected error occurred';
     }
   }
 
   /**
-   * Hiển thị thông báo lỗi trong snackbar
-   * @param message Thông báo lỗi cần hiển thị
-   * @param duration Thời gian hiển thị (ms)
+   * Displays error message in snackbar
+   * @param message Error message to display
+   * @param duration Display duration (ms)
    */
   showError(message: string, duration: number = 5000): void {
-    this.snackBar.open(message, 'COMMON.CLOSE', {
+    this.snackBar.open(message, 'Close', {
       duration: duration,
       panelClass: ['error-snackbar'],
       horizontalPosition: 'center',
@@ -85,12 +115,12 @@ export class ErrorHandlingService {
   }
 
   /**
-   * Hiển thị thông báo thành công trong snackbar
-   * @param message Thông báo thành công cần hiển thị
-   * @param duration Thời gian hiển thị (ms)
+   * Displays success message in snackbar
+   * @param message Success message to display
+   * @param duration Display duration (ms)
    */
   showSuccess(message: string, duration: number = 3000): void {
-    this.snackBar.open(message, 'COMMON.CLOSE', {
+    this.snackBar.open(message, 'Close', {
       duration: duration,
       panelClass: ['success-snackbar'],
       horizontalPosition: 'center',
@@ -99,12 +129,12 @@ export class ErrorHandlingService {
   }
 
   /**
-   * Hiển thị thông báo cảnh báo trong snackbar
-   * @param message Thông báo cảnh báo cần hiển thị
-   * @param duration Thời gian hiển thị (ms)
+   * Displays warning message in snackbar
+   * @param message Warning message to display
+   * @param duration Display duration (ms)
    */
   showWarning(message: string, duration: number = 4000): void {
-    this.snackBar.open(message, 'COMMON.CLOSE', {
+    this.snackBar.open(message, 'Close', {
       duration: duration,
       panelClass: ['warning-snackbar'],
       horizontalPosition: 'center',
