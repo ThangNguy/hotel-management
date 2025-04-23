@@ -11,4 +11,5 @@
   [message]="(loadingService.loadingMessage$ | async) || null">
 </app-loading-indicator>
 
-<app-footer></app-footer>
+<!-- Only show the footer when not on an admin route -->
+<app-footer *ngIf="!isAdminRoute"></app-footer>
