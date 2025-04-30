@@ -2,7 +2,9 @@
   <!-- Sidebar / Drawer -->
   <div class="sidebar-container" [class.open]="isDrawerOpen">
     <div class="sidebar-header">
-      <h1 class="hotel-name">Luxury Hotel & Resort</h1>
+      <div class="logo-container">
+        <mat-icon>hotel</mat-icon>
+      </div>
       <button mat-icon-button class="close-button" (click)="toggleDrawer()" *ngIf="isDrawerOpen">
         <mat-icon>chevron_left</mat-icon>
       </button>
@@ -10,29 +12,29 @@
     
     <div class="sidebar-content">
       <div class="nav-section">
-        <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
+        <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active" matTooltip="Dashboard" matTooltipPosition="right">
           <mat-icon>dashboard</mat-icon>
           <span>Dashboard</span>
         </a>
 
-        <a mat-list-item routerLink="/admin/bookings" routerLinkActive="active">
-          <mat-icon>event_note</mat-icon>
+        <a mat-list-item routerLink="/admin/bookings" routerLinkActive="active" matTooltip="Bookings" matTooltipPosition="right">
+          <mat-icon>book_online</mat-icon>
           <span>Bookings</span>
         </a>
 
-        <a mat-list-item routerLink="/admin/booking-calendar" routerLinkActive="active">
-          <mat-icon>calendar_month</mat-icon>
+        <a mat-list-item routerLink="/admin/booking-calendar" routerLinkActive="active" matTooltip="Booking Calendar" matTooltipPosition="right">
+          <mat-icon>date_range</mat-icon>
           <span>Booking Calendar</span>
         </a>
 
-        <a mat-list-item routerLink="/admin/rooms" routerLinkActive="active">
-          <mat-icon>hotel</mat-icon>
+        <a mat-list-item routerLink="/admin/rooms" routerLinkActive="active" matTooltip="Room Management" matTooltipPosition="right">
+          <mat-icon>king_bed</mat-icon>
           <span>Room Management</span>
         </a>
       </div>
 
       <div class="nav-section user-section">
-        <a mat-list-item (click)="logout()">
+        <a mat-list-item (click)="logout()" matTooltip="Logout" matTooltipPosition="right">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>
         </a>
