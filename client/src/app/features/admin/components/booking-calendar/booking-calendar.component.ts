@@ -69,6 +69,7 @@ export class BookingCalendarComponent implements OnInit {
   private _filteredEvents = signal<any[]>([]);
   private _selectedStatuses = signal<BookingStatus[]>(Object.values(BookingStatus));
   private _isEditMode = signal(false);
+  private _currentView = signal<string>('dayGridMonth');
   
   // Thêm biến để reference đến calendar
   @ViewChild('calendar') calendarComponent: any;
@@ -87,6 +88,7 @@ export class BookingCalendarComponent implements OnInit {
   get filteredEvents() { return this._filteredEvents(); }
   get selectedStatuses() { return this._selectedStatuses(); }
   get isEditMode() { return this._isEditMode(); }
+  get currentView() { return this._currentView(); }
 
   // Status filter options
   allStatusOptions: StatusFilterOption[] = [];
@@ -101,7 +103,7 @@ export class BookingCalendarComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      right: '' // We'll handle view switching with our custom buttons
     },
     initialView: 'dayGridMonth',
     weekends: true,
@@ -120,6 +122,8 @@ export class BookingCalendarComponent implements OnInit {
       week: 'Week',
       day: 'Day'
     },
+    height: 'auto', // To ensure the calendar expands to show all events
+    contentHeight: 'auto',
     events: [] // Initialize with empty array to be populated later
   };
 
@@ -152,6 +156,27 @@ export class BookingCalendarComponent implements OnInit {
       { value: BookingStatus.CHECKED_OUT, label: this._bookingStatusService.getStatusLabel(BookingStatus.CHECKED_OUT), color: '#78909c' },
       { value: BookingStatus.CANCELLED, label: this._bookingStatusService.getStatusLabel(BookingStatus.CANCELLED), color: '#ef5350' }
     ];
+  }
+
+  // View management methods
+  isMonthView(): boolean {
+    return this._currentView() === 'dayGridMonth';
+  }
+  
+  isWeekView(): boolean {
+    return this._currentView() === 'timeGridWeek';
+  }
+  
+  isDayView(): boolean {
+    return this._currentView() === 'timeGridDay';
+  }
+  
+  changeView(viewName: string): void {
+    if (this.calendarComponent && this.calendarComponent.getApi) {
+      const calendarApi = this.calendarComponent.getApi();
+      calendarApi.changeView(viewName);
+      this._currentView.set(viewName);
+    }
   }
 
   loadData(): void {
@@ -201,6 +226,9 @@ export class BookingCalendarComponent implements OnInit {
       const startDate = new Date(booking.checkInDate);
       const endDate = new Date(booking.checkOutDate);
       
+      // Create appropriate status class name for CSS styling
+      const statusClass = 'status-' + booking.status.toLowerCase().replace(/_/g, '-');
+      
       console.log(`Processing booking: ${booking.id}, ${booking.guestName}, Check-in: ${startDate.toISOString()}, Check-out: ${endDate.toISOString()}`);
       
       return {
@@ -211,6 +239,7 @@ export class BookingCalendarComponent implements OnInit {
         backgroundColor: backgroundColor,
         borderColor: backgroundColor,
         allDay: true, // Ensure events are displayed as all-day events
+        classNames: [statusClass], // Add CSS class based on status
         extendedProps: {
           booking: booking,
           roomName: roomName,

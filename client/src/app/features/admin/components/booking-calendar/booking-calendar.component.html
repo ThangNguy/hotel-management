@@ -1,28 +1,41 @@
 <div class="booking-calendar-container">
   <mat-card class="main-card">
-    <mat-card-header>
-      <mat-card-title>Booking Calendar</mat-card-title>
+    <mat-card-header class="calendar-header">
+      <div class="header-title">
+        <h1 class="page-title">Booking Calendar</h1>
+        <p class="page-subtitle">Manage all hotel bookings in an interactive calendar view</p>
+      </div>
       <div class="header-actions">
-        <button mat-raised-button color="primary" (click)="addBooking()">
+        <button mat-raised-button color="primary" (click)="addBooking()" class="add-booking-btn">
           <mat-icon>add</mat-icon> Add Booking
         </button>
       </div>
     </mat-card-header>
     
-    <div class="filter-controls">
-      <mat-form-field appearance="outline">
-        <mat-label>Filter by status</mat-label>
-        <mat-select [value]="selectedStatuses" multiple (selectionChange)="onStatusFilterChange($event)">
-          <mat-option *ngFor="let status of allStatusOptions" [value]="status.value">
-            <span class="status-dot" [style.background-color]="status.color"></span>
-            {{ status.label }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="filter-section">
+      <div class="filter-controls">
+        <mat-form-field appearance="outline" class="status-filter">
+          <mat-label>Filter by status</mat-label>
+          <mat-select [value]="selectedStatuses" multiple (selectionChange)="onStatusFilterChange($event)">
+            <mat-option *ngFor="let status of allStatusOptions" [value]="status.value">
+              <span class="status-dot" [style.background-color]="status.color"></span>
+              {{ status.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <button mat-button color="accent" (click)="resetFilters()" class="reset-filters-btn">
+          <mat-icon>filter_list</mat-icon> Reset Filters
+        </button>
+      </div>
       
-      <button mat-button color="accent" (click)="resetFilters()">
-        <mat-icon>filter_list</mat-icon> Reset Filters
-      </button>
+      <div class="view-modes">
+        <div class="btn-group">
+          <button mat-button [class.active]="isMonthView()" (click)="changeView('dayGridMonth')">Month</button>
+          <button mat-button [class.active]="isWeekView()" (click)="changeView('timeGridWeek')">Week</button>
+          <button mat-button [class.active]="isDayView()" (click)="changeView('timeGridDay')">Day</button>
+        </div>
+      </div>
     </div>
     
     <mat-card-content>
@@ -30,7 +43,16 @@
         <div *ngIf="isLoading" class="loading-overlay">
           <mat-spinner diameter="40"></mat-spinner>
         </div>
-        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        <div class="calendar-legend">
+          <span class="legend-title">Status Legend:</span>
+          <div class="legend-items">
+            <span *ngFor="let status of allStatusOptions" class="legend-item">
+              <span class="status-dot" [style.background-color]="status.color"></span>
+              {{ status.label }}
+            </span>
+          </div>
+        </div>
+        <full-calendar #calendar [options]="calendarOptions" class="full-calendar"></full-calendar>
       </div>
     </mat-card-content>
   </mat-card>
@@ -124,7 +146,7 @@
       <div class="form-row">
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Notes</mat-label>
-          <textarea matInput formControlName="notes" rows="3"></textarea>
+          <textarea matInput formControlName="specialRequests" rows="3"></textarea>
         </mat-form-field>
       </div>
     </form>
