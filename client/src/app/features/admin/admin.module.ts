@@ -16,6 +16,7 @@ import { BookingFormDialogComponent } from './components/booking-form-dialog/boo
 import { DeleteConfirmDialogComponent } from './components/delete-confirm-dialog/delete-confirm-dialog.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { BookingCalendarComponent } from './components/booking-calendar/booking-calendar.component';
+import { BookingGridComponent } from './components/booking-grid/booking-grid.component';
 
 
 /**
@@ -44,7 +45,8 @@ import { BookingCalendarComponent } from './components/booking-calendar/booking-
     RoomFormDialogComponent,
     BookingFormDialogComponent,
     DeleteConfirmDialogComponent,
-    BookingCalendarComponent
+    BookingCalendarComponent,
+    BookingGridComponent
   ]
 })
 export class AdminModule { }

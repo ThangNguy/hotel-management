@@ -32,6 +32,18 @@ namespace HotelManagement.API.Controllers
             return Ok(bookings);
         }
 
+        [HttpGet("range")]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<List<BookingDto>>> GetBookingsByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var bookings = await _mediator.Send(new GetBookingsByDateRangeQuery 
+            { 
+                StartDate = startDate, 
+                EndDate = endDate 
+            });
+            return Ok(bookings);
+        }
+
         [HttpGet("recent")]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<List<BookingDto>>> GetRecentBookings([FromQuery] int count = 5)

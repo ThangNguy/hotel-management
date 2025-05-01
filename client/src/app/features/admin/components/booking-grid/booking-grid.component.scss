@@ -1,0 +1,300 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+.booking-grid-container {
+  padding: 16px;
+  
+  .main-card {
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  
+  .grid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 16px 8px;
+    
+    .header-title {
+      .page-title {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 500;
+      }
+      
+      .page-subtitle {
+        margin: 4px 0 0;
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+  }
+  
+  .date-navigation-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px 16px;
+    flex-wrap: wrap;
+    
+    .month-selector {
+      display: flex;
+      align-items: center;
+      
+      .current-month {
+        margin: 0 8px;
+        font-size: 18px;
+        font-weight: 500;
+        min-width: 180px;
+        text-align: center;
+      }
+      
+      .today-btn {
+        margin-left: 16px;
+      }
+    }
+    
+    .view-options {
+      display: flex;
+      gap: 16px;
+    }
+  }
+  
+  .grid-content {
+    padding: 0;
+    position: relative;
+    overflow-x: auto;
+    
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 255, 255, 0.7);
+      z-index: 5;
+    }
+    
+    .error-message {
+      padding: 16px;
+      text-align: center;
+      color: #f44336;
+    }
+  }
+  
+  .booking-grid-legends {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #f5f5f5;
+    
+    .legend-title {
+      font-weight: 500;
+      margin-right: 16px;
+    }
+    
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        
+        .color-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+  
+  .booking-grid-wrapper {
+    overflow-x: auto;
+    
+    .booking-grid {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 800px;
+      
+      th, td {
+        border: 1px solid #ddd;
+        text-align: center;
+      }
+      
+      thead {
+        .month-row {
+          background-color: #f0f0f0;
+          
+          .month-header {
+            padding: 8px 0;
+            
+            &.month-start {
+              border-left: 2px solid #aaa;
+            }
+          }
+          
+          .room-header {
+            background-color: #e0e0e0;
+            min-width: 80px;
+          }
+        }
+        
+        .day-row {
+          .day-header {
+            padding: 4px;
+            min-width: 32px;
+            background-color: #f5f5f5;
+            
+            &.weekend {
+              background-color: #e8f5e9;
+            }
+            
+            &.today {
+              background-color: #e3f2fd;
+              font-weight: bold;
+            }
+            
+            .day-number {
+              font-weight: bold;
+              font-size: 14px;
+            }
+            
+            .day-name {
+              font-size: 10px;
+              color: rgba(0, 0, 0, 0.6);
+            }
+          }
+        }
+      }
+      
+      tbody {
+        .room-row {
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+          }
+          
+          .room-cell {
+            padding: 8px;
+            text-align: left;
+            background-color: #f5f5f5;
+            
+            .room-number {
+              font-weight: bold;
+              font-size: 14px;
+            }
+            
+            .room-type {
+              font-size: 12px;
+              color: rgba(0, 0, 0, 0.6);
+            }
+          }
+          
+          .booking-cell {
+            padding: 0;
+            height: 40px;
+            cursor: pointer;
+            vertical-align: middle;
+            transition: transform 0.1s;
+            
+            &:hover {
+              transform: scale(1.05);
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+              z-index: 2;
+              position: relative;
+            }
+            
+            &.weekend {
+              background-color: #f8f8f8;
+            }
+            
+            &.today {
+              border: 2px solid #2196f3;
+            }
+            
+            &.booked {
+              padding: 0;
+              
+              .booking-info {
+                padding: 4px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                
+                .guest-name {
+                  font-weight: 500;
+                  font-size: 12px;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  // Đảm bảo chữ trắng hiển thị rõ trên nền tối
+                  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+                }
+                
+                .booking-source {
+                  font-size: 10px;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  // Đảm bảo chữ trắng hiển thị rõ trên nền tối
+                  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+                }
+              }
+            }
+            
+            &.available {
+              background-color: #ffffff;
+              border: 1px dashed #ddd;
+              
+              .available-cell {
+                font-size: 12px;
+                font-weight: bold;
+                color: #4caf50;
+              }
+            }
+          }
+        }
+        
+        .no-data-row {
+          .no-data-cell {
+            padding: 32px;
+            text-align: center;
+            color: rgba(0, 0, 0, 0.5);
+            font-style: italic;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Form styles
+.booking-form {
+  .form-row {
+    margin-bottom: 16px;
+    
+    mat-form-field {
+      width: 100%;
+    }
+    
+    &.dates, &.people {
+      display: flex;
+      gap: 16px;
+      
+      mat-form-field {
+        flex: 1;
+      }
+    }
+    
+    &.full-width {
+      width: 100%;
+    }
+  }
+}
