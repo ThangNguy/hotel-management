@@ -2,21 +2,29 @@
   <mat-card appearance="outlined" class="booking-grid-card">
     <mat-card-header>
       <mat-card-title>Bảng đặt phòng</mat-card-title>
-      <div class="month-navigation">
-        <button mat-icon-button (click)="previousMonth()" matTooltip="Tháng trước">
-          <mat-icon>navigate_before</mat-icon>
+      <div class="header-actions">
+        <div class="month-navigation">
+          <button mat-icon-button (click)="previousMonth()" matTooltip="Tháng trước">
+            <mat-icon>navigate_before</mat-icon>
+          </button>
+          <button mat-button (click)="currentMonth()">
+            {{ formatMonth(startDate) }}
+          </button>
+          <button mat-icon-button (click)="nextMonth()" matTooltip="Tháng sau">
+            <mat-icon>navigate_next</mat-icon>
+          </button>
+        </div>
+        
+        <div class="display-options">
+          <mat-slide-toggle [(ngModel)]="showRoomTypes" color="primary">
+            Hiển thị loại phòng
+          </mat-slide-toggle>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="addBooking()">
+          <mat-icon>add</mat-icon>
+          Thêm đặt phòng
         </button>
-        <button mat-button (click)="currentMonth()">
-          {{ formatMonth(startDate) }}
-        </button>
-        <button mat-icon-button (click)="nextMonth()" matTooltip="Tháng sau">
-          <mat-icon>navigate_next</mat-icon>
-        </button>
-      </div>
-      <div class="display-options">
-        <mat-slide-toggle [(ngModel)]="showRoomTypes" color="primary">
-          Hiển thị loại phòng
-        </mat-slide-toggle>
       </div>
     </mat-card-header>
 
@@ -88,13 +96,6 @@
         </div>
       </div>
     </mat-card-content>
-    
-    <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="addBooking()">
-        <mat-icon>add</mat-icon>
-        Thêm đặt phòng
-      </button>
-    </mat-card-actions>
   </mat-card>
 </div>
 
