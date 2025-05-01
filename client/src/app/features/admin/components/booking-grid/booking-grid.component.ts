@@ -9,8 +9,8 @@ import { catchError, map } from 'rxjs/operators';
 import { MaterialModule } from '../../../../material/material.module';
 import { environment } from '../../../../../environments/environment';
 import { BookingGridService } from '../../services/booking-grid.service';
-import { BookingGridRow, BookingGridCell, BookingSource } from '../../../../models/booking-grid.model';
-import { Booking, BookingStatus } from '../../../../models/booking.model';
+import { BookingGridRow, BookingGridCell } from '../../../../models/booking-grid.model';
+import { Booking } from '../../../../models/booking.model';
 import { Room } from '../../../../models/room.model';
 
 // Import các module Angular Material cần thiết
@@ -58,7 +58,6 @@ export class BookingGridComponent implements OnInit {
   rooms: Room[] = [];
   bookings: Booking[] = [];
   dateHeaders: Date[] = [];
-  
   // Form và điều khiển
   bookingForm: FormGroup;
   isEditMode = false;
@@ -75,18 +74,10 @@ export class BookingGridComponent implements OnInit {
 
   // Tùy chọn hiển thị
   showRoomTypes = true;
-  showSources = true;
-  filterByStatus: string[] = [];
 
   // Trạng thái tải dữ liệu
   isLoading = false;
   error: string | null = null;
-  
-  // Các nguồn đặt phòng
-  bookingSources: BookingSource[] = [];
-
-  // Các trạng thái đặt phòng
-  bookingStatusList = Object.values(BookingStatus);
 
   constructor(
     private bookingGridService: BookingGridService, 
@@ -108,15 +99,10 @@ export class BookingGridComponent implements OnInit {
       phone: [''],
       checkIn: [null, Validators.required],
       checkOut: [null, Validators.required],
-      status: [BookingStatus.CONFIRMED, Validators.required],
       specialRequests: [''],
       adults: [1, [Validators.required, Validators.min(1)]],
-      children: [0, [Validators.required, Validators.min(0)]],
-      bookingSource: ['DIRECT'],
-      referenceNumber: ['']
+      children: [0, [Validators.required, Validators.min(0)]]
     });
-    
-    this.bookingSources = this.bookingGridService.bookingSources;
   }
 
   ngOnInit(): void {
@@ -256,8 +242,12 @@ export class BookingGridComponent implements OnInit {
    * Lấy màu nền cho ô dựa trên trạng thái
    */
   getCellBackground(cell: BookingGridCell): string {
+    if (!cell) {
+      return 'transparent';
+    }
+    
     if (cell.status === 'booked') {
-      return cell.color || '#f44336';
+      return cell.color || 'transparent';
     }
     return 'transparent';
   }
@@ -266,6 +256,10 @@ export class BookingGridComponent implements OnInit {
    * Lấy màu chữ cho ô
    */
   getCellTextColor(cell: BookingGridCell): string {
+    if (!cell) {
+      return '#000000';
+    }
+    
     if (cell.status === 'booked') {
       // Kiểm tra màu nền có sáng hay không để chọn màu chữ phù hợp
       const color = cell.color || '#f44336';
@@ -318,6 +312,10 @@ export class BookingGridComponent implements OnInit {
       classes += ' weekend';
     }
     
+    if (!cell) {
+      return classes + ' available';
+    }
+    
     if (cell.status === 'booked') {
       classes += ' booked';
     } else {
@@ -331,7 +329,7 @@ export class BookingGridComponent implements OnInit {
    * Xử lý khi click vào ô đặt phòng
    */
   onCellClick(row: BookingGridRow, date: string, cell: BookingGridCell): void {
-    if (cell.status === 'booked' && cell.bookingId) {
+    if (cell && cell.status === 'booked' && cell.bookingId) {
       // Chỉnh sửa đặt phòng hiện có
       this.editBooking(cell.bookingId);
     } else {
@@ -348,10 +346,8 @@ export class BookingGridComponent implements OnInit {
     
     // Reset form và thiết lập giá trị mặc định
     this.bookingForm.reset({
-      status: BookingStatus.CONFIRMED,
       adults: 1,
-      children: 0,
-      bookingSource: 'DIRECT'
+      children: 0
     });
     
     // Nếu có roomId, thiết lập cho form
@@ -399,13 +395,9 @@ export class BookingGridComponent implements OnInit {
         phone: booking.phone || booking.guestPhone,
         checkIn: new Date(booking.checkInDate),
         checkOut: new Date(booking.checkOutDate),
-        status: booking.status,
         specialRequests: booking.specialRequests,
         adults: booking.adults || 1,
-        children: booking.children || 0,
-        // Các trường bổ sung từ booking
-        bookingSource: this.extractBookingSource(booking),
-        referenceNumber: this.extractReferenceNumber(booking)
+        children: booking.children || 0
       });
       
       // Mở dialog
@@ -435,8 +427,7 @@ export class BookingGridComponent implements OnInit {
       phone: formValue.phone,
       checkInDate: formValue.checkIn,
       checkOutDate: formValue.checkOut,
-      status: formValue.status,
-      specialRequests: this.buildSpecialRequests(formValue),
+      specialRequests: formValue.specialRequests,
       adults: formValue.adults,
       children: formValue.children,
       numberOfNights: this.calculateNights(formValue.checkIn, formValue.checkOut)
@@ -463,8 +454,6 @@ export class BookingGridComponent implements OnInit {
       return;
     }
     
-    // TODO: Hiển thị dialog xác nhận xóa
-    
     this.bookingGridService.deleteBooking(this.currentBooking.id).subscribe({
       next: () => {
         this.dialog.closeAll();
@@ -478,54 +467,11 @@ export class BookingGridComponent implements OnInit {
   }
 
   /**
-   * Xây dựng chuỗi specialRequests để lưu thông tin bổ sung
-   */
-  private buildSpecialRequests(formValue: any): string {
-    let requests = formValue.specialRequests || '';
-    
-    // Thêm thông tin nguồn đặt phòng và mã tham chiếu vào specialRequests
-    if (formValue.bookingSource !== 'DIRECT') {
-      requests += `\n${formValue.bookingSource}`;
-      
-      if (formValue.referenceNumber) {
-        requests += `-${formValue.referenceNumber}`;
-      }
-    }
-    
-    return requests.trim();
-  }
-
-  /**
    * Tính số đêm từ ngày check-in đến check-out
    */
   private calculateNights(checkIn: Date, checkOut: Date): number {
     const diffTime = checkOut.getTime() - checkIn.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  }
-
-  /**
-   * Trích xuất nguồn đặt phòng từ đối tượng booking
-   */
-  private extractBookingSource(booking: Booking): string {
-    for (const source of this.bookingSources) {
-      if (booking.specialRequests && booking.specialRequests.includes(source.code)) {
-        return source.code;
-      }
-    }
-    return 'DIRECT';
-  }
-
-  /**
-   * Trích xuất mã tham chiếu từ đối tượng booking
-   */
-  private extractReferenceNumber(booking: Booking): string {
-    if (booking.specialRequests) {
-      const matches = booking.specialRequests.match(/[A-Z]+-(\d+)/);
-      if (matches && matches.length > 1) {
-        return matches[1];
-      }
-    }
-    return '';
   }
 
   /**

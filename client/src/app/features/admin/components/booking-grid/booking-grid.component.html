@@ -1,253 +1,213 @@
 <div class="booking-grid-container">
-  <mat-card class="main-card">
-    <mat-card-header class="grid-header">
-      <div class="header-title">
-        <h1 class="page-title">Booking Grid</h1>
-        <p class="page-subtitle">Quản lý đặt phòng theo dạng lưới</p>
-      </div>
-      <div class="header-actions">
-        <button mat-raised-button color="primary" (click)="addBooking()" class="add-booking-btn">
-          <mat-icon>add</mat-icon> Thêm đặt phòng
+  <mat-card appearance="outlined" class="booking-grid-card">
+    <mat-card-header>
+      <mat-card-title>Bảng đặt phòng</mat-card-title>
+      <div class="month-navigation">
+        <button mat-icon-button (click)="previousMonth()" matTooltip="Tháng trước">
+          <mat-icon>navigate_before</mat-icon>
+        </button>
+        <button mat-button (click)="currentMonth()">
+          {{ formatMonth(startDate) }}
+        </button>
+        <button mat-icon-button (click)="nextMonth()" matTooltip="Tháng sau">
+          <mat-icon>navigate_next</mat-icon>
         </button>
       </div>
-    </mat-card-header>
-    
-    <div class="date-navigation-controls">
-      <div class="month-selector">
-        <button mat-icon-button color="primary" (click)="previousMonth()">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
-        <span class="current-month">{{ formatMonth(startDate) }}</span>
-        <button mat-icon-button color="primary" (click)="nextMonth()">
-          <mat-icon>chevron_right</mat-icon>
-        </button>
-        <button mat-button color="primary" (click)="currentMonth()" class="today-btn">
-          Tháng hiện tại
-        </button>
-      </div>
-      
-      <div class="view-options">
+      <div class="display-options">
         <mat-slide-toggle [(ngModel)]="showRoomTypes" color="primary">
           Hiển thị loại phòng
         </mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="showSources" color="primary">
-          Hiển thị nguồn đặt phòng
-        </mat-slide-toggle>
       </div>
-    </div>
+    </mat-card-header>
 
-    <mat-card-content class="grid-content">
-      <div *ngIf="isLoading" class="loading-overlay">
-        <mat-spinner diameter="40"></mat-spinner>
-      </div>
-      
-      <div *ngIf="error" class="error-message">
-        {{ error }}
-        <button mat-button color="primary" (click)="loadGridData()">Thử lại</button>
-      </div>
+    <mat-card-content>
+      <div class="booking-grid-wrapper">
+        <div class="loading-overlay" *ngIf="isLoading">
+          <mat-spinner diameter="40"></mat-spinner>
+          <span>Đang tải...</span>
+        </div>
 
-      <div class="booking-grid-legends" *ngIf="!isLoading && !error">
-        <div class="legend-title">Chú thích:</div>
-        <div class="legend-items">
-          <span *ngFor="let source of bookingSources" class="legend-item">
-            <span class="color-dot" [style.background-color]="source.color"></span>
-            {{ source.name }}
-          </span>
+        <div class="error-message" *ngIf="error">
+          {{ error }}
+          <button mat-button color="primary" (click)="loadGridData()">Thử lại</button>
+        </div>
+
+        <div class="booking-grid-scroll-container" *ngIf="!isLoading && !error">
+          <table class="booking-grid">
+            <thead>
+              <tr class="month-row">
+                <th class="room-header" rowspan="2">Phòng</th>
+                <th *ngFor="let date of dateHeaders; let i = index" 
+                    [attr.colspan]="1" 
+                    class="month-header" 
+                    [class.month-start]="isFirstOfMonth(date)">
+                  <span *ngIf="isFirstOfMonth(date) || i === 0">
+                    {{ date | date:'MMM' }}
+                  </span>
+                </th>
+              </tr>
+              <tr class="day-row">
+                <th *ngFor="let date of dateHeaders" 
+                    class="day-header" 
+                    [class.weekend]="isWeekend(date)"
+                    [class.today]="isToday(date)">
+                  <div class="day-number">{{ formatDate(date) }}</div>
+                  <div class="day-name">{{ date | date:'EEE' }}</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let row of gridData">
+                <tr class="room-row">
+                  <td class="room-cell">
+                    <div class="room-number">{{ row.roomNumber }}</div>
+                    <div class="room-type" *ngIf="showRoomTypes && row.roomType">{{ row.roomType }}</div>
+                  </td>
+                  
+                  <ng-container *ngFor="let date of dateHeaders">
+                    <td class="booking-cell" 
+                        [ngClass]="getCellClass(date, row.cells[formatDate(date)])"
+                        [style.background-color]="getCellBackground(row.cells[formatDate(date)])"
+                        (click)="onCellClick(row, formatDate(date), row.cells[formatDate(date)])">
+                      
+                      <ng-container *ngIf="row.cells[formatDate(date)]?.status === 'booked'">
+                        <div class="booking-info" [style.color]="getCellTextColor(row.cells[formatDate(date)])">
+                          <div class="guest-name">{{ row.cells[formatDate(date)].guestName }}</div>
+                        </div>
+                      </ng-container>
+                      
+                      <ng-container *ngIf="row.cells[formatDate(date)]?.status !== 'booked'">
+                        <div class="available-cell"></div>
+                      </ng-container>
+                    </td>
+                  </ng-container>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
         </div>
       </div>
-
-      <div class="booking-grid-wrapper" *ngIf="!isLoading && !error">
-        <table class="booking-grid">
-          <thead>
-            <tr class="month-row">
-              <th class="room-header" rowspan="2">Phòng</th>
-              <th *ngFor="let date of dateHeaders" 
-                  [attr.colspan]="isFirstOfMonth(date) || date === dateHeaders[0] ? 1 : null"
-                  class="month-header"
-                  [class.month-start]="isFirstOfMonth(date)">
-                <span *ngIf="isFirstOfMonth(date) || date === dateHeaders[0]">
-                  {{ date | date:'MMM' }}
-                </span>
-              </th>
-            </tr>
-            <tr class="day-row">
-              <th *ngFor="let date of dateHeaders" 
-                  class="day-header" 
-                  [class.weekend]="isWeekend(date)"
-                  [class.today]="isToday(date)">
-                <div class="day-number">{{ formatDate(date) }}</div>
-                <div class="day-name">{{ date | date:'EEE' }}</div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let row of gridData">
-              <tr class="room-row">
-                <td class="room-cell">
-                  <div class="room-number">{{ row.roomNumber }}</div>
-                  <div class="room-type" *ngIf="showRoomTypes && row.roomType">{{ row.roomType }}</div>
-                </td>
-                
-                <ng-container *ngFor="let date of dateHeaders">
-                  <td class="booking-cell" 
-                      [ngClass]="getCellClass(date, row.cells[formatDate(date)])"
-                      [style.background-color]="getCellBackground(row.cells[formatDate(date)])"
-                      (click)="onCellClick(row, formatDate(date), row.cells[formatDate(date)])">
-                    
-                    <ng-container *ngIf="row.cells[formatDate(date)].status === 'booked'">
-                      <div class="booking-info" [style.color]="getCellTextColor(row.cells[formatDate(date)])">
-                        <div class="guest-name">{{ row.cells[formatDate(date)].guestName }}</div>
-                        <div class="booking-source" *ngIf="showSources && row.cells[formatDate(date)].bookingSource">
-                          {{ row.cells[formatDate(date)].bookingSource }}
-                          <span *ngIf="row.cells[formatDate(date)].referenceNumber">
-                            -{{ row.cells[formatDate(date)].referenceNumber }}
-                          </span>
-                        </div>
-                      </div>
-                    </ng-container>
-                    
-                    <ng-container *ngIf="row.cells[formatDate(date)].status !== 'booked'">
-                      <div class="available-cell"></div>
-                    </ng-container>
-                  </td>
-                </ng-container>
-              </tr>
-            </ng-container>
-            
-            <tr *ngIf="gridData.length === 0" class="no-data-row">
-              <td [attr.colspan]="dateHeaders.length + 1" class="no-data-cell">
-                Không có dữ liệu phòng
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </mat-card-content>
+    
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="addBooking()">
+        <mat-icon>add</mat-icon>
+        Thêm đặt phòng
+      </button>
+    </mat-card-actions>
   </mat-card>
 </div>
 
 <!-- Dialog thêm/sửa đặt phòng -->
 <ng-template #bookingDialog>
-  <h2 mat-dialog-title>{{ isEditMode ? 'Chỉnh sửa đặt phòng' : 'Thêm đặt phòng mới' }}</h2>
-  <mat-dialog-content>
-    <form [formGroup]="bookingForm" class="booking-form">
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Phòng</mat-label>
-          <mat-select formControlName="roomId" required>
-            <mat-option *ngFor="let room of availableRooms()" [value]="room.id">
-              {{ room.name || 'Phòng ' + room.id }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="bookingForm.get('roomId')?.hasError('required')">
-            Vui lòng chọn phòng
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Tên khách</mat-label>
-          <input matInput formControlName="guestName" required>
-          <mat-error *ngIf="bookingForm.get('guestName')?.hasError('required')">
-            Vui lòng nhập tên khách
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email">
-          <mat-error *ngIf="bookingForm.get('email')?.hasError('email')">
-            Email không hợp lệ
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Số điện thoại</mat-label>
-          <input matInput formControlName="phone">
-        </mat-form-field>
-      </div>
-
-      <div class="form-row dates">
-        <mat-form-field appearance="outline">
-          <mat-label>Ngày nhận phòng</mat-label>
-          <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn" required>
-          <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
-          <mat-datepicker #checkInPicker></mat-datepicker>
-          <mat-error *ngIf="bookingForm.get('checkIn')?.hasError('required')">
-            Vui lòng chọn ngày nhận phòng
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Ngày trả phòng</mat-label>
-          <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut" required>
-          <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
-          <mat-datepicker #checkOutPicker></mat-datepicker>
-          <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required')">
-            Vui lòng chọn ngày trả phòng
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="form-row people">
-        <mat-form-field appearance="outline">
-          <mat-label>Số người lớn</mat-label>
-          <input matInput type="number" min="1" formControlName="adults">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Số trẻ em</mat-label>
-          <input matInput type="number" min="0" formControlName="children">
-        </mat-form-field>
-      </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Trạng thái</mat-label>
-          <mat-select formControlName="status" required>
-            <mat-option *ngFor="let status of bookingStatusList" [value]="status">
-              {{ status }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline">
-          <mat-label>Nguồn đặt phòng</mat-label>
-          <mat-select formControlName="bookingSource">
-            <mat-option *ngFor="let source of bookingSources" [value]="source.code">
-              {{ source.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <div class="form-row" *ngIf="bookingForm.get('bookingSource')?.value !== 'DIRECT'">
-        <mat-form-field appearance="outline">
-          <mat-label>Mã tham chiếu</mat-label>
-          <input matInput formControlName="referenceNumber">
-        </mat-form-field>
-      </div>
-
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Ghi chú</mat-label>
-          <textarea matInput formControlName="specialRequests" rows="3"></textarea>
-        </mat-form-field>
-      </div>
-    </form>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Hủy</button>
-    <button mat-raised-button color="warn" *ngIf="isEditMode" (click)="deleteBooking()">Xóa</button>
-    <button mat-raised-button color="primary" [disabled]="bookingForm.invalid" (click)="saveBooking()">
-      {{ isEditMode ? 'Cập nhật' : 'Thêm' }}
-    </button>
-  </mat-dialog-actions>
+  <div class="booking-dialog">
+    <h2 mat-dialog-title>{{ isEditMode ? 'Chỉnh sửa đặt phòng' : 'Thêm đặt phòng mới' }}</h2>
+    
+    <div mat-dialog-content>
+      <form [formGroup]="bookingForm" class="booking-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Phòng</mat-label>
+            <mat-select formControlName="roomId" required>
+              <mat-option *ngFor="let room of availableRooms()" [value]="room.id">
+                {{ room.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="bookingForm.controls['roomId'].hasError('required')">
+              Vui lòng chọn phòng
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Tên khách hàng</mat-label>
+            <input matInput formControlName="guestName" required>
+            <mat-error *ngIf="bookingForm.controls['guestName'].hasError('required')">
+              Vui lòng nhập tên khách hàng
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" required type="email">
+            <mat-error *ngIf="bookingForm.controls['email'].hasError('required')">
+              Vui lòng nhập email
+            </mat-error>
+            <mat-error *ngIf="bookingForm.controls['email'].hasError('email')">
+              Vui lòng nhập email hợp lệ
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Số điện thoại</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row dates-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Ngày check-in</mat-label>
+            <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn" required>
+            <mat-datepicker-toggle matIconSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+            <mat-datepicker #checkInPicker></mat-datepicker>
+            <mat-error *ngIf="bookingForm.controls['checkIn'].hasError('required')">
+              Vui lòng chọn ngày check-in
+            </mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Ngày check-out</mat-label>
+            <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut" required>
+            <mat-datepicker-toggle matIconSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+            <mat-datepicker #checkOutPicker></mat-datepicker>
+            <mat-error *ngIf="bookingForm.controls['checkOut'].hasError('required')">
+              Vui lòng chọn ngày check-out
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row guests-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Người lớn</mat-label>
+            <input matInput type="number" min="1" formControlName="adults" required>
+            <mat-error *ngIf="bookingForm.controls['adults'].hasError('required')">
+              Vui lòng nhập số người lớn
+            </mat-error>
+            <mat-error *ngIf="bookingForm.controls['adults'].hasError('min')">
+              Phải có ít nhất 1 người lớn
+            </mat-error>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Trẻ em</mat-label>
+            <input matInput type="number" min="0" formControlName="children" required>
+            <mat-error *ngIf="bookingForm.controls['children'].hasError('required')">
+              Vui lòng nhập số trẻ em
+            </mat-error>
+            <mat-error *ngIf="bookingForm.controls['children'].hasError('min')">
+              Số trẻ em không được âm
+            </mat-error>
+          </mat-form-field>
+        </div>
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Yêu cầu đặc biệt</mat-label>
+            <textarea matInput formControlName="specialRequests" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+    
+    <div mat-dialog-actions>
+      <button mat-button mat-dialog-close>Hủy</button>
+      <button mat-button color="warn" *ngIf="isEditMode" (click)="deleteBooking()">Xóa</button>
+      <button mat-raised-button color="primary" [disabled]="bookingForm.invalid" (click)="saveBooking()">Lưu</button>
+    </div>
+  </div>
 </ng-template>

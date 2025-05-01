@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Booking } from 'src/app/models/booking.model';
-import { BookingGridRow, BookingSource } from 'src/app/models/booking-grid.model';
+import { BookingGridRow } from 'src/app/models/booking-grid.model';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -11,17 +11,13 @@ import { environment } from 'src/environments/environment';
 })
 export class BookingGridService {
   private apiUrl = `${environment.apiUrl}/api/bookings`;
+  private usedColorsThisMonth: Map<string, string[]> = new Map(); // Lưu trữ màu đã sử dụng theo tháng
 
-  // Danh sách các nguồn đặt phòng và màu sắc tương ứng
-  public bookingSources: BookingSource[] = [
-    { code: 'DIRECT', name: 'Direct Booking', color: '#4caf50' },
-    { code: 'EXPEDIA', name: 'Expedia', color: '#2196f3' },
-    { code: 'AGODA', name: 'Agoda', color: '#ff9800' },
-    { code: 'BOOKING', name: 'Booking.com', color: '#3f51b5' },
-    { code: 'CTRIP', name: 'Ctrip', color: '#9c27b0' },
-    { code: 'SEMITEC', name: 'Semitec', color: '#607d8b' },
-    { code: 'THANG', name: 'Thắng', color: '#795548' },
-    { code: 'THA', name: 'Thả', color: '#673ab7' },
+  // Danh sách các màu có thể sử dụng
+  private availableColors: string[] = [
+    '#4caf50', '#2196f3', '#ff9800', '#3f51b5', '#9c27b0', 
+    '#607d8b', '#795548', '#673ab7', '#e91e63', '#009688',
+    '#cddc39', '#ffc107', '#00bcd4', '#8bc34a', '#ff5722'
   ];
 
   constructor(private http: HttpClient) { }
@@ -45,12 +41,18 @@ export class BookingGridService {
     const gridData: BookingGridRow[] = [];
     const dateRange = this.getDateRange(startDate, endDate);
     
+    // Khởi tạo lại bảng màu đã sử dụng cho tháng hiện tại
+    const monthKey = `${startDate.getFullYear()}-${startDate.getMonth() + 1}`;
+    if (!this.usedColorsThisMonth.has(monthKey)) {
+      this.usedColorsThisMonth.set(monthKey, []);
+    }
+    
     // Tạo dữ liệu lưới cho mỗi phòng
     rooms.forEach(room => {
       const gridRow: BookingGridRow = {
         roomId: room.id,
         roomNumber: room.name || `Room ${room.id}`,
-        roomType: room.type,
+        roomType: room.beds || 'Phòng tiêu chuẩn', // Sử dụng thuộc tính beds thay vì type không tồn tại
         cells: {}
       };
       
@@ -67,6 +69,9 @@ export class BookingGridService {
       gridData.push(gridRow);
     });
     
+    // Tạo bảng ánh xạ booking ID to màu
+    const bookingColors = new Map<number, string>();
+    
     // Cập nhật thông tin đặt phòng vào lưới
     bookings.forEach(booking => {
       const checkInDate = new Date(booking.checkInDate);
@@ -74,24 +79,25 @@ export class BookingGridService {
       const roomIndex = gridData.findIndex(row => row.roomId === booking.roomId);
       
       if (roomIndex >= 0) {
+        // Chọn màu ngẫu nhiên không trùng cho booking này
+        let bookingColor = bookingColors.get(booking.id);
+        if (!bookingColor) {
+          bookingColor = this.getRandomUniqueColor(monthKey);
+          bookingColors.set(booking.id, bookingColor);
+        }
+        
         // Cập nhật trạng thái đặt phòng cho mỗi ngày trong khoảng đặt phòng
         dateRange.forEach(date => {
           if (date >= checkInDate && date < checkOutDate) {
             const dateStr = this.formatDate(date);
             
-            // Tìm màu dựa trên nguồn đặt phòng
-            const bookingSource = this.extractBookingSource(booking);
-            const sourceColor = this.getSourceColor(bookingSource);
-            
             gridData[roomIndex].cells[dateStr] = {
               bookingId: booking.id,
               guestName: booking.guestName,
-              bookingSource: bookingSource,
-              referenceNumber: this.extractReferenceNumber(booking),
               status: 'booked',
               date: new Date(date),
               roomId: booking.roomId,
-              color: sourceColor
+              color: bookingColor
             };
           }
         });
@@ -124,47 +130,29 @@ export class BookingGridService {
   }
 
   /**
-   * Trích xuất nguồn đặt phòng từ thông tin đặt phòng
+   * Lấy màu ngẫu nhiên không trùng lặp trong một tháng
    */
-  private extractBookingSource(booking: Booking): string {
-    // Thực hiện logic trích xuất nguồn đặt phòng dựa trên dữ liệu có sẵn
-    // Đây là một ví dụ đơn giản, bạn có thể điều chỉnh theo nhu cầu
-    if (booking.specialRequests && booking.specialRequests.includes('EXPEDIA')) {
-      return 'EXPEDIA';
-    } else if (booking.specialRequests && booking.specialRequests.includes('AGODA')) {
-      return 'AGODA';
-    } else if (booking.specialRequests && booking.specialRequests.includes('CTRIP')) {
-      return 'CTRIP';
-    } else if (booking.email && booking.email.includes('semitec')) {
-      return 'SEMITEC';
+  private getRandomUniqueColor(monthKey: string): string {
+    const usedColors = this.usedColorsThisMonth.get(monthKey) || [];
+    const availableUnusedColors = this.availableColors.filter(color => !usedColors.includes(color));
+    
+    // Nếu đã hết màu không trùng, tạo màu ngẫu nhiên mới
+    if (availableUnusedColors.length === 0) {
+      const r = Math.floor(Math.random() * 200) + 20; // 20-220 để tránh quá tối hoặc quá sáng
+      const g = Math.floor(Math.random() * 200) + 20;
+      const b = Math.floor(Math.random() * 200) + 20;
+      const newColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+      usedColors.push(newColor);
+      this.usedColorsThisMonth.set(monthKey, usedColors);
+      return newColor;
     }
     
-    // Nguồn mặc định là đặt trực tiếp
-    return 'DIRECT';
-  }
-
-  /**
-   * Trích xuất mã tham chiếu từ thông tin đặt phòng
-   */
-  private extractReferenceNumber(booking: Booking): string {
-    // Thực hiện logic trích xuất mã tham chiếu dựa trên dữ liệu có sẵn
-    // Đây là một ví dụ đơn giản, bạn có thể điều chỉnh theo nhu cầu
-    if (booking.specialRequests) {
-      const matches = booking.specialRequests.match(/[A-Z]+-\d+/);
-      if (matches) {
-        return matches[0];
-      }
-    }
-    
-    return '';
-  }
-
-  /**
-   * Lấy màu dựa trên nguồn đặt phòng
-   */
-  private getSourceColor(source: string): string {
-    const sourceData = this.bookingSources.find(s => s.code === source);
-    return sourceData ? sourceData.color : '#757575'; // Màu mặc định nếu không tìm thấy
+    // Nếu còn màu không trùng, chọn ngẫu nhiên một màu
+    const randomIndex = Math.floor(Math.random() * availableUnusedColors.length);
+    const selectedColor = availableUnusedColors[randomIndex];
+    usedColors.push(selectedColor);
+    this.usedColorsThisMonth.set(monthKey, usedColors);
+    return selectedColor;
   }
 
   /**
