@@ -74,17 +74,17 @@
                   
                   <ng-container *ngFor="let date of dateHeaders">
                     <td class="booking-cell" 
-                        [ngClass]="getCellClass(date, row.cells[formatDate(date)])"
-                        [style.background-color]="getCellBackground(row.cells[formatDate(date)])"
-                        (click)="onCellClick(row, formatDate(date), row.cells[formatDate(date)])">
+                        [ngClass]="getCellClass(date, row.cells[getCellKey(date)])"
+                        [style.background-color]="getCellBackground(row.cells[getCellKey(date)])"
+                        (click)="onCellClick(row, getCellKey(date), row.cells[getCellKey(date)])">
                       
-                      <ng-container *ngIf="row.cells[formatDate(date)]?.status === 'booked'">
-                        <div class="booking-info" [style.color]="getCellTextColor(row.cells[formatDate(date)])">
-                          <div class="guest-name">{{ row.cells[formatDate(date)].guestName }}</div>
+                      <ng-container *ngIf="row.cells[getCellKey(date)]?.status === 'booked'">
+                        <div class="booking-info" [style.color]="getCellTextColor(row.cells[getCellKey(date)])">
+                          <div class="guest-name">{{ row.cells[getCellKey(date)].guestName }}</div>
                         </div>
                       </ng-container>
                       
-                      <ng-container *ngIf="row.cells[formatDate(date)]?.status !== 'booked'">
+                      <ng-container *ngIf="row.cells[getCellKey(date)]?.status !== 'booked'">
                         <div class="available-cell"></div>
                       </ng-container>
                     </td>

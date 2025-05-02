@@ -134,6 +134,7 @@
           
           .month-header {
             padding: 8px 0;
+            color: #000;
             
             &.month-start {
               border-left: 2px solid #aaa;
@@ -143,6 +144,7 @@
           .room-header {
             background-color: #e0e0e0;
             min-width: 80px;
+            color: #000;
           }
         }
         
@@ -362,6 +364,7 @@
                   padding: 8px;
                   font-weight: normal;
                   border: 1px solid #ddd;
+                  color: #000;
                   
                   &.month-start {
                     border-left: 2px solid #aaa;
@@ -374,6 +377,7 @@
                   text-align: left;
                   padding: 8px;
                   border: 1px solid #ddd;
+                  color: #000;
                 }
               }
               

@@ -229,6 +229,13 @@ export class BookingGridComponent implements OnInit {
   }
 
   /**
+   * Lấy key cho truy cập vào cells - định dạng giống với service
+   */
+  getCellKey(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  /**
    * Format tháng hiển thị
    */
   formatMonth(date: Date): string {

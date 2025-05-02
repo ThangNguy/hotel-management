@@ -5,11 +5,11 @@
 </div>
 
 <!-- Global loading indicator for API requests -->
-<app-loading-indicator 
+<!-- <app-loading-indicator 
   *ngIf="loadingService.loading$ | async" 
   [overlay]="true"
   [message]="(loadingService.loadingMessage$ | async) || null">
-</app-loading-indicator>
+</app-loading-indicator> -->
 
 <!-- Only show the footer when not on an admin route -->
 <app-footer *ngIf="!isAdminRoute"></app-footer>
