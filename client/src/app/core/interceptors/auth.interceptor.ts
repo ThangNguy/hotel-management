@@ -6,22 +6,25 @@ import {
   HttpInterceptor,
   HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap, filter, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 /**
  * Interceptor for handling authentication
  * - Adds Bearer token to outgoing requests
- * - Handles 401 Unauthorized responses
+ * - Handles 401 Unauthorized responses by trying to refresh token
  */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  private isRefreshing = false;
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   /**
    * Intercept HTTP requests to add authentication token
@@ -33,11 +36,17 @@ export class AuthInterceptor implements HttpInterceptor {
     const token = this.authService.getToken();
 
     if (token) {
-      const authRequest = this.addTokenToRequest(request, token);
-      return this.handleRequest(next, authRequest);
+      request = this.addTokenToRequest(request, token);
     }
-    
-    return this.handleRequest(next, request);
+
+    return next.handle(request).pipe(
+      catchError(error => {
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          return this.handle401Error(request, next);
+        }
+        return throwError(() => error);
+      })
+    );
   }
 
   /**
@@ -53,35 +62,37 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   /**
-   * Handle the HTTP request and catch errors
-   * @param handler HTTP handler
-   * @param request HTTP request
+   * Handle 401 Unauthorized error by trying to refresh token
+   * @param request The failed request
+   * @param next The HTTP handler
    * @returns Observable of HTTP event
    */
-  private handleRequest(handler: HttpHandler, request: HttpRequest<unknown>): Observable<HttpEvent<unknown>> {
-    return handler.handle(request).pipe(
-      catchError(error => this.handleError(error))
-    );
-  }
+  private handle401Error(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
 
-  /**
-   * Handle HTTP errors, specifically authentication errors
-   * @param error HTTP error response
-   * @returns Observable that throws the error
-   */
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    if (error.status === 401) {
-      this.handleUnauthorized();
+      return this.authService.refreshToken().pipe(
+        switchMap((response: any) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(response.token);
+          return next.handle(this.addTokenToRequest(request, response.token));
+        }),
+        catchError((err) => {
+          this.isRefreshing = false;
+          this.authService.logout();
+          this.router.navigate(['/login']);
+          return throwError(() => err);
+        })
+      );
+    } else {
+      return this.refreshTokenSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(jwt => {
+          return next.handle(this.addTokenToRequest(request, jwt));
+        })
+      );
     }
-    
-    return throwError(() => error);
-  }
-
-  /**
-   * Handle unauthorized (401) responses
-   */
-  private handleUnauthorized(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }

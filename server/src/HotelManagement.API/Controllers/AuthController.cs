@@ -25,5 +25,25 @@ namespace HotelManagement.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpPost("register")]
+        public async Task<ActionResult<AuthResponse>> Register(RegisterCommand command)
+        {
+            var response = await _mediator.Send(command);
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<AuthResponse>> RefreshToken(RefreshTokenCommand command)
+        {
+            var response = await _mediator.Send(command);
+            if (!response.Success)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
     }
 }

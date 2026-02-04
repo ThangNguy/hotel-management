@@ -94,7 +94,7 @@ export class BookingFormDialogComponent implements OnInit {
     return this.fb.group({
       guestName: [booking?.guestName || '', [Validators.required, Validators.minLength(3)]],
       guestEmail: [booking?.guestEmail || '', [Validators.required, Validators.email]],
-      guestPhone: [booking?.guestPhone || '', [Validators.required, Validators.pattern(/^\d{9,11}$/)]],
+      guestPhone: [booking?.guestPhone || '', [Validators.required]],
       roomId: [booking?.roomId || '', [Validators.required]],
       checkInDate: [booking?.checkInDate || new Date(), [Validators.required]],
       checkOutDate: [booking?.checkOutDate || tomorrow, [Validators.required]],

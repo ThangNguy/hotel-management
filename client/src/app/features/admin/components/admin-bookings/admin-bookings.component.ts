@@ -48,9 +48,9 @@ export class AdminBookingsComponent implements OnInit {
   bookings: Booking[] = [];
   rooms: Room[] = [];
   isLoading = false;
-  
+
   bookingStatuses = Object.values(BookingStatus);
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -67,12 +67,12 @@ export class AdminBookingsComponent implements OnInit {
 
   loadData(): void {
     this.isLoading = true;
-    
+
     // Load rooms first
     this.hotelService.getRoomsAsync().subscribe(
       rooms => {
         this.rooms = rooms;
-        
+
         // Then load bookings
         this.hotelService.getBookingsAsync().subscribe(
           bookings => {
@@ -81,7 +81,7 @@ export class AdminBookingsComponent implements OnInit {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.isLoading = false;
-            
+
             // Custom sort function for dates
             this.dataSource.sortingDataAccessor = (item: Booking, property: string) => {
               switch (property) {
@@ -166,7 +166,7 @@ export class AdminBookingsComponent implements OnInit {
   editBooking(booking: Booking): void {
     const dialogRef = this.dialog.open(BookingFormDialogComponent, {
       width: '700px',
-      data: { mode: 'edit', booking: {...booking}, rooms: this.rooms }
+      data: { mode: 'edit', booking: { ...booking }, rooms: this.rooms }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -201,6 +201,7 @@ export class AdminBookingsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        if (!booking.id) return;
         this.isLoading = true;
         this.hotelService.deleteBooking(booking.id).subscribe(
           success => {
@@ -221,6 +222,7 @@ export class AdminBookingsComponent implements OnInit {
   }
 
   updateBookingStatus(booking: Booking, status: BookingStatus): void {
+    if (!booking.id) return;
     this.isLoading = true;
     this.hotelService.updateBookingStatus(booking.id, status).subscribe(
       updatedBooking => {
@@ -248,19 +250,19 @@ export class AdminBookingsComponent implements OnInit {
   }
 
   getFormattedPrice(price: number): string {
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0
     }).format(price);
   }
-  
+
   getStatusLabel(status: BookingStatus): string {
     return this.bookingStatusService.getStatusLabel(status);
   }
-  
+
   getStatusColor(status: BookingStatus): string {
-    switch(status) {
+    switch (status) {
       case BookingStatus.PENDING:
         return 'accent';
       case BookingStatus.CONFIRMED:

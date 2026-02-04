@@ -16,6 +16,7 @@ namespace HotelManagement.Infrastructure.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,6 +80,24 @@ namespace HotelManagement.Infrastructure.Data
 
                 // Add unique constraint for username
                 entity.HasIndex(e => e.Username).IsUnique();
+            });
+            
+            // Configure RefreshToken entity
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Token).IsRequired();
+                entity.Property(e => e.CreatedByIp).HasMaxLength(50);
+                entity.Property(e => e.ReplacedByToken).HasMaxLength(500);
+                
+                // Configure relationship with User
+                entity.HasOne(e => e.User)
+                    .WithMany(u => u.RefreshTokens)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                
+                // Add index for faster token lookup
+                entity.HasIndex(e => e.Token);
             });
 
             // Seed initial admin user with fixed date and hash value

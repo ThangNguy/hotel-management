@@ -19,6 +19,7 @@ export interface User {
  */
 interface AuthResponse {
   token: string;
+  refreshToken: string;
   user: User;
 }
 
@@ -41,6 +42,13 @@ interface RegisterRequest {
 }
 
 /**
+ * Interface cho yêu cầu refresh token
+ */
+interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+/**
  * Service quản lý xác thực người dùng
  */
 @Injectable({
@@ -50,15 +58,16 @@ export class AuthService {
   // Subjects
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
-  
+
   // Observables
   /** Observable của người dùng hiện tại */
   currentUser$ = this.currentUserSubject.asObservable();
   /** Observable của trạng thái xác thực */
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-  
+
   // Token storage key
   private readonly TOKEN_KEY = 'auth_token';
+  private readonly REFRESH_TOKEN_KEY = 'auth_refresh_token';
   private readonly USER_KEY = 'user';
 
   constructor(
@@ -76,11 +85,11 @@ export class AuthService {
    */
   login(username: string, password: string): Observable<{ success: boolean; message?: string }> {
     const loginData: LoginRequest = { username, password };
-    
+
     return this.http.post<AuthResponse>(this.apiConfigService.getLoginUrl(), loginData)
       .pipe(
         map(response => {
-          this.setUserAndToken(response.user, response.token);
+          this.setUserAndToken(response.user, response.token, response.refreshToken);
           return { success: true };
         }),
         catchError(error => this.handleAuthError(error, 'login'))
@@ -96,10 +105,31 @@ export class AuthService {
     return this.http.post<AuthResponse>(this.apiConfigService.getRegisterUrl(), userData)
       .pipe(
         map(response => {
-          this.setUserAndToken(response.user, response.token);
+          this.setUserAndToken(response.user, response.token, response.refreshToken);
           return { success: true };
         }),
         catchError(error => this.handleAuthError(error, 'registration'))
+      );
+  }
+
+  /**
+   * Refresh token
+   * @returns Observable với token mới
+   */
+  refreshToken(): Observable<AuthResponse> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+
+    const request: RefreshTokenRequest = { refreshToken };
+
+    return this.http.post<AuthResponse>(this.apiConfigService.getRefreshTokenUrl(), request)
+      .pipe(
+        map(response => {
+          this.setUserAndToken(response.user, response.token, response.refreshToken);
+          return response;
+        })
       );
   }
 
@@ -108,6 +138,7 @@ export class AuthService {
    */
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
     this.currentUserSubject.next(null);
     this.isAuthenticatedSubject.next(false);
@@ -119,6 +150,14 @@ export class AuthService {
    */
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  /**
+   * Lấy refresh token hiện tại
+   * @returns Refresh token hoặc null
+   */
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
 
   /**
@@ -139,11 +178,13 @@ export class AuthService {
    * Lưu thông tin người dùng và token
    * @param user Thông tin người dùng
    * @param token Token xác thực
+   * @param refreshToken Refresh token
    */
-  private setUserAndToken(user: User, token: string): void {
+  private setUserAndToken(user: User, token: string, refreshToken: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
+    localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshToken);
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
-    
+
     this.currentUserSubject.next(user);
     this.isAuthenticatedSubject.next(true);
   }

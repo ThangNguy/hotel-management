@@ -70,7 +70,7 @@ export class BookingCalendarComponent implements OnInit {
   private _selectedStatuses = signal<BookingStatus[]>(Object.values(BookingStatus));
   private _isEditMode = signal(false);
   private _currentView = signal<string>('dayGridMonth');
-  
+
   // Thêm biến để reference đến calendar
   @ViewChild('calendar') calendarComponent: any;
   @ViewChild('bookingDialog') bookingDialogTemplate!: TemplateRef<any>;
@@ -138,8 +138,8 @@ export class BookingCalendarComponent implements OnInit {
     this.bookingForm = this._formBuilder.group({
       id: [booking?.id || null],
       guestName: [booking?.guestName || '', Validators.required],
-      email: [booking?.email || '', [Validators.required, Validators.email]],
-      phone: [booking?.phone || ''],
+      email: [booking?.guestEmail || '', [Validators.required, Validators.email]],
+      phone: [booking?.guestPhone || ''],
       checkIn: [booking?.checkInDate ? new Date(booking.checkInDate) : new Date(), Validators.required],
       checkOut: [booking?.checkOutDate ? new Date(booking.checkOutDate) : new Date(Date.now() + 24 * 60 * 60 * 1000), Validators.required],
       roomId: [booking?.roomId || null, Validators.required],
@@ -147,7 +147,7 @@ export class BookingCalendarComponent implements OnInit {
       specialRequests: [booking?.specialRequests || '']
     });
   }
-  
+
   initStatusOptions(): void {
     this.allStatusOptions = [
       { value: BookingStatus.PENDING, label: this._bookingStatusService.getStatusLabel(BookingStatus.PENDING), color: '#ffa726' },
@@ -162,15 +162,15 @@ export class BookingCalendarComponent implements OnInit {
   isMonthView(): boolean {
     return this._currentView() === 'dayGridMonth';
   }
-  
+
   isWeekView(): boolean {
     return this._currentView() === 'timeGridWeek';
   }
-  
+
   isDayView(): boolean {
     return this._currentView() === 'timeGridDay';
   }
-  
+
   changeView(viewName: string): void {
     if (this.calendarComponent && this.calendarComponent.getApi) {
       const calendarApi = this.calendarComponent.getApi();
@@ -214,25 +214,25 @@ export class BookingCalendarComponent implements OnInit {
   updateCalendarEvents(bookings: Booking[]): void {
     // Log bookings for debugging
     console.log('Updating calendar events with bookings:', bookings);
-    
-    const events = bookings.map(booking => {
+
+    const events = bookings.filter(booking => !!booking.id).map(booking => {
       const room = this._rooms().find(r => r.id === booking.roomId);
       const roomName = room ? room.name : 'Unknown Room';
-      
+
       // Determine color based on booking status
       let backgroundColor = this.getStatusColor(booking.status);
-      
+
       // Ensure dates are properly created as Date objects
       const startDate = new Date(booking.checkInDate);
       const endDate = new Date(booking.checkOutDate);
-      
+
       // Create appropriate status class name for CSS styling
       const statusClass = 'status-' + booking.status.toLowerCase().replace(/_/g, '-');
-      
+
       console.log(`Processing booking: ${booking.id}, ${booking.guestName}, Check-in: ${startDate.toISOString()}, Check-out: ${endDate.toISOString()}`);
-      
+
       return {
-        id: booking.id.toString(),
+        id: booking.id!.toString(),
         title: `${booking.guestName} - ${roomName}`,
         start: startDate,
         end: endDate,
@@ -247,14 +247,14 @@ export class BookingCalendarComponent implements OnInit {
         }
       };
     });
-    
+
     console.log('Generated calendar events:', events);
-    
+
     this._calendarEvents.set(events);
-    
+
     // Update calendarOptions directly
     this.calendarOptions.events = events;
-    
+
     // Force calendar to redraw with events using the API if available
     setTimeout(() => {
       if (this.calendarComponent && this.calendarComponent.getApi) {
@@ -272,25 +272,25 @@ export class BookingCalendarComponent implements OnInit {
   // Apply filters to calendar events
   applyFilters(): void {
     if (!this._bookings) return;
-    
+
     const filteredEvents = this._calendarEvents().filter(event => {
       // If no status filters are selected, show all events
       if (this.selectedStatuses.length === 0) return true;
-      
+
       // Otherwise, only show events that match the selected statuses
       return this.selectedStatuses.includes(event.extendedProps?.status);
     });
-    
+
     // Update the calendar events directly via the calendar API if available
     if (this.calendarComponent && this.calendarComponent.getApi) {
       const calendarApi = this.calendarComponent.getApi();
-      
+
       // Remove all events first
       calendarApi.removeAllEvents();
-      
+
       // Then add the filtered events
       calendarApi.addEventSource(filteredEvents);
-      
+
       // Render the events immediately
       calendarApi.render();
     }
@@ -312,14 +312,14 @@ export class BookingCalendarComponent implements OnInit {
   handleDateSelect(selectInfo: DateSelectArg): void {
     const startDate = selectInfo.startStr;
     const endDate = selectInfo.endStr;
-    
+
     // Create new booking with basic info
     const newBooking: Partial<Booking> = {
       checkInDate: startDate,
       checkOutDate: endDate,
       status: BookingStatus.PENDING
     };
-    
+
     // Open dialog to create new booking
     this.openBookingDialog('add', newBooking as Booking);
   }
@@ -338,7 +338,7 @@ export class BookingCalendarComponent implements OnInit {
       checkInDate: eventDropInfo.event.start,
       checkOutDate: eventDropInfo.event.end || new Date(eventDropInfo.event.start.getTime() + 24 * 60 * 60 * 1000)
     };
-    
+
     this.updateBooking(updatedBooking);
   }
 
@@ -350,7 +350,7 @@ export class BookingCalendarComponent implements OnInit {
       checkInDate: eventResizeInfo.event.start,
       checkOutDate: eventResizeInfo.event.end
     };
-    
+
     this.updateBooking(updatedBooking);
   }
 
@@ -374,9 +374,9 @@ export class BookingCalendarComponent implements OnInit {
   openBookingDialog(mode: 'add' | 'edit', booking: Booking): void {
     this._isEditMode.set(mode === 'edit');
     this.currentBooking = booking;
-    
+
     this.initBookingForm(booking);
-    
+
     const dialogRef = this._dialog.open(this.bookingDialogTemplate, {
       width: '500px',
       disableClose: true
@@ -385,7 +385,7 @@ export class BookingCalendarComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       // Dialog was closed without action
       if (!result) return;
-      
+
       // Handle result if needed
     });
   }
@@ -398,9 +398,9 @@ export class BookingCalendarComponent implements OnInit {
   // Save booking (add or update)
   saveBooking(): void {
     if (this.bookingForm.invalid) return;
-    
+
     const formValues = this.bookingForm.value;
-    
+
     // Convert dates to ISO string format
     const bookingData: Booking = {
       ...this.currentBooking,
@@ -408,17 +408,17 @@ export class BookingCalendarComponent implements OnInit {
       checkInDate: formValues.checkIn.toISOString(),
       checkOutDate: formValues.checkOut.toISOString(),
     };
-    
+
     // Remove form-specific properties
     delete (bookingData as any).checkIn;
     delete (bookingData as any).checkOut;
-    
+
     if (this.isEditMode) {
       this.updateBooking(bookingData);
     } else {
       this.createBooking(bookingData);
     }
-    
+
     // Close the dialog
     this._dialog.closeAll();
   }
@@ -426,7 +426,7 @@ export class BookingCalendarComponent implements OnInit {
   // Create a new booking
   createBooking(booking: Booking): void {
     this._isLoading.set(true);
-    
+
     this._hotelService.addBooking(booking).subscribe({
       next: (result) => {
         this._snackBar.open('Booking created successfully', 'Close', {
@@ -446,7 +446,7 @@ export class BookingCalendarComponent implements OnInit {
   // Update an existing booking
   updateBooking(booking: Booking): void {
     this._isLoading.set(true);
-    
+
     this._hotelService.updateBooking(booking).subscribe({
       next: (result) => {
         this._snackBar.open('Booking updated successfully', 'Close', {
@@ -466,7 +466,7 @@ export class BookingCalendarComponent implements OnInit {
   // Delete an existing booking
   deleteBooking(): void {
     if (!this.currentBooking || !this.currentBooking.id) return;
-    
+
     // Use the DeleteConfirmDialogComponent for confirmation instead of the browser's confirm
     const dialogRef = this._dialog.open(DeleteConfirmDialogComponent, {
       width: '400px',
@@ -479,8 +479,9 @@ export class BookingCalendarComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this._isLoading.set(true);
-        
-        this._hotelService.deleteBooking(this.currentBooking!.id).subscribe({
+        if (!this.currentBooking?.id) return;
+
+        this._hotelService.deleteBooking(this.currentBooking.id).subscribe({
           next: () => {
             this._snackBar.open('Booking deleted successfully', 'Close', {
               duration: 3000

@@ -88,4 +88,11 @@ export class ApiConfigService {
   getRegisterUrl(): string {
     return `${this.getAuthUrl()}/register`;
   }
+
+  /**
+   * Get URL for refresh token endpoint
+   */
+  getRefreshTokenUrl(): string {
+    return `${this.getAuthUrl()}/refresh-token`;
+  }
 }

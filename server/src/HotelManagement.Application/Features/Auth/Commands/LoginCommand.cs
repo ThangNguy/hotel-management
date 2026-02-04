@@ -18,6 +18,7 @@ namespace HotelManagement.Application.Features.Auth.Commands
     public class AuthResponse : BaseResponse
     {
         public string Token { get; set; }
+        public string RefreshToken { get; set; }
         public UserDto User { get; set; }
     }
 
@@ -39,11 +40,16 @@ namespace HotelManagement.Application.Features.Auth.Commands
     {
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-        public LoginCommandHandler(IUserRepository userRepository, IAuthService authService)
+        public LoginCommandHandler(
+            IUserRepository userRepository, 
+            IAuthService authService,
+            IRefreshTokenRepository refreshTokenRepository)
         {
             _userRepository = userRepository;
             _authService = authService;
+            _refreshTokenRepository = refreshTokenRepository;
         }
 
         public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -68,12 +74,18 @@ namespace HotelManagement.Application.Features.Auth.Commands
                 return response;
             }
 
-            // Generate token
-            var token = _authService.GenerateJwtToken(user);
+            // Generate access token
+            var accessToken = _authService.GenerateJwtToken(user);
+            
+            // Generate and save refresh token
+            var refreshToken = _authService.GenerateRefreshToken("unknown");
+            refreshToken.UserId = user.Id;
+            await _refreshTokenRepository.AddAsync(refreshToken);
 
             response.Success = true;
             response.Message = "Login successful";
-            response.Token = token;
+            response.Token = accessToken;
+            response.RefreshToken = refreshToken.Token;
             response.User = new UserDto
             {
                 Id = user.Id,

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { LoadingService } from './core/services/loading.service';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { FooterComponent } from './features/public/components/footer/footer.component';
 import { HeaderComponent } from './features/public/components/header/header.component';
-import { LoadingIndicatorComponent } from './features/public/components/shared/loading-indicator/loading-indicator.component';
 import { filter } from 'rxjs/operators';
 
 /**
@@ -27,16 +26,12 @@ export class AppComponent implements OnInit {
   ) {}
   
   ngOnInit(): void {
-    // Track route changes to detect admin routes
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      // Check if current URL includes /admin/ path
       this.isAdminRoute = event.url.includes('/admin/');
-      console.log(event.url, this.isAdminRoute);
     });
     
-    // Initial check for current route
     this.isAdminRoute = this.router.url.includes('/admin/');
   }
 }

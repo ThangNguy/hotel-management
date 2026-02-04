@@ -148,6 +148,9 @@ export class HotelService {
    * @returns Observable of the updated booking
    */
   updateBooking(booking: Booking): Observable<Booking> {
+    if (!booking.id) {
+      throw new Error('Booking ID is required for update');
+    }
     return this.requestService.put<Booking>(this.apiConfigService.getBookingUrl(booking.id), booking)
       .pipe(
         map((updatedBooking: Booking) => ModelMapperService.mapBooking(updatedBooking))
@@ -200,7 +203,7 @@ export class HotelService {
   }
 
   // SYNC METHODS - For compatibility with components that haven't been updated
-  
+
   /**
    * Get rooms from cache
    * @returns Array of rooms
@@ -262,12 +265,12 @@ export class HotelService {
    */
   checkRoomAvailability(roomId: number, checkIn: Date, checkOut: Date): boolean {
     const bookings = this.getBookings();
-    
+
     const checkInTime = new Date(checkIn).getTime();
     const checkOutTime = new Date(checkOut).getTime();
-  
-    const roomBookings = bookings.filter((booking: Booking) => 
-      booking.roomId === roomId && 
+
+    const roomBookings = bookings.filter((booking: Booking) =>
+      booking.roomId === roomId &&
       booking.status !== BookingStatus.CANCELLED
     );
 
@@ -296,7 +299,7 @@ export class HotelService {
    */
   private transformImageUrl(room: Room): Room {
     if (room.images && room.images.length > 0) {
-      room.images = room.images.map((image: string) => 
+      room.images = room.images.map((image: string) =>
         `${this.apiConfigService.baseUrl}/${image}`
       );
     }

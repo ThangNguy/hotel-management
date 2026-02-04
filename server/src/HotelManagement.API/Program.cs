@@ -93,6 +93,7 @@ builder.Services.AddValidatorsFromAssembly(typeof(LoginCommand).Assembly);
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
 // Register Services
 builder.Services.AddScoped<IAuthService, AuthService>();

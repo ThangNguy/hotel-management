@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace HotelManagement.Core.Entities
 {
@@ -10,5 +11,10 @@ namespace HotelManagement.Core.Entities
         public string PasswordHash { get; set; }
         public string Role { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        
+        /// <summary>
+        /// Collection of refresh tokens for this user
+        /// </summary>
+        public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }
