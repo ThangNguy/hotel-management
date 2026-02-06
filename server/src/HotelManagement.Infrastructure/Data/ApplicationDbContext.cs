@@ -1,4 +1,5 @@
 using HotelManagement.Core.Entities;
+using HotelManagement.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -9,18 +10,66 @@ namespace HotelManagement.Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        private readonly ITenantContext _tenantContext;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, ITenantContext tenantContext) : base(options)
         {
+            _tenantContext = tenantContext;
         }
+
+        public DbSet<Hotel> Hotels { get; set; }
 
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
 
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries<HotelManagement.Core.Entities.Room>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.HotelId == 0)
+                {
+                    entry.Entity.HotelId = _tenantContext.HotelId;
+                }
+            }
+            
+            foreach (var entry in ChangeTracker.Entries<HotelManagement.Core.Entities.Booking>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.HotelId == 0)
+                {
+                    entry.Entity.HotelId = _tenantContext.HotelId;
+                }
+            }
+            
+            foreach (var entry in ChangeTracker.Entries<HotelManagement.Core.Entities.User>())
+            {
+                if (entry.State == EntityState.Added && entry.Entity.HotelId == 0)
+                {
+                    entry.Entity.HotelId = _tenantContext.HotelId;
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // Configure Global Query Filters for Multi-Tenancy
+            // Allow Admins to see all data, otherwise filter by HotelId
+            modelBuilder.Entity<User>().HasQueryFilter(e => _tenantContext.IsAdmin || e.HotelId == _tenantContext.HotelId);
+            modelBuilder.Entity<Room>().HasQueryFilter(e => _tenantContext.IsAdmin || e.HotelId == _tenantContext.HotelId);
+            modelBuilder.Entity<Booking>().HasQueryFilter(e => _tenantContext.IsAdmin || e.HotelId == _tenantContext.HotelId);
+
+            // Configure Hotel entity
+            modelBuilder.Entity<Hotel>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Address).HasMaxLength(200);
+            });
 
             // Configure Room entity
             modelBuilder.Entity<Room>(entity =>
@@ -67,6 +116,12 @@ namespace HotelManagement.Infrastructure.Data
                     .WithMany(r => r.Bookings)
                     .HasForeignKey(e => e.RoomId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                // Configure relationship with Hotel
+                entity.HasOne(e => e.Hotel)
+                    .WithMany(h => h.Bookings)
+                    .HasForeignKey(e => e.HotelId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Configure User entity
@@ -80,6 +135,12 @@ namespace HotelManagement.Infrastructure.Data
 
                 // Add unique constraint for username
                 entity.HasIndex(e => e.Username).IsUnique();
+
+                // Configure relationship with Hotel
+                entity.HasOne(e => e.Hotel)
+                    .WithMany(h => h.Users)
+                    .HasForeignKey(e => e.HotelId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
             
             // Configure RefreshToken entity
@@ -101,6 +162,19 @@ namespace HotelManagement.Infrastructure.Data
             });
 
             // Seed initial admin user with fixed date and hash value
+            // Note: Data seeding might need adjustment for multi-tenancy as HotelId is required
+            modelBuilder.Entity<Hotel>().HasData(
+                new Hotel
+                {
+                    Id = 1,
+                    Name = "Default Hotel",
+                    Address = "123 Main St",
+                    IsActive = true,
+                    CreatedAt = new DateTime(2025, 4, 19, 12, 0, 0)
+                }
+            );
+
+            // Ensure Admin user belongs to Default Hotel
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -110,6 +184,7 @@ namespace HotelManagement.Infrastructure.Data
                     // Use a hardcoded hash for "Admin@123" instead of generating a new one each time
                     PasswordHash = "$2a$11$jytGBLLdqQTgIh8htOjXzOx/QjXf2fFX/24bILVGUNdV.SOlV3ggy",
                     Role = "admin",
+                    HotelId = 1,
                     CreatedAt = new DateTime(2025, 4, 19, 12, 0, 0)
                 }
             );

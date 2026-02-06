@@ -87,6 +87,7 @@ namespace HotelManagement.Application.Features.Auth.Commands
                 Name = request.Name,
                 PasswordHash = passwordHash,
                 Role = "Guest", // Default role for new registrations
+                HotelId = 1, // Default to the first hotel for now
                 CreatedAt = DateTime.Now
             };
 

@@ -76,18 +76,26 @@ namespace HotelManagement.Application.Features.Rooms.Commands
                 Available = true
             };
 
-            var createdRoom = await _roomRepository.AddAsync(room);
+            try
+            {
+                var createdRoom = await _roomRepository.AddAsync(room);
 
-            if (createdRoom != null)
-            {
-                response.Success = true;
-                response.Message = "Room created successfully";
+                if (createdRoom != null)
+                {
+                    response.Success = true;
+                    response.Message = "Room created successfully";
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "Failed to create room";
+                    response.Errors.Add("An error occurred while creating the room");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                response.Success = false;
-                response.Message = "Failed to create room";
-                response.Errors.Add("An error occurred while creating the room");
+                Console.WriteLine($"[ERROR] Exception: {ex.Message}");
+                throw;
             }
 
             return response;

@@ -11,6 +11,9 @@ namespace HotelManagement.Core.Entities
         public string PasswordHash { get; set; }
         public string Role { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public int HotelId { get; set; }
+        public Hotel Hotel { get; set; } = default!;
         
         /// <summary>
         /// Collection of refresh tokens for this user

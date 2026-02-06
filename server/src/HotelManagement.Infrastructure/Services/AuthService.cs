@@ -24,7 +24,8 @@ namespace HotelManagement.Infrastructure.Services
         /// </summary>
         public string GenerateJwtToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var secretKey = _configuration["JWT:Secret"] ?? throw new InvalidOperationException("JWT Secret is not configured");
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -33,6 +34,7 @@ namespace HotelManagement.Infrastructure.Services
                 new Claim(JwtRegisteredClaimNames.Name, user.Username),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Role),
+                new Claim("hotel_id", user.HotelId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

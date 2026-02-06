@@ -14,6 +14,8 @@ namespace HotelManagement.Core.Entities
         public List<string> Images { get; set; } = new List<string>();
         
         // Navigation properties
+        public int HotelId { get; set; }
+        public Hotel Hotel { get; set; } = default!;
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }
