@@ -168,6 +168,7 @@ namespace HotelManagement.Infrastructure.Data
                 {
                     Id = 1,
                     Name = "Default Hotel",
+                    Domain = "localhost",
                     Address = "123 Main St",
                     IsActive = true,
                     CreatedAt = new DateTime(2025, 4, 19, 12, 0, 0)

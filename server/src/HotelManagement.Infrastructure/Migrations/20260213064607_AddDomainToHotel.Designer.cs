@@ -4,6 +4,7 @@ using HotelManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260213064607_AddDomainToHotel")]
+    partial class AddDomainToHotel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +123,6 @@ namespace HotelManagement.Infrastructure.Migrations
                             Id = 1,
                             Address = "123 Main St",
                             CreatedAt = new DateTime(2025, 4, 19, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            Domain = "localhost",
                             IsActive = true,
                             Name = "Default Hotel"
                         });

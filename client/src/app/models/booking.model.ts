@@ -10,22 +10,25 @@ export enum BookingStatus {
 
 export interface Booking {
   id?: number;
+  hotelId: number;
   roomId: number;
   guestName: string;
-  guestEmail?: string;
-  guestPhone?: string;
+  guestEmail: string;
+  guestPhone: string;
   checkInDate: Date | string;
   checkOutDate: Date | string;
-  numberOfNights: number;
-  adults: number;
-  children: number;
+  numberOfGuests: number;
   totalPrice: number;
   status: BookingStatus;
   specialRequests?: string;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 
-  numberOfGuests?: number;
+  // Additional fields for UI / Legacy compatibility
+  roomName?: string;
+  numberOfNights?: number;
+  adults?: number;
+  children?: number;
 }
 
 export interface BookingForm {

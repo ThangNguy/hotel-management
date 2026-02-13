@@ -8,6 +8,7 @@ import { RequestService } from '../services/request.service';
 import { ModelMapperService } from './model-mapper.service';
 import { Room } from '../../models/room.model';
 import { Booking, BookingStatus } from '../../models/booking.model';
+import { Hotel } from '../../models/hotel.model';
 
 /**
  * Service to manage hotel-related operations including rooms and bookings
@@ -24,6 +25,14 @@ export class HotelService {
     private apiConfigService: ApiConfigService,
     private requestService: RequestService
   ) { }
+
+  /**
+   * Get current hotel info
+   * @returns Observable of hotel info
+   */
+  getHotelInfo(): Observable<Hotel> {
+    return this.requestService.get<Hotel>(this.apiConfigService.getHotelUrl());
+  }
 
   // ROOMS API
   /**

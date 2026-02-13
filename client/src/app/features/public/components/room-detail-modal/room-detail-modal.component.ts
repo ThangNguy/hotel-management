@@ -14,10 +14,10 @@ import { HotelService, ErrorHandlingService } from '../../../../core/services';
   selector: 'app-room-detail-modal',
   standalone: true,
   imports: [
-    CommonModule, 
-    MaterialModule, 
-    MatDialogModule, 
-    ReactiveFormsModule, 
+    CommonModule,
+    MaterialModule,
+    MatDialogModule,
+    ReactiveFormsModule,
     LoadingIndicatorComponent,
     MatTabsModule // Add MatTabsModule explicitly
   ],
@@ -30,7 +30,7 @@ export class RoomDetailModalComponent implements OnInit {
   isSubmitting = false;
   minDate = new Date();
   minCheckOutDate = new Date(this.minDate.getTime() + 86400000); // Tomorrow
-  
+
   // Price calculation
   numberOfNights = 1;
   totalPrice = 0;
@@ -44,10 +44,10 @@ export class RoomDetailModalComponent implements OnInit {
   ) {
     // Ensure all room properties are properly mapped
     this.room = ModelMapperService.mapRoom(room);
-    
+
     // Use default max capacity if room.capacity is undefined
     const maxCapacity = this.room.capacity || this.room.maxOccupancy || 1;
-    
+
     // Initialize booking form
     this.bookingForm = this.fb.group({
       checkInDate: [null, Validators.required],
@@ -65,13 +65,13 @@ export class RoomDetailModalComponent implements OnInit {
     this.bookingForm.valueChanges.subscribe(() => {
       this.updatePriceCalculation();
     });
-    
+
     // Update checkout min date when check-in date changes
     this.bookingForm.get('checkInDate')?.valueChanges.subscribe(date => {
       if (date) {
         const checkInDate = new Date(date);
         this.minCheckOutDate = new Date(checkInDate.getTime() + 86400000); // Next day
-        
+
         // Reset checkout date if it's before the new min date
         const currentCheckOutDate = this.bookingForm.get('checkOutDate')?.value;
         if (currentCheckOutDate && new Date(currentCheckOutDate) < this.minCheckOutDate) {
@@ -87,15 +87,15 @@ export class RoomDetailModalComponent implements OnInit {
   updatePriceCalculation(): void {
     const checkInDate = this.bookingForm.get('checkInDate')?.value;
     const checkOutDate = this.bookingForm.get('checkOutDate')?.value;
-    
+
     if (checkInDate && checkOutDate) {
       const checkIn = new Date(checkInDate);
       const checkOut = new Date(checkOutDate);
-      
+
       // Calculate number of nights
       const timeDiff = checkOut.getTime() - checkIn.getTime();
       this.numberOfNights = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      
+
       // Calculate total price (use pricePerNight as fallback)
       this.totalPrice = this.numberOfNights * (this.room.price || this.room.pricePerNight || 0);
     }
@@ -108,9 +108,10 @@ export class RoomDetailModalComponent implements OnInit {
   submitBooking(): void {
     if (this.bookingForm.valid) {
       this.isSubmitting = true;
-      
+
       const formValues = this.bookingForm.value;
       const booking = {
+        hotelId: this.room.hotelId || 0,
         roomId: this.room.id,
         checkInDate: formValues.checkInDate,
         checkOutDate: formValues.checkOutDate,
@@ -122,7 +123,7 @@ export class RoomDetailModalComponent implements OnInit {
         totalPrice: this.totalPrice,
         status: BookingStatus.PENDING
       };
-      
+
       this.hotelService.addBooking(booking).subscribe({
         next: (response) => {
           this.isSubmitting = false;

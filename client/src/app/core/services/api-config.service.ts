@@ -28,6 +28,14 @@ export class ApiConfigService {
     return `${this.apiUrl}/${endpoint}`;
   }
 
+  // Hotel endpoints
+  /**
+   * Get URL for current hotel info
+   */
+  getHotelUrl(): string {
+    return this.getUrl('api/hotels/current');
+  }
+
   // Room endpoints
   /**
    * Get URL for rooms endpoint

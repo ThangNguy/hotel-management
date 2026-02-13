@@ -11,6 +11,7 @@ namespace HotelManagement.Application.Features.Bookings.Commands
 {
     public class CreateBookingCommand : IRequest<BaseResponse>
     {
+        public int HotelId { get; set; }
         public int RoomId { get; set; }
         public string GuestName { get; set; }
         public string GuestEmail { get; set; }
@@ -27,8 +28,14 @@ namespace HotelManagement.Application.Features.Bookings.Commands
     {
         public CreateBookingCommandValidator()
         {
+            RuleFor(p => p.HotelId)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
+
             RuleFor(p => p.RoomId)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
+            
+            // ... (rest unchanged)
 
             RuleFor(p => p.GuestName)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
@@ -101,6 +108,7 @@ namespace HotelManagement.Application.Features.Bookings.Commands
             {
                 var booking = new Booking
                 {
+                    HotelId = request.HotelId,
                     RoomId = request.RoomId,
                     GuestName = request.GuestName,
                     GuestEmail = request.GuestEmail,

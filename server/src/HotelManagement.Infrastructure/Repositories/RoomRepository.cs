@@ -20,14 +20,19 @@ namespace HotelManagement.Infrastructure.Repositories
 
         public async Task<IEnumerable<Room>> GetAllAsync()
         {
-            return await _context.Rooms.ToListAsync();
+            return await _context.Rooms
+                .Include(r => r.Hotel)
+                .ToListAsync();
         }
 
         public async Task<Room> GetByIdAsync(int id)
         {
             return await _context.Rooms
+                .Include(r => r.Hotel)
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
+
+
 
         public async Task<Room> AddAsync(Room room)
         {
@@ -67,7 +72,9 @@ namespace HotelManagement.Infrastructure.Repositories
         public async Task<IEnumerable<Room>> GetAvailableRoomsAsync(DateTime checkIn, DateTime checkOut)
         {
             // Get all rooms
-            var allRooms = await _context.Rooms.ToListAsync();
+            var allRooms = await _context.Rooms
+                .Include(r => r.Hotel)
+                .ToListAsync();
             
             // Get IDs of rooms that have overlapping bookings
             var unavailableRoomIds = await _context.Bookings

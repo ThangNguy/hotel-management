@@ -19,19 +19,24 @@ namespace HotelManagement.Infrastructure.Services
         {
             get
             {
-                var user = _httpContextAccessor.HttpContext?.User;
-                if (user == null || !user.Identity.IsAuthenticated)
+                var context = _httpContextAccessor.HttpContext;
+                if (context == null) return 0;
+
+                // 1. Try to get from Items (set by middleware)
+                if (context.Items.TryGetValue("HotelId", out var hotelIdObj) && hotelIdObj is int hotelIdItem)
                 {
-                    // Fallback or throw exception depending on requirement
-                    // For now returning 0 which might indicate no tenant
-                    return 0;
+                    return hotelIdItem;
                 }
 
-                // Try to get from claims
-                var hotelIdClaim = user.Claims.FirstOrDefault(c => c.Type == "hotel_id");
-                if (hotelIdClaim != null && int.TryParse(hotelIdClaim.Value, out int hotelId))
+                // 2. Try to get from User Claims (fallback)
+                var user = context.User;
+                if (user != null && user.Identity.IsAuthenticated)
                 {
-                    return hotelId;
+                    var hotelIdClaim = user.Claims.FirstOrDefault(c => c.Type == "hotel_id");
+                    if (hotelIdClaim != null && int.TryParse(hotelIdClaim.Value, out int hotelId))
+                    {
+                        return hotelId;
+                    }
                 }
 
                 return 0;

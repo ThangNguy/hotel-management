@@ -64,76 +64,24 @@ namespace HotelManagement.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseResponse>> CreateBooking([FromBody] JsonElement requestData)
+        public async Task<ActionResult<BaseResponse>> CreateBooking([FromBody] CreateBookingCommand command)
         {
-            try
-            {
-                var command = new CreateBookingCommand
-                {
-                    RoomId = requestData.TryGetProperty("roomId", out var roomIdProp) && roomIdProp.TryGetInt32(out var roomId) 
-                        ? roomId : 0,
-                    
-                    GuestName = requestData.TryGetProperty("guestName", out var guestNameProp) && guestNameProp.ValueKind == JsonValueKind.String 
-                        ? guestNameProp.GetString() : "",
-                    
-                    GuestEmail = requestData.TryGetProperty("guestEmail", out var guestEmailProp) && guestEmailProp.ValueKind == JsonValueKind.String 
-                        ? guestEmailProp.GetString() : "",
-                    
-                    GuestPhone = requestData.TryGetProperty("guestPhone", out var guestPhoneProp) && guestPhoneProp.ValueKind == JsonValueKind.String 
-                        ? guestPhoneProp.GetString() : "",
-                    
-                    CheckInDate = requestData.TryGetProperty("checkInDate", out var checkInDateProp) && checkInDateProp.TryGetDateTime(out var checkInDate) 
-                        ? checkInDate : DateTime.Now,
-                    
-                    CheckOutDate = requestData.TryGetProperty("checkOutDate", out var checkOutDateProp) && checkOutDateProp.TryGetDateTime(out var checkOutDate) 
-                        ? checkOutDate : DateTime.Now.AddDays(1),
-                    
-                    NumberOfGuests = requestData.TryGetProperty("numberOfGuests", out var numberOfGuestsProp) && numberOfGuestsProp.TryGetInt32(out var numberOfGuests) 
-                        ? numberOfGuests : 1,
-                    
-                    TotalPrice = requestData.TryGetProperty("totalPrice", out var totalPriceProp) && totalPriceProp.TryGetDecimal(out var totalPrice) 
-                        ? totalPrice : 0,
-                    
-                    SpecialRequests = requestData.TryGetProperty("specialRequests", out var specialRequestsProp) && specialRequestsProp.ValueKind == JsonValueKind.String 
-                        ? specialRequestsProp.GetString() : "",
-                };
+            var response = await _mediator.Send(command);
+            if (!response.Success)
+                return BadRequest(response);
 
-                // Handle status enum conversion with case-insensitive matching
-                if (requestData.TryGetProperty("status", out var statusProp) && statusProp.ValueKind == JsonValueKind.String)
-                {
-                    var statusString = statusProp.GetString();
-                    if (!string.IsNullOrEmpty(statusString))
-                    {
-                        // Case-insensitive parsing for enum
-                        if (Enum.TryParse<BookingStatus>(statusString, true, out var statusEnum))
-                        {
-                            command.Status = statusEnum;
-                        }
-                    }
-                }
-
-                var response = await _mediator.Send(command);
-                if (!response.Success)
-                    return BadRequest(response);
-
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new BaseResponse 
-                { 
-                    Success = false, 
-                    Message = "Error processing booking", 
-                    Errors = new List<string> { ex.Message } 
-                });
-            }
+            return Ok(response);
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<BaseResponse>> UpdateBooking(int id, UpdateBookingCommand command)
+        public async Task<ActionResult<BaseResponse>> UpdateBooking(int id, [FromBody] UpdateBookingCommand command)
         {
-            command.Id = id;
+            if (id != command.Id)
+            {
+                return BadRequest(new BaseResponse { Success = false, Message = "Id mismatch" });
+            }
+            
             var response = await _mediator.Send(command);
             if (!response.Success)
                 return BadRequest(response);

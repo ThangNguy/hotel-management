@@ -138,11 +138,12 @@ export class BookingCalendarComponent implements OnInit {
     this.bookingForm = this._formBuilder.group({
       id: [booking?.id || null],
       guestName: [booking?.guestName || '', Validators.required],
-      email: [booking?.guestEmail || '', [Validators.required, Validators.email]],
-      phone: [booking?.guestPhone || ''],
-      checkIn: [booking?.checkInDate ? new Date(booking.checkInDate) : new Date(), Validators.required],
-      checkOut: [booking?.checkOutDate ? new Date(booking.checkOutDate) : new Date(Date.now() + 24 * 60 * 60 * 1000), Validators.required],
+      guestEmail: [booking?.guestEmail || '', [Validators.required, Validators.email]],
+      guestPhone: [booking?.guestPhone || ''],
+      checkInDate: [booking?.checkInDate ? new Date(booking.checkInDate) : new Date(), Validators.required],
+      checkOutDate: [booking?.checkOutDate ? new Date(booking.checkOutDate) : new Date(Date.now() + 24 * 60 * 60 * 1000), Validators.required],
       roomId: [booking?.roomId || null, Validators.required],
+      numberOfGuests: [booking?.numberOfGuests || 1, [Validators.required, Validators.min(1)]],
       status: [booking?.status || BookingStatus.PENDING, Validators.required],
       specialRequests: [booking?.specialRequests || '']
     });
@@ -333,10 +334,12 @@ export class BookingCalendarComponent implements OnInit {
   // Handle when user drags and drops an event
   handleEventDrop(eventDropInfo: any): void {
     const booking = eventDropInfo.event.extendedProps['booking'] as Booking;
+    const newStart = eventDropInfo.event.start;
+    const newEnd = eventDropInfo.event.end || new Date(newStart.getTime() + 24 * 60 * 60 * 1000);
     const updatedBooking: Booking = {
       ...booking,
-      checkInDate: eventDropInfo.event.start,
-      checkOutDate: eventDropInfo.event.end || new Date(eventDropInfo.event.start.getTime() + 24 * 60 * 60 * 1000)
+      checkInDate: newStart.toISOString(),
+      checkOutDate: newEnd.toISOString()
     };
 
     this.updateBooking(updatedBooking);
@@ -347,8 +350,8 @@ export class BookingCalendarComponent implements OnInit {
     const booking = eventResizeInfo.event.extendedProps['booking'] as Booking;
     const updatedBooking: Booking = {
       ...booking,
-      checkInDate: eventResizeInfo.event.start,
-      checkOutDate: eventResizeInfo.event.end
+      checkInDate: eventResizeInfo.event.start.toISOString(),
+      checkOutDate: eventResizeInfo.event.end.toISOString()
     };
 
     this.updateBooking(updatedBooking);
@@ -401,17 +404,21 @@ export class BookingCalendarComponent implements OnInit {
 
     const formValues = this.bookingForm.value;
 
-    // Convert dates to ISO string format
+    // Build booking data with proper field names and ISO date strings
     const bookingData: Booking = {
       ...this.currentBooking,
-      ...formValues,
-      checkInDate: formValues.checkIn.toISOString(),
-      checkOutDate: formValues.checkOut.toISOString(),
-    };
-
-    // Remove form-specific properties
-    delete (bookingData as any).checkIn;
-    delete (bookingData as any).checkOut;
+      guestName: formValues.guestName,
+      guestEmail: formValues.guestEmail,
+      guestPhone: formValues.guestPhone,
+      roomId: formValues.roomId,
+      numberOfGuests: formValues.numberOfGuests || 1,
+      checkInDate: new Date(formValues.checkInDate).toISOString(),
+      checkOutDate: new Date(formValues.checkOutDate).toISOString(),
+      status: formValues.status,
+      specialRequests: formValues.specialRequests || '',
+      totalPrice: this.currentBooking?.totalPrice || 0,
+      hotelId: this.currentBooking?.hotelId || (this._rooms().length > 0 ? this._rooms()[0].hotelId : 0),
+    } as Booking;
 
     if (this.isEditMode) {
       this.updateBooking(bookingData);

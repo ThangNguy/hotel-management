@@ -11,7 +11,7 @@
         </button>
       </div>
     </mat-card-header>
-    
+
     <div class="filter-section">
       <div class="filter-controls">
         <mat-form-field appearance="outline" class="status-filter">
@@ -23,12 +23,12 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        
+
         <button mat-button color="accent" (click)="resetFilters()" class="reset-filters-btn">
           <mat-icon>filter_list</mat-icon> Reset Filters
         </button>
       </div>
-      
+
       <div class="view-modes">
         <div class="btn-group">
           <button mat-button [class.active]="isMonthView()" (click)="changeView('dayGridMonth')">Month</button>
@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    
+
     <mat-card-content>
       <div class="calendar-wrapper">
         <div *ngIf="isLoading" class="loading-overlay">
@@ -76,11 +76,11 @@
       <div class="form-row">
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" required type="email">
-          <mat-error *ngIf="bookingForm.get('email')?.hasError('required')">
+          <input matInput formControlName="guestEmail" required type="email">
+          <mat-error *ngIf="bookingForm.get('guestEmail')?.hasError('required')">
             Email is required
           </mat-error>
-          <mat-error *ngIf="bookingForm.get('email')?.hasError('email')">
+          <mat-error *ngIf="bookingForm.get('guestEmail')?.hasError('email')">
             Please enter a valid email
           </mat-error>
         </mat-form-field>
@@ -89,29 +89,36 @@
       <div class="form-row">
         <mat-form-field appearance="fill">
           <mat-label>Phone</mat-label>
-          <input matInput formControlName="phone">
+          <input matInput formControlName="guestPhone">
         </mat-form-field>
       </div>
 
       <div class="form-row dates">
         <mat-form-field appearance="fill">
           <mat-label>Check In</mat-label>
-          <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn" required>
+          <input matInput [matDatepicker]="checkInPicker" formControlName="checkInDate" required>
           <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
           <mat-datepicker #checkInPicker></mat-datepicker>
-          <mat-error *ngIf="bookingForm.get('checkIn')?.hasError('required')">
+          <mat-error *ngIf="bookingForm.get('checkInDate')?.hasError('required')">
             Check in date is required
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Check Out</mat-label>
-          <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut" required>
+          <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOutDate" required>
           <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
           <mat-datepicker #checkOutPicker></mat-datepicker>
-          <mat-error *ngIf="bookingForm.get('checkOut')?.hasError('required')">
+          <mat-error *ngIf="bookingForm.get('checkOutDate')?.hasError('required')">
             Check out date is required
           </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Number of Guests</mat-label>
+          <input matInput type="number" formControlName="numberOfGuests" required min="1">
         </mat-form-field>
       </div>
 

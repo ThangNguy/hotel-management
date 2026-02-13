@@ -10,26 +10,27 @@ export class ModelMapperService {
    */
   static mapRoom(room: any): any {
     if (!room) return null;
-    
+
     // Đảm bảo tương thích hai chiều giữa các thuộc tính cũ và mới
     return {
       ...room,
       // Map các thuộc tính chính
+      hotelId: room.hotelId || 0,
       pricePerNight: room.pricePerNight || room.price || 0,
       price: room.price || room.pricePerNight || 0,
       maxOccupancy: room.maxOccupancy || room.capacity || 1,
       capacity: room.capacity || room.maxOccupancy || 1,
       sizeSqm: room.sizeSqm || room.size || 0,
       size: room.size || room.sizeSqm || 0,
-      
+
       // Đảm bảo các thuộc tính mảng tồn tại
       images: room.images || (room.imageUrl ? [room.imageUrl] : []),
-      
+
       // Đảm bảo các thuộc tính boolean tồn tại
       available: room.available !== undefined ? room.available : true,
     };
   }
-  
+
   /**
    * Map từ mô hình Booking cũ sang mới và ngược lại
    * @param booking - Đối tượng Booking cần chuyển đổi
@@ -37,19 +38,22 @@ export class ModelMapperService {
    */
   static mapBooking(booking: any): any {
     if (!booking) return null;
-    
+
     // Đảm bảo tương thích hai chiều giữa các thuộc tính cũ và mới
     return {
       ...booking,
       // Map các thuộc tính chính
-      email: booking.email || booking.guestEmail || '',
+      hotelId: booking.hotelId || 0,
       guestEmail: booking.guestEmail || booking.email || '',
-      phone: booking.phone || booking.guestPhone || '',
       guestPhone: booking.guestPhone || booking.phone || '',
-      totalAmount: booking.totalAmount || booking.totalPrice || 0,
       totalPrice: booking.totalPrice || booking.totalAmount || 0,
       numberOfGuests: booking.numberOfGuests || (booking.adults + (booking.children || 0)) || 1,
-      
+
+      // Các thuộc tính cũ cho tương thích ngược nếu cần
+      email: booking.guestEmail || booking.email || '',
+      phone: booking.guestPhone || booking.phone || '',
+      totalAmount: booking.totalPrice || booking.totalAmount || 0,
+
       // Đảm bảo các thuộc tính ngày tồn tại
       createdAt: booking.createdAt || new Date(),
       updatedAt: booking.updatedAt || new Date(),
