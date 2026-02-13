@@ -27,6 +27,20 @@ namespace HotelManagement.API.Controllers
             return Ok(rooms);
         }
 
+        [HttpGet("available")]
+        public async Task<ActionResult<List<RoomDto>>> GetAvailableRooms([FromQuery] DateTime checkInDate, [FromQuery] DateTime checkOutDate, [FromQuery] int? adults, [FromQuery] int? children)
+        {
+            var query = new GetAvailableRoomsQuery
+            {
+                CheckInDate = checkInDate,
+                CheckOutDate = checkOutDate,
+                Adults = adults,
+                Children = children
+            };
+            var rooms = await _mediator.Send(query);
+            return Ok(rooms);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<RoomDto>> GetRoomById(int id)
         {

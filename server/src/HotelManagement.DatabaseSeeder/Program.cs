@@ -237,68 +237,68 @@ namespace HotelManagement.DatabaseSeeder
             {
                 new Room
                 {
-                    Name = "Deluxe Room",
-                    Description = "Spacious room with city view",
-                    Price = 150.00m,
+                    Name = "Deluxe King",
+                    Description = "A spacious 35m² retreat featuring a plush king-sized bed, modern amenities, and a stunning city view. Perfect for couples or business travelers seeking comfort and style.",
+                    Price = 180.00m,
                     Capacity = 2,
                     Size = 35,
-                    Beds = "1 King",
-                    Amenities = new List<string> { "WIFI", "AIR_CONDITIONING", "FLAT_SCREEN_TV", "MINIBAR", "SAFE" },
+                    Beds = "1 King Bed",
+                    Amenities = new List<string> { "Free Wi-Fi", "Air Conditioning", "50\" Flat Screen TV", "Mini Bar", "Work Desk" },
                     Available = true,
                     HotelId = hotelId,
-                    Images = new List<string> { "/assets/images/rooms/deluxe-1.jpg", "/assets/images/rooms/deluxe-2.jpg" }
+                    Images = new List<string> { "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1000&auto=format&fit=crop" }
                 },
                 new Room
                 {
-                    Name = "Superior Room",
-                    Description = "Elegant room with garden view",
-                    Price = 200.00m,
+                    Name = "Superior Twin",
+                    Description = "Designed for friends or family, this 40m² room offers two comfortable twin beds and a relaxing garden view. Enjoy a blend of elegance and functionality.",
+                    Price = 220.00m,
                     Capacity = 2,
                     Size = 40,
-                    Beds = "1 King",
-                    Amenities = new List<string> { "WIFI", "AIR_CONDITIONING", "FLAT_SCREEN_TV", "MINIBAR", "SAFE", "COFFEE_MACHINE", "MARBLE_BATHROOM" },
+                    Beds = "2 Twin Beds",
+                    Amenities = new List<string> { "Free Wi-Fi", "Balcony", "Coffee Maker", "Rain Shower", "Safe" },
                     Available = true,
                     HotelId = hotelId,
-                    Images = new List<string> { "/assets/images/rooms/superior-1.jpg", "/assets/images/rooms/superior-2.jpg" }
+                    Images = new List<string> { "https://images.unsplash.com/photo-1590490360182-f33efe29a79d?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1000&auto=format&fit=crop" }
                 },
                 new Room
                 {
-                    Name = "Family Room",
-                    Description = "Comfortable room for families",
-                    Price = 250.00m,
-                    Capacity = 4,
-                    Size = 55,
-                    Beds = "2 Queen",
-                    Amenities = new List<string> { "WIFI", "AIR_CONDITIONING", "FLAT_SCREEN_TV", "MINIBAR", "SAFE", "COFFEE_MACHINE", "BATHTUB" },
-                    Available = true,
-                    HotelId = hotelId,
-                    Images = new List<string> { "/assets/images/rooms/family-1.jpg", "/assets/images/rooms/family-2.jpg" }
-                },
-                new Room
-                {
-                    Name = "Executive Suite",
-                    Description = "Luxurious suite with separate living area",
+                    Name = "Family Suite",
+                    Description = "Experience home away from home in our 60m² Family Suite. Features a master bedroom, a separate living area with a sofa bed, and plenty of space for everyone.",
                     Price = 350.00m,
-                    Capacity = 2,
-                    Size = 70,
-                    Beds = "1 King",
-                    Amenities = new List<string> { "WIFI", "AIR_CONDITIONING", "FLAT_SCREEN_TV", "MINIBAR", "SAFE", "COFFEE_MACHINE", "MARBLE_BATHROOM", "BATHTUB", "LIVING_ROOM", "DESK" },
+                    Capacity = 4,
+                    Size = 60,
+                    Beds = "1 King + 1 Soda Bed",
+                    Amenities = new List<string> { "Kitchenette", "Living Area", "2 TVs", "Bathtub", "High-speed Wi-Fi" },
                     Available = true,
                     HotelId = hotelId,
-                    Images = new List<string> { "/assets/images/rooms/executive-1.jpg", "/assets/images/rooms/executive-2.jpg" }
+                    Images = new List<string> { "https://images.unsplash.com/photo-1591088398332-8a7791972843?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1000&auto=format&fit=crop" }
                 },
                 new Room
                 {
-                    Name = "Presidential Suite",
-                    Description = "Our finest accommodation with panoramic views",
-                    Price = 600.00m,
+                    Name = "Executive Studio",
+                    Description = "Tailored for the modern executive. This 45m² studio combines a productive workspace with a luxurious sleeping area and exclusive lounge access.",
+                    Price = 290.00m,
+                    Capacity = 2,
+                    Size = 45,
+                    Beds = "1 Queen Bed",
+                    Amenities = new List<string> { "Lounge Access", "Premium Sound System", "Espresso Machine", "Ironing Facilities", "Smart TV" },
+                    Available = true,
+                    HotelId = hotelId,
+                    Images = new List<string> { "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1590490360182-f33efe29a79d?q=80&w=1000&auto=format&fit=crop" }
+                },
+                new Room
+                {
+                    Name = "Oceanfront Villa",
+                    Description = "Indulge in ultimate luxury with our 120m² Oceanfront Villa. Private pool, direct beach access, and personalized butler service for an unforgettable stay.",
+                    Price = 850.00m,
                     Capacity = 4,
                     Size = 120,
-                    Beds = "1 King",
-                    Amenities = new List<string> { "WIFI", "AIR_CONDITIONING", "FLAT_SCREEN_TV", "MINIBAR", "SAFE", "COFFEE_MACHINE", "MARBLE_BATHROOM", "BATHTUB", "LIVING_ROOM", "DESK", "DINING_ROOM", "BUTLER", "BALCONY" },
+                    Beds = "2 King Beds",
+                    Amenities = new List<string> { "Private Pool", "Butler Service", "Jacuzzi", "Ocean View", "Private Terrace" },
                     Available = true,
                     HotelId = hotelId,
-                    Images = new List<string> { "/assets/images/rooms/presidential-1.jpg", "/assets/images/rooms/presidential-2.jpg" }
+                    Images = new List<string> { "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=1000&auto=format&fit=crop", "https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1000&auto=format&fit=crop" }
                 }
             };
             

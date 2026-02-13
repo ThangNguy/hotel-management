@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../../material/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,16 +23,17 @@ import { ContactComponent } from '../contact/contact.component';
 })
 export class HeroComponent implements OnInit {
   bookingForm!: FormGroup;
-  
+
   constructor(
-    private fb: FormBuilder
-  ) {}
-  
+    private fb: FormBuilder,
+    private router: Router
+  ) { }
+
   ngOnInit() {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     this.bookingForm = this.fb.group({
       checkIn: [today, Validators.required],
       checkOut: [tomorrow, Validators.required],
@@ -39,11 +41,19 @@ export class HeroComponent implements OnInit {
       children: [0, [Validators.required, Validators.min(0), Validators.max(10)]]
     });
   }
-  
+
   checkAvailability() {
     if (this.bookingForm.valid) {
-      console.log('Form submitted with values:', this.bookingForm.value);
-      // Logic to check room availability can be added here via service
+      const { checkIn, checkOut, adults, children } = this.bookingForm.value;
+
+      this.router.navigate(['/rooms'], {
+        queryParams: {
+          checkIn: checkIn.toISOString(),
+          checkOut: checkOut.toISOString(),
+          adults,
+          children
+        }
+      });
     }
   }
 }
