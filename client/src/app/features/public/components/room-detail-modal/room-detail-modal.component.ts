@@ -9,6 +9,7 @@ import { LoadingIndicatorComponent } from '../shared/loading-indicator/loading-i
 import { MatTabsModule } from '@angular/material/tabs'; // Import MatTabsModule explicitly
 import { ModelMapperService } from '../../../../core/services/model-mapper.service';
 import { HotelService, ErrorHandlingService } from '../../../../core/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room-detail-modal',
@@ -40,7 +41,8 @@ export class RoomDetailModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public room: Room,
     private fb: FormBuilder,
     private hotelService: HotelService,
-    private errorService: ErrorHandlingService
+    private errorService: ErrorHandlingService,
+    private router: Router
   ) {
     // Ensure all room properties are properly mapped
     this.room = ModelMapperService.mapRoom(room);
@@ -127,8 +129,9 @@ export class RoomDetailModalComponent implements OnInit {
       this.hotelService.addBooking(booking).subscribe({
         next: (response) => {
           this.isSubmitting = false;
-          this.errorService.showSuccess('BOOKING_SUCCESS');
-          this.dialogRef.close(true); // Pass true to indicate successful booking
+          // this.errorService.showSuccess('BOOKING_SUCCESS'); // Removed to avoid double notification
+          this.dialogRef.close(true);
+          this.router.navigate(['/booking-confirmation'], { state: { booking: response } });
         },
         error: (error) => {
           this.isSubmitting = false;

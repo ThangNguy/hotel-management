@@ -1,0 +1,54 @@
+<div class="confirmation-container">
+  <mat-card class="confirmation-card">
+    <div class="header">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h1>Booking Confirmed!</h1>
+      <p>Thank you for choosing our hotel. Your booking has been successfully received.</p>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="booking-details" *ngIf="booking">
+      <h3>Booking Reference: <strong>#{{ booking.id || 'Pending' }}</strong></h3>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Guest Name</label>
+          <span>{{ booking.guestName }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Email</label>
+          <span>{{ booking.guestEmail }}</span>
+        </div>
+        <div class="detail-item" *ngIf="room">
+          <label>Room</label>
+          <span>{{ room.name }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Dates</label>
+          <span>{{ getFormattedDate(booking.checkInDate) }} - {{ getFormattedDate(booking.checkOutDate) }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Guests</label>
+          <span>{{ booking.numberOfGuests }} Persons</span>
+        </div>
+        <div class="detail-item">
+          <label>Total Price</label>
+          <span class="price-text">{{ getFormattedPrice(booking.totalPrice) }}</span>
+        </div>
+      </div>
+
+      <div class="special-requests" *ngIf="booking.specialRequests">
+        <label>Special Requests</label>
+        <p>{{ booking.specialRequests }}</p>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" routerLink="/home">Back to Home</button>
+      <button mat-stroked-button color="accent" routerLink="/rooms">Browse More Rooms</button>
+    </div>
+  </mat-card>
+</div>

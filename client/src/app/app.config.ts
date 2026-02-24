@@ -1,8 +1,10 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
+import { provideTranslateHttpLoader, TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { routes } from './app.routes';
 import { CoreModule } from './core/core.module';
@@ -14,6 +16,18 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     // Import CoreModule to provide services and interceptors
     importProvidersFrom(CoreModule),
+    // TranslateModule configuration version 17+
+    provideTranslateService({
+      loader: {
+        provide: TranslateLoader,
+        useClass: TranslateHttpLoader
+      },
+      defaultLanguage: 'en'
+    }),
+    provideTranslateHttpLoader({
+      prefix: './assets/i18n/',
+      suffix: '.json'
+    }),
     // Material design defaults
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -24,3 +38,5 @@ export const appConfig: ApplicationConfig = {
     }
   ]
 };
+
+
