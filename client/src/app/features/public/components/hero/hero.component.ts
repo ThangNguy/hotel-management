@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../../material/material.module';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 import { AmenitiesComponent } from '../amenities/amenities.component';
 import { RoomsComponent } from '../rooms/rooms.component';
 import { ContactComponent } from '../contact/contact.component';
@@ -14,6 +15,7 @@ import { ContactComponent } from '../contact/contact.component';
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
+    TranslateModule,
     AmenitiesComponent,
     RoomsComponent,
     ContactComponent

@@ -73,11 +73,13 @@ namespace HotelManagement.Application.Features.Bookings.Commands
     {
         private readonly IBookingRepository _bookingRepository;
         private readonly IRoomRepository _roomRepository;
+        private readonly IEmailService _emailService;
 
-        public CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomRepository roomRepository)
+        public CreateBookingCommandHandler(IBookingRepository bookingRepository, IRoomRepository roomRepository, IEmailService emailService)
         {
             _bookingRepository = bookingRepository;
             _roomRepository = roomRepository;
+            _emailService = emailService;
         }
 
         public async Task<BaseResponse> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
@@ -128,6 +130,21 @@ namespace HotelManagement.Application.Features.Bookings.Commands
                 {
                     response.Success = true;
                     response.Message = "Booking created successfully";
+
+                    // Send confirmation email
+                    var bookingDetails = $@"
+                        <ul>
+                            <li><strong>Booking ID:</strong> {createdBooking.Id}</li>
+                            <li><strong>Check-in:</strong> {createdBooking.CheckInDate:MMM dd, yyyy}</li>
+                            <li><strong>Check-out:</strong> {createdBooking.CheckOutDate:MMM dd, yyyy}</li>
+                            <li><strong>Guests:</strong> {createdBooking.NumberOfGuests}</li>
+                            <li><strong>Total Price:</strong> ${createdBooking.TotalPrice:N2}</li>
+                        </ul>";
+                    
+                    await _emailService.SendBookingConfirmationAsync(
+                        createdBooking.GuestEmail, 
+                        createdBooking.GuestName, 
+                        bookingDetails);
                 }
                 else
                 {

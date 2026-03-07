@@ -4,7 +4,7 @@
       <h2>Contact Us</h2>
       <p>Get in touch with us for the best assistance</p>
     </div>
-    
+
     <div class="contact-wrapper">
       <div class="contact-info">
         <div class="contact-info-item">
@@ -14,7 +14,7 @@
             <p>123 Le Loi Street, District 1, Ho Chi Minh City</p>
           </div>
         </div>
-        
+
         <div class="contact-info-item">
           <mat-icon>phone</mat-icon>
           <div>
@@ -22,7 +22,7 @@
             <p>+84 28 1234 5678</p>
           </div>
         </div>
-        
+
         <div class="contact-info-item">
           <mat-icon>email</mat-icon>
           <div>
@@ -30,7 +30,7 @@
             <!-- <p>info&#64;luxuryhotel.com</p> -->
           </div>
         </div>
-        
+
         <div class="contact-info-item">
           <mat-icon>access_time</mat-icon>
           <div>
@@ -39,13 +39,13 @@
           </div>
         </div>
       </div>
-      
+
       <div class="contact-form">
         <mat-card>
           <mat-card-header>
             <mat-card-title>Send us your inquiry</mat-card-title>
           </mat-card-header>
-          
+
           <mat-card-content>
             <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
               <mat-form-field appearance="outline" class="full-width">
@@ -58,7 +58,7 @@
                   Name must be at least 3 characters
                 </mat-error>
               </mat-form-field>
-              
+
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>Email</mat-label>
@@ -70,7 +70,7 @@
                     Invalid email format
                   </mat-error>
                 </mat-form-field>
-                
+
                 <mat-form-field appearance="outline">
                   <mat-label>Phone Number</mat-label>
                   <input matInput type="tel" formControlName="phone">
@@ -82,7 +82,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              
+
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Message</mat-label>
                 <textarea matInput rows="5" formControlName="message"></textarea>
@@ -93,7 +93,7 @@
                   Message must be at least 10 characters
                 </mat-error>
               </mat-form-field>
-              
+
               <button mat-raised-button color="primary" type="submit" class="submit-button">
                 Send
               </button>
@@ -101,6 +101,17 @@
           </mat-card-content>
         </mat-card>
       </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="contact-map">
+      <mat-card>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4478774116045!2d106.699162915334!3d10.77584386213233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f47306236b5%3A0x7f4e9a0f44357c3e!2sDistrict%201%2C%20Ho%20Chi%20Minh%20City%2C%20Vietnam!5e0!3m2!1sen!2s!4v1650615412456!5m2!1sen!2s"
+          width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </mat-card>
     </div>
   </div>
 </section>

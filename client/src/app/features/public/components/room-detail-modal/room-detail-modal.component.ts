@@ -131,7 +131,7 @@ export class RoomDetailModalComponent implements OnInit {
           this.isSubmitting = false;
           // this.errorService.showSuccess('BOOKING_SUCCESS'); // Removed to avoid double notification
           this.dialogRef.close(true);
-          this.router.navigate(['/booking-confirmation'], { state: { booking: response } });
+          this.router.navigate(['/checkout'], { state: { booking: response } });
         },
         error: (error) => {
           this.isSubmitting = false;

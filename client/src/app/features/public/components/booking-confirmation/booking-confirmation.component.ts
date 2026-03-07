@@ -45,12 +45,11 @@ export class BookingConfirmationComponent implements OnInit {
     return new Date(date).toLocaleDateString();
   }
 
-  getFormattedPrice(price: number | undefined): string {
-    if (price === undefined) return '';
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(price);
+  getFormattedPrice(amount: number | undefined): string {
+    return amount !== undefined ? `$${amount.toLocaleString()}` : '$0';
+  }
+
+  printBooking(): void {
+    window.print();
   }
 }

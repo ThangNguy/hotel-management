@@ -12,6 +12,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { BookingConfirmationComponent } from './components/booking-confirmation/booking-confirmation.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 // Public Module Routes
 const routes: Routes = [
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'rooms', component: RoomsComponent },
   { path: 'amenities', component: AmenitiesComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'booking-confirmation', component: BookingConfirmationComponent },
 ];
 
@@ -42,7 +44,8 @@ const routes: Routes = [
     ContactComponent,
     HeaderComponent,
     FooterComponent,
-    BookingConfirmationComponent
+    BookingConfirmationComponent,
+    CheckoutComponent
   ],
   exports: [
     HeaderComponent,

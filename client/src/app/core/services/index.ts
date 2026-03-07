@@ -11,4 +11,6 @@ export * from './hotel.service';
 export * from './image.service';
 export * from './loading.service';
 export * from './model-mapper.service';
+export * from './payment.service';
+export * from './report.service';
 export * from './request.service';

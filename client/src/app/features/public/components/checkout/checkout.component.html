@@ -1,0 +1,70 @@
+<div class="checkout-container">
+  <div class="checkout-wrapper">
+    <!-- Booking Summary Side -->
+    <div class="booking-summary">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Booking Summary</mat-card-title>
+        </mat-card-header>
+        <mat-card-content *ngIf="booking">
+          <div class="summary-item">
+            <span class="label">Booking ID:</span>
+            <span class="value">#{{ booking.id }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Check-in:</span>
+            <span class="value">{{ booking.checkInDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Check-out:</span>
+            <span class="value">{{ booking.checkOutDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="label">Total Price:</span>
+            <span class="value total">${{ booking.totalPrice }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Payment Side -->
+    <div class="payment-form">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Complete Payment</mat-card-title>
+          <mat-card-subtitle>Secure payment powered by Stripe</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form [formGroup]="checkoutForm" (ngSubmit)="pay()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Cardholder Name</mat-label>
+              <input matInput formControlName="name" placeholder="Name as on card">
+              <mat-error *ngIf="checkoutForm.get('name')?.hasError('required')">
+                Name is required
+              </mat-error>
+            </mat-form-field>
+
+            <div class="stripe-element-container" *ngIf="clientSecret">
+              <ngx-stripe-payment [options]="$any(elementsOptions)"></ngx-stripe-payment>
+            </div>
+
+            <div class="error-message" *ngIf="errorMessage">
+              <mat-icon>error</mat-icon>
+              <span>{{ errorMessage }}</span>
+            </div>
+
+            <div class="actions">
+              <button mat-raised-button color="primary" type="submit" [disabled]="isProcessing || !clientSecret">
+                <mat-spinner diameter="20" *ngIf="isProcessing"></mat-spinner>
+                <span *ngIf="!isProcessing">Pay Now ${{ booking?.totalPrice }}</span>
+                <span *ngIf="isProcessing">Processing...</span>
+              </button>
+              <button mat-button type="button" routerLink="/rooms" [disabled]="isProcessing">Cancel</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

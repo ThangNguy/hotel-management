@@ -44,11 +44,19 @@
       </div>
     </div>
 
+    <div class="confirmation-note">
+      <mat-icon>email</mat-icon>
+      <p>A confirmation email has been sent to <strong>{{ booking?.guestEmail }}</strong>.</p>
+    </div>
+
     <mat-divider></mat-divider>
 
     <div class="actions">
       <button mat-raised-button color="primary" routerLink="/home">Back to Home</button>
-      <button mat-stroked-button color="accent" routerLink="/rooms">Browse More Rooms</button>
+      <button mat-stroked-button color="accent" (click)="printBooking()">
+        <mat-icon>print</mat-icon> Print Confirmation
+      </button>
+      <button mat-button routerLink="/rooms">Browse More Rooms</button>
     </div>
   </mat-card>
 </div>

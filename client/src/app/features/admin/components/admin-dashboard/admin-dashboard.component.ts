@@ -6,9 +6,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterLink } from '@angular/router';
-import { BookingStatusService, HotelService } from '../../../../core/services';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BookingStatusService, HotelService, ReportService } from '../../../../core/services';
 import { Booking, BookingStatus } from '../../../../models/booking.model';
-import { Room } from '../../../../models/room.model';
+import { DashboardStats } from '../../../../models/report.model';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -33,17 +34,54 @@ export class AdminDashboardComponent implements OnInit {
   occupancyRate = 0;
   totalBookings = 0;
   monthlyRevenue = 0;
-  
+
   // Recent bookings
   recentBookings: Booking[] = [];
+
+  // Chart data
+  public lineChartData: ChartData<'line'> = {
+    labels: [],
+    datasets: [
+      {
+        data: [],
+        label: 'Monthly Revenue',
+        backgroundColor: 'rgba(63, 81, 181, 0.2)',
+        borderColor: '#3f51b5',
+        pointBackgroundColor: '#3f51b5',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: '#3f51b5',
+        fill: 'origin',
+      }
+    ]
+  };
+
+  public lineChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: (value) => '$' + value
+        }
+      }
+    }
+  };
+
+  public lineChartType: ChartType = 'line';
   displayedColumns: string[] = ['id', 'guestName', 'roomType', 'checkIn', 'checkOut', 'status', 'totalPrice'];
-  
+
   // Data loading state
   isLoading = true;
 
   constructor(
     private hotelService: HotelService,
-    private bookingStatusService: BookingStatusService
+    private bookingStatusService: BookingStatusService,
+    private reportService: ReportService
   ) { }
 
   ngOnInit(): void {
@@ -52,59 +90,42 @@ export class AdminDashboardComponent implements OnInit {
 
   loadDashboardData(): void {
     this.isLoading = true;
-    
-    // Load rooms first
-    const rooms = this.hotelService.getRooms();
-    this.totalRooms = rooms.length;
-    this.availableRooms = this.calculateAvailableRooms(rooms);
-    
-    if (this.totalRooms > 0) {
-      this.occupancyRate = ((this.totalRooms - this.availableRooms) / this.totalRooms) * 100;
-    }
-    
-    // Then load bookings
-    this.loadBookingsData();
-  }
-  
-  loadBookingsData(): void {
-    // Get bookings data directly then use getBookingsAsync for Observable approach
-    const bookings = this.hotelService.getBookings();
-    this.totalBookings = bookings.length;
-    this.monthlyRevenue = this.calculateMonthlyRevenue(bookings);
-    this.recentBookings = this.getRecentBookings(bookings, 5);
-    this.isLoading = false;
+
+    // Load aggregated stats from Backend
+    this.reportService.getDashboardStats().subscribe({
+      next: (stats: DashboardStats) => {
+        this.totalRooms = stats.totalRooms;
+        this.availableRooms = stats.availableRooms;
+        this.occupancyRate = stats.occupancyRate;
+        this.totalBookings = stats.totalBookings;
+        this.monthlyRevenue = stats.monthlyRevenue;
+      },
+      error: (err) => console.error('Failed to load dashboard stats', err)
+    });
+
+    // Load recent bookings list
+    this.hotelService.getBookingsAsync().subscribe({
+      next: (bookings: Booking[]) => {
+        this.recentBookings = this.getRecentBookings(bookings, 5);
+      },
+      error: (err) => console.error('Failed to load recent bookings', err)
+    });
+
+    // Load revenue chart data
+    this.reportService.getMonthlyRevenue(6).subscribe({
+      next: (data) => {
+        this.lineChartData.labels = data.map(d => d.month);
+        this.lineChartData.datasets[0].data = data.map(d => d.revenue);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Failed to load revenue data', err);
+        this.isLoading = false;
+      }
+    });
   }
 
-  private calculateAvailableRooms(rooms: Room[]): number {
-    // Check which rooms are currently available today
-    const currentDate = new Date();
-    
-    return rooms.filter(room => {
-      return this.hotelService.checkRoomAvailability(
-        room.id, 
-        currentDate, 
-        currentDate
-      );
-    }).length;
-  }
-
-  private calculateOccupancyRate(): number {
-    if (this.totalRooms === 0) return 0;
-    return ((this.totalRooms - this.availableRooms) / this.totalRooms) * 100;
-  }
-
-  private calculateMonthlyRevenue(bookings: Booking[]): number {
-    const currentDate = new Date();
-    const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    
-    // Sum up revenue from bookings in the current month
-    return bookings
-      .filter(booking => {
-        const bookingDate = new Date(booking.checkInDate);
-        return bookingDate >= firstDayOfMonth && bookingDate <= currentDate;
-      })
-      .reduce((total, booking) => total + (booking.totalPrice || 0), 0);
-  }
+  // Removed local calculation methods as logic moved to Backend
 
   private getRecentBookings(bookings: Booking[], count: number): Booking[] {
     // Sort bookings by date (newest first) using createdAt field
@@ -134,18 +155,18 @@ export class AdminDashboardComponent implements OnInit {
       default: return '';
     }
   }
-  
+
   getStatusLabel(status: BookingStatus): string {
     return this.bookingStatusService.getStatusLabel(status);
   }
-  
+
   getFormattedDate(date: Date): string {
     return new Date(date).toLocaleDateString('en-US');
   }
 
   getFormattedPrice(price: number): string {
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0
     }).format(price);
