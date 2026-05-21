@@ -1,24 +1,19 @@
 <section class="rooms-section" id="rooms">
   <div class="container">
-    <div class="section-header">
-      <h2>Our Rooms</h2>
-      <p class="section-subtitle">Experience luxury and comfort in our carefully designed accommodations</p>
-    </div>
-
-    <!-- Loading state -->
-    <div *ngIf="loading" class="loading-container">
-      <app-loading-indicator [message]="'Loading rooms...'"></app-loading-indicator>
+    <div class="section-header animate-fade-in-up">
+      <h2>Exclusive Suites & Rooms</h2>
+      <p>Experience unmatched luxury and comfort in our carefully designed accommodations.</p>
     </div>
 
     <!-- Search Status -->
-    <div *ngIf="searchActive && !loading && !error" class="search-status-container">
+    <div *ngIf="searchActive() && !loading() && !error()" class="search-status-container animate-fade-in-up delay-200">
       <div class="search-info">
         <mat-icon>event_available</mat-icon>
         <span>
-          Showing available rooms from <strong>{{searchParams.checkIn | date}}</strong> to
-          <strong>{{searchParams.checkOut | date}}</strong>
-          <span *ngIf="searchParams.adults"> for {{searchParams.adults}} Adults</span>
-          <span *ngIf="searchParams.children && searchParams.children > 0">, {{searchParams.children}} Children</span>
+          Showing available rooms from <strong>{{searchParams().checkIn | date}}</strong> to
+          <strong>{{searchParams().checkOut | date}}</strong>
+          <span *ngIf="searchParams().adults"> for {{searchParams().adults}} Adults</span>
+          <span *ngIf="searchParams().children && searchParams().children > 0">, {{searchParams().children}} Children</span>
         </span>
       </div>
       <button mat-stroked-button color="primary" (click)="clearSearch()">
@@ -27,11 +22,11 @@
     </div>
 
     <!-- Error state -->
-    <div *ngIf="error" class="error-container">
+    <div *ngIf="error()" class="error-container">
       <mat-card class="error-card">
         <mat-card-content>
-          <mat-icon color="warn">error</mat-icon>
-          <p>Error loading rooms. Please try again.</p>
+          <mat-icon color="warn">error_outline</mat-icon>
+          <p>{{ error() }}</p>
           <button mat-raised-button color="primary" (click)="retryLoading()">
             Retry
           </button>
@@ -39,12 +34,29 @@
       </mat-card>
     </div>
 
-    <!-- Rooms display (Horizontal Scroll) -->
-    <div *ngIf="!loading && !error" class="rooms-grid">
-      <div *ngFor="let room of rooms" class="room-card" (click)="openRoomDetails(room)">
+    <!-- Skeletons state -->
+    <div *ngIf="loading()" class="rooms-grid">
+      <div *ngFor="let item of skeletonArray" class="skeleton-card">
+        <div class="skeleton-box skeleton-img"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-box skeleton-title"></div>
+          <div class="skeleton-box skeleton-text"></div>
+          <div class="skeleton-box skeleton-text short"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rooms display -->
+    <div *ngIf="!loading() && !error()" class="rooms-grid animate-fade-in-up delay-200">
+      <div *ngFor="let room of rooms(); trackBy: trackByRoomId" class="room-card" (click)="openRoomDetails(room)">
         <div class="room-image-container">
+          <!-- Added loading="lazy" for performance -->
           <img [src]="room.images[0]" [alt]="room.name" class="room-image"
+            loading="lazy"
             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=800&auto=format&fit=crop'">
+          <div class="hover-overlay">
+            <span>View Details</span>
+          </div>
         </div>
 
         <mat-card-content>
@@ -61,7 +73,7 @@
           <div class="room-features">
             <div class="feature" title="Capacity">
               <mat-icon>group</mat-icon>
-              <span class="feature-text">{{room.capacity || 2}}</span>
+              <span class="feature-text">{{room.capacity || 2}} Guests</span>
             </div>
             <div class="feature" title="Room Size">
               <mat-icon>square_foot</mat-icon>
@@ -69,7 +81,7 @@
             </div>
             <div class="feature" title="Beds">
               <mat-icon>bed</mat-icon>
-              <span class="feature-text">{{room.beds || 'King Bed'}}</span>
+              <span class="feature-text">{{room.beds || 'King'}}</span>
             </div>
           </div>
         </mat-card-content>

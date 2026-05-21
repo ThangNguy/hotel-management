@@ -2,19 +2,15 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-text">
-      <h1>Welcome to Luxury Hotel & Resort</h1>
-      <p>Experience elegance and comfort in the heart of the city</p>
-      <div class="hero-buttons">
-        <a mat-raised-button color="primary" routerLink="/rooms" class="cta-button">
-          View Rooms
-        </a>
-        <a mat-stroked-button color="accent" routerLink="/amenities" class="secondary-button">
-          Explore Amenities
-        </a>
+      <h1 class="animate-fade-in-up">Welcome to Luxury Hotel & Resort</h1>
+      <p class="animate-fade-in-up delay-200">Experience elegance and comfort in the heart of the city.</p>
+      <div class="hero-buttons animate-fade-in-up delay-400">
+        <a routerLink="/rooms" class="cta-button">View Rooms</a>
+        <a routerLink="/amenities" class="secondary-button">Explore Amenities</a>
       </div>
     </div>
     
-    <div class="booking-form-container">
+    <div class="booking-form-container animate-fade-in-left delay-400">
       <mat-card class="booking-form-card">
         <mat-card-header>
           <mat-card-title>Find Your Perfect Room</mat-card-title>
@@ -28,8 +24,8 @@
                 <input matInput [matDatepicker]="checkInPicker" formControlName="checkIn">
                 <mat-datepicker-toggle matIconSuffix [for]="checkInPicker"></mat-datepicker-toggle>
                 <mat-datepicker #checkInPicker></mat-datepicker>
-                <mat-error *ngIf="bookingForm.get('checkIn')?.invalid">
-                  Check-in date is required
+                <mat-error *ngIf="bookingForm.controls.checkIn.invalid">
+                  Required
                 </mat-error>
               </mat-form-field>
               
@@ -38,8 +34,8 @@
                 <input matInput [matDatepicker]="checkOutPicker" formControlName="checkOut">
                 <mat-datepicker-toggle matIconSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
                 <mat-datepicker #checkOutPicker></mat-datepicker>
-                <mat-error *ngIf="bookingForm.get('checkOut')?.invalid">
-                  Check-out date is required
+                <mat-error *ngIf="bookingForm.controls.checkOut.invalid">
+                  Required
                 </mat-error>
               </mat-form-field>
             </div>
@@ -49,31 +45,21 @@
                 <mat-label>Adults</mat-label>
                 <input matInput type="number" min="1" max="10" formControlName="adults">
                 <mat-icon matSuffix>person</mat-icon>
-                <mat-error *ngIf="bookingForm.get('adults')?.hasError('required')">
-                  Number of adults is required
-                </mat-error>
-                <mat-error *ngIf="bookingForm.get('adults')?.hasError('min')">
-                  At least 1 adult is required
-                </mat-error>
-                <mat-error *ngIf="bookingForm.get('adults')?.hasError('max')">
-                  Maximum 10 adults allowed
-                </mat-error>
+                <mat-error *ngIf="bookingForm.controls.adults.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="bookingForm.controls.adults.hasError('min')">Min 1</mat-error>
+                <mat-error *ngIf="bookingForm.controls.adults.hasError('max')">Max 10</mat-error>
               </mat-form-field>
               
               <mat-form-field appearance="outline">
                 <mat-label>Children</mat-label>
                 <input matInput type="number" min="0" max="10" formControlName="children">
                 <mat-icon matSuffix>child_care</mat-icon>
-                <mat-error *ngIf="bookingForm.get('children')?.hasError('min')">
-                  Cannot be negative
-                </mat-error>
-                <mat-error *ngIf="bookingForm.get('children')?.hasError('max')">
-                  Maximum 10 children allowed
-                </mat-error>
+                <mat-error *ngIf="bookingForm.controls.children.hasError('min')">Cannot be negative</mat-error>
+                <mat-error *ngIf="bookingForm.controls.children.hasError('max')">Max 10</mat-error>
               </mat-form-field>
             </div>
             
-            <button mat-raised-button color="accent" type="submit" class="search-button">
+            <button type="submit" class="search-button">
               <mat-icon>search</mat-icon>
               Check Availability
             </button>

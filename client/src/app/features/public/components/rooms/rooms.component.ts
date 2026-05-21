@@ -1,126 +1,134 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, DestroyRef, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../../../../material/material.module';
-import { Room } from '../../../../models/room.model';
+import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MaterialModule } from '../../../../material/material.module';
+import { HotelService } from '../../../../core/services/hotel.service';
+import { Room } from '../../../../models/room.model';
 import { RoomDetailModalComponent } from '../room-detail-modal/room-detail-modal.component';
 import { LoadingIndicatorComponent } from '../shared/loading-indicator/loading-indicator.component';
-import { Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HotelService, ErrorHandlingService } from '../../../../core/services';
 
 @Component({
   selector: 'app-rooms',
   standalone: true,
-  imports: [CommonModule, MaterialModule, LoadingIndicatorComponent, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, LoadingIndicatorComponent],
   templateUrl: './rooms.component.html',
-  styleUrl: './rooms.component.scss'
+  styleUrl: './rooms.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RoomsComponent implements OnInit, OnDestroy {
-  rooms: Room[] = [];
-  filteredRooms: Room[] = [];
-  loading = false;
-  error = false;
+export class RoomsComponent implements OnInit {
+  rooms = signal<Room[]>([]);
+  loading = signal(true);
+  error = signal<string | null>(null);
+  
+  searchActive = signal(false);
+  searchParams = signal<any>({});
+  
+  // Create an array for skeleton loaders (e.g., show 6 skeleton cards while loading)
+  skeletonArray = Array(6).fill(0);
 
-  minDate = new Date();
-  minCheckOutDate = new Date(this.minDate.getTime() + 86400000); // Tomorrow
-
-  private destroy$ = new Subject<void>();
-
-  searchActive = false;
-  searchParams: { checkIn?: string; checkOut?: string; adults?: number; children?: number } = {};
-
-  constructor(
-    private hotelService: HotelService,
-    private errorService: ErrorHandlingService,
-    private dialog: MatDialog,
-    private route: ActivatedRoute,
-    private router: Router
-  ) { }
+  private hotelService = inject(HotelService);
+  private route = inject(ActivatedRoute);
+  private dialog = inject(MatDialog);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
-      if (params['checkIn'] && params['checkOut']) {
-        this.searchActive = true;
-        this.searchParams = params;
-        this.loadAvailableRooms(new Date(params['checkIn']), new Date(params['checkOut']));
-      } else {
-        this.searchActive = false;
-        this.loadRooms();
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  loadRooms(): void {
-    this.loading = true;
-    this.error = false;
-
-    this.hotelService.getRoomsAsync()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (rooms) => {
-          this.rooms = rooms;
-          this.loading = false;
-        },
-        error: (error) => {
-          this.loading = false;
-          this.error = true;
-          this.errorService.handleError(error);
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(params => {
+        if (params['checkIn'] && params['checkOut']) {
+          this.searchActive.set(true);
+          this.searchParams.set(params);
+          this.searchAvailableRooms(
+            new Date(params['checkIn']),
+            new Date(params['checkOut']),
+            params['adults'] ? +params['adults'] : undefined,
+            params['children'] ? +params['children'] : undefined
+          );
+        } else {
+          this.searchActive.set(false);
+          this.loadAllRooms();
         }
       });
   }
 
-  loadAvailableRooms(checkIn: Date, checkOut: Date): void {
-    this.loading = true;
-    this.error = false;
+  loadAllRooms(): void {
+    this.loading.set(true);
+    this.error.set(null);
+    
+    this.hotelService.getRoomsAsync()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (data: Room[]) => {
+          this.rooms.set(data);
+          this.loading.set(false);
+        },
+        error: (err: any) => {
+          console.error('Error loading rooms', err);
+          this.error.set('Failed to load rooms');
+          this.loading.set(false);
+        }
+      });
+  }
+
+  searchAvailableRooms(checkIn: Date, checkOut: Date, adults?: number, children?: number): void {
+    this.loading.set(true);
+    this.error.set(null);
 
     this.hotelService.getAvailableRoomsAsync(checkIn, checkOut)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (rooms) => {
-          this.rooms = rooms;
-          this.loading = false;
+        next: (data: Room[]) => {
+          this.rooms.set(data);
+          this.loading.set(false);
         },
-        error: (error) => {
-          this.loading = false;
-          this.error = true;
-          this.errorService.handleError(error);
+        error: (err: any) => {
+          console.error('Error searching rooms', err);
+          this.error.set('Failed to search rooms');
+          this.loading.set(false);
         }
       });
+  }
+
+  clearSearch(): void {
+    this.searchActive.set(false);
+    this.searchParams.set({});
+    
+    // Update URL to remove query params without reloading the page
+    const currentUrl = window.location.pathname;
+    window.history.replaceState({}, document.title, currentUrl);
+    
+    this.loadAllRooms();
+  }
+
+  retryLoading(): void {
+    if (this.searchActive()) {
+      const p = this.searchParams();
+      this.searchAvailableRooms(new Date(p.checkIn), new Date(p.checkOut), p.adults, p.children);
+    } else {
+      this.loadAllRooms();
+    }
   }
 
   openRoomDetails(room: Room): void {
     this.dialog.open(RoomDetailModalComponent, {
       width: '800px',
-      data: room
+      maxWidth: '95vw',
+      panelClass: 'modern-dialog',
+      data: { room, searchParams: this.searchActive() ? this.searchParams() : null }
     });
   }
 
   formatPrice(price: number): string {
-    return new Intl.NumberFormat('vi-VN', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'VND'
+      currency: 'USD',
+      minimumFractionDigits: 0
     }).format(price);
   }
 
-  retryLoading(): void {
-    this.loadRooms();
-  }
-
-  clearSearch(): void {
-    this.searchActive = false;
-    this.searchParams = {};
-    // Remove query params from URL
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {}
-    });
-    this.loadRooms();
+  trackByRoomId(index: number, room: Room): number {
+    return room.id;
   }
 }

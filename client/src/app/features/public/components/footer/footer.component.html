@@ -1,65 +1,67 @@
 <footer class="footer">
-  <div class="container">
+  <div class="container animate-fade-in-up">
     <div class="footer-content">
-      <div class="footer-logo">
-        <a [routerLink]="['/']">
+      
+      <div class="footer-brand">
+        <a [routerLink]="['/']" class="logo-link">
           <mat-icon>hotel</mat-icon>
-          <span>Luxury Hotel & Resort</span>
+          <span>Luxury Hotel</span>
         </a>
-        <p class="tagline">Experience Luxury and Comfort</p>
+        <p class="tagline">Experience unparalleled luxury and comfort right in the heart of the city.</p>
+        <div class="social-links">
+          <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="social-icon">
+            <mat-icon>facebook</mat-icon>
+          </a>
+          <a href="https://twitter.com" target="_blank" aria-label="Twitter" class="social-icon">
+            <mat-icon>x</mat-icon>
+          </a>
+          <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="social-icon">
+            <!-- Alternative fallback since Instagram isn't a mat-icon standard, photo_camera is good -->
+            <mat-icon>photo_camera</mat-icon>
+          </a>
+        </div>
       </div>
       
-      <div class="footer-links">
-        <div class="link-column">
-          <h3>Luxury Hotel & Resort</h3>
-          <ul>
-            <li><a routerLink="/about">About Us</a></li>
-            <li><a routerLink="/rooms">Rooms</a></li>
-            <li><a routerLink="/amenities">Amenities</a></li>
-            <li><a routerLink="/contact">Contact</a></li>
-          </ul>
-        </div>
-        
-        <div class="link-column">
-          <h3>Services</h3>
-          <ul>
-            <li><a routerLink="/restaurant">Restaurant</a></li>
-            <li><a routerLink="/spa">Spa</a></li>
-            <li><a routerLink="/gym">Gym</a></li>
-            <li><a routerLink="/pool">Pool</a></li>
-          </ul>
-        </div>
-        
-        <div class="link-column">
-          <h3>Support</h3>
-          <ul>
-            <li><a routerLink="/faq">FAQ</a></li>
-            <li><a routerLink="/terms">Terms</a></li>
-            <li><a routerLink="/privacy">Privacy</a></li>
-            <li><a routerLink="/careers">Careers</a></li>
-          </ul>
-        </div>
+      <div class="link-column">
+        <h3>Explore</h3>
+        <ul>
+          <li><a routerLink="/about">About Us</a></li>
+          <li><a routerLink="/rooms">Rooms & Suites</a></li>
+          <li><a routerLink="/amenities">Amenities</a></li>
+          <li><a routerLink="/contact">Contact Us</a></li>
+        </ul>
       </div>
+      
+      <div class="link-column">
+        <h3>Services</h3>
+        <ul>
+          <li><a routerLink="/restaurant">Fine Dining</a></li>
+          <li><a routerLink="/spa">Spa & Wellness</a></li>
+          <li><a routerLink="/gym">Fitness Center</a></li>
+          <li><a routerLink="/pool">Swimming Pool</a></li>
+        </ul>
+      </div>
+      
+      <div class="link-column">
+        <h3>Support & Policies</h3>
+        <ul>
+          <li><a routerLink="/faq">FAQ</a></li>
+          <li><a routerLink="/terms">Terms of Service</a></li>
+          <li><a routerLink="/privacy">Privacy Policy</a></li>
+          <li><a routerLink="/careers">Careers</a></li>
+        </ul>
+      </div>
+      
     </div>
     
     <div class="footer-bottom">
       <div class="copyright">
-        © {{currentYear}} Luxury Hotel & Resort. All rights reserved.
+        &copy; {{ currentYear() }} Luxury Hotel & Resort. All rights reserved.
       </div>
-      
-      <div class="social-links">
-        <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="social-icon">
-          <mat-icon>facebook</mat-icon>
-        </a>
-        <a href="https://twitter.com" target="_blank" aria-label="Twitter" class="social-icon">
-          <mat-icon>twitter</mat-icon>
-        </a>
-        <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="social-icon">
-          <mat-icon>photo_camera</mat-icon>
-        </a>
-        <a href="https://youtube.com" target="_blank" aria-label="YouTube" class="social-icon">
-          <mat-icon>smart_display</mat-icon>
-        </a>
+      <div class="footer-bottom-links">
+        <a routerLink="/sitemap">Sitemap</a>
+        <span class="separator">|</span>
+        <a routerLink="/admin">Admin Login</a>
       </div>
     </div>
   </div>

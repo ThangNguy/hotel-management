@@ -1,15 +1,15 @@
 <section class="amenities-section" id="amenities">
   <div class="container">
-    <div class="section-header">
-      <h2>Hotel Amenities</h2>
-      <p class="section-subtitle">Experience the Best in Luxury and Comfort</p>
+    <div class="section-header animate-fade-in-up">
+      <h2>Luxurious Amenities</h2>
+      <p>Elevate your stay with our premium facilities tailored to your every need.</p>
     </div>
     
     <div class="amenities-grid">
       @for (amenity of amenitiesList; track amenity.name) {
-        <div class="amenity-card" [attr.data-aos]="'fade-up'" [attr.data-aos-delay]="amenity.animationDelay">
-          <div class="amenity-icon">
-            <mat-icon>{{amenity.icon}}</mat-icon>
+        <div class="amenity-card animate-fade-in-up" [style.animation-delay]="amenity.animationDelay + 'ms'">
+          <div class="amenity-icon-wrapper">
+            <mat-icon class="amenity-icon">{{amenity.icon}}</mat-icon>
           </div>
           <div class="amenity-content">
             <h3>{{ amenity.name }}</h3>

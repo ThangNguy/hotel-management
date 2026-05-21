@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgClass } from '@angular/common';
+import { Component, OnInit, ChangeDetectionStrategy, inject, DestroyRef, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CommonModule, NgClass, DatePipe, CurrencyPipe } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { BookingStatusService, HotelService } from '../../../../core/services';
 import { Booking, BookingStatus } from '../../../../models/booking.model';
 import { Room } from '../../../../models/room.model';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -23,91 +25,98 @@ import { Room } from '../../../../models/room.model';
     MatButtonModule,
     MatProgressSpinnerModule,
     NgClass,
-    RouterLink
-  ]
+    RouterLink,
+    DatePipe,
+    CurrencyPipe
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AdminDashboardComponent implements OnInit {
-  // Dashboard metrics
-  totalRooms = 0;
-  availableRooms = 0;
-  occupancyRate = 0;
-  totalBookings = 0;
-  monthlyRevenue = 0;
+  // Dashboard Metrics Signals
+  totalRooms = signal(0);
+  availableRooms = signal(0);
+  occupancyRate = signal(0);
+  totalBookings = signal(0);
+  monthlyRevenue = signal(0);
   
-  // Recent bookings
-  recentBookings: Booking[] = [];
+  // Collections Signals
+  recentBookings = signal<(Booking & { roomType: string })[]>([]);
   displayedColumns: string[] = ['id', 'guestName', 'roomType', 'checkIn', 'checkOut', 'status', 'totalPrice'];
   
-  // Data loading state
-  isLoading = true;
+  // State Signals
+  isLoading = signal(true);
+  error = signal<string | null>(null);
 
-  constructor(
-    private hotelService: HotelService,
-    private bookingStatusService: BookingStatusService
-  ) { }
+  // Injections
+  private hotelService = inject(HotelService);
+  private bookingStatusService = inject(BookingStatusService);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.loadDashboardData();
   }
 
   loadDashboardData(): void {
-    this.isLoading = true;
-    
-    // Load rooms first
-    const rooms = this.hotelService.getRooms();
-    this.totalRooms = rooms.length;
-    this.availableRooms = this.calculateAvailableRooms(rooms);
-    
-    if (this.totalRooms > 0) {
-      this.occupancyRate = ((this.totalRooms - this.availableRooms) / this.totalRooms) * 100;
-    }
-    
-    // Then load bookings
-    this.loadBookingsData();
+    this.isLoading.set(true);
+    this.error.set(null);
+
+    // Using forkJoin to load all required async data in parallel
+    forkJoin({
+      rooms: this.hotelService.getRoomsAsync(),
+      bookings: this.hotelService.getBookingsAsync()
+    })
+    .pipe(takeUntilDestroyed(this.destroyRef))
+    .subscribe({
+      next: ({ rooms, bookings }) => {
+        this.processDashboardMetrics(rooms, bookings);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        console.error('Failed to load dashboard data:', err);
+        this.error.set('Failed to load dashboard data. Please try again.');
+        this.isLoading.set(false);
+      }
+    });
   }
-  
-  loadBookingsData(): void {
-    // Get bookings data directly then use getBookingsAsync for Observable approach
-    const bookings = this.hotelService.getBookings();
-    this.totalBookings = bookings.length;
-    this.monthlyRevenue = this.calculateMonthlyRevenue(bookings);
-    this.recentBookings = this.getRecentBookings(bookings, 5);
-    this.isLoading = false;
+
+  private processDashboardMetrics(rooms: Room[], bookings: Booking[]): void {
+    // Rooms metrics
+    const available = this.calculateAvailableRooms(rooms);
+    this.totalRooms.set(rooms.length);
+    this.availableRooms.set(available);
+    
+    if (rooms.length > 0) {
+      this.occupancyRate.set(((rooms.length - available) / rooms.length) * 100);
+    } else {
+      this.occupancyRate.set(0);
+    }
+
+    // Bookings metrics
+    this.totalBookings.set(bookings.length);
+    this.monthlyRevenue.set(this.calculateMonthlyRevenue(bookings));
+    this.recentBookings.set(this.getRecentBookings(bookings, rooms, 5));
   }
 
   private calculateAvailableRooms(rooms: Room[]): number {
-    // Check which rooms are currently available today
     const currentDate = new Date();
-    
-    return rooms.filter(room => {
-      return this.hotelService.checkRoomAvailability(
-        room.id, 
-        currentDate, 
-        currentDate
-      );
-    }).length;
-  }
-
-  private calculateOccupancyRate(): number {
-    if (this.totalRooms === 0) return 0;
-    return ((this.totalRooms - this.availableRooms) / this.totalRooms) * 100;
+    // In a real app, this logic should be on the backend, but we're mimicking the existing logic
+    return rooms.filter(room => this.hotelService.checkRoomAvailability(room.id, currentDate, currentDate)).length;
   }
 
   private calculateMonthlyRevenue(bookings: Booking[]): number {
     const currentDate = new Date();
     const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
     
-    // Sum up revenue from bookings in the current month
     return bookings
       .filter(booking => {
-        const bookingDate = new Date(booking.checkInDate);
+        const dateValue = booking.checkInDate || booking.createdAt;
+        const bookingDate = dateValue ? new Date(dateValue) : new Date();
         return bookingDate >= firstDayOfMonth && bookingDate <= currentDate;
       })
       .reduce((total, booking) => total + (booking.totalPrice || 0), 0);
   }
 
-  private getRecentBookings(bookings: Booking[], count: number): Booking[] {
-    // Sort bookings by date (newest first) using createdAt field
+  private getRecentBookings(bookings: Booking[], rooms: Room[], count: number): (Booking & { roomType: string })[] {
     return [...bookings]
       .sort((a, b) => {
         const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
@@ -116,12 +125,11 @@ export class AdminDashboardComponent implements OnInit {
       })
       .slice(0, count)
       .map(booking => {
-        // Add room type to each booking for the table
-        const room = this.hotelService.getRoomById(booking.roomId);
+        const room = rooms.find(r => r.id === booking.roomId);
         return {
           ...booking,
-          roomType: room ? room.name : 'Undefined'
-        } as Booking & { roomType: string };
+          roomType: room ? room.name : `Room #${booking.roomId}`
+        };
       });
   }
 
@@ -131,23 +139,17 @@ export class AdminDashboardComponent implements OnInit {
       case BookingStatus.CHECKED_IN: return 'status-checked-in';
       case BookingStatus.CHECKED_OUT: return 'status-checked-out';
       case BookingStatus.CANCELLED: return 'status-cancelled';
+      case BookingStatus.PENDING: return 'status-pending';
       default: return '';
     }
   }
   
-  getStatusLabel(status: BookingStatus): string {
-    return this.bookingStatusService.getStatusLabel(status);
-  }
-  
-  getFormattedDate(date: Date): string {
-    return new Date(date).toLocaleDateString('en-US');
+  getStatusLabel(status: string): string {
+    // Casting to BookingStatus since strings might come from backend
+    return this.bookingStatusService.getStatusLabel(status as BookingStatus);
   }
 
-  getFormattedPrice(price: number): string {
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
-      currency: 'USD',
-      minimumFractionDigits: 0
-    }).format(price);
+  retry(): void {
+    this.loadDashboardData();
   }
 }

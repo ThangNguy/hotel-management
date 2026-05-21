@@ -1,13 +1,14 @@
-<header class="header">
-  <mat-toolbar color="primary">
+<header class="header" [class.scrolled]="isScrolled()">
+  <mat-toolbar>
     <div class="container">
       <div class="logo">
-        <a [routerLink]="['/']">
+        <a [routerLink]="['/']" (click)="closeMobileMenu()">
           <mat-icon>hotel</mat-icon>
-          <span>{{ title }}</span>
+          <span>{{ title() }}</span>
         </a>
       </div>
 
+      <!-- Desktop Navigation -->
       <div class="navigation-container">
         <nav class="navigation">
           <a mat-button routerLink="/home" routerLinkActive="active">{{ 'HOME' | translate }}</a>
@@ -15,16 +16,44 @@
           <a mat-button routerLink="/amenities" routerLinkActive="active">{{ 'AMENITIES' | translate }}</a>
           <a mat-button routerLink="/contact" routerLinkActive="active">{{ 'CONTACT' | translate }}</a>
           <a mat-button routerLink="/admin" routerLinkActive="active">Admin</a>
-
-          <button mat-icon-button [matMenuTriggerFor]="langMenu" class="lang-btn">
-            <mat-icon>language</mat-icon>
-          </button>
-          <mat-menu #langMenu="matMenu">
-            <button mat-menu-item (click)="switchLanguage('en')">English</button>
-            <button mat-menu-item (click)="switchLanguage('vi')">Tiếng Việt</button>
-          </mat-menu>
         </nav>
+
+        <div class="language-selector">
+          <button mat-button [matMenuTriggerFor]="langMenu" class="language-button">
+            {{ currentLang() === 'vi' ? 'VN' : 'EN' }}
+            <mat-icon>expand_more</mat-icon>
+          </button>
+          <mat-menu #langMenu="matMenu" class="modern-menu">
+            <button mat-menu-item (click)="switchLanguage('en')" [class.active]="currentLang() === 'en'">English</button>
+            <button mat-menu-item (click)="switchLanguage('vi')" [class.active]="currentLang() === 'vi'">Tiếng Việt</button>
+          </mat-menu>
+        </div>
       </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button mat-icon-button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+        <mat-icon>menu</mat-icon>
+      </button>
     </div>
   </mat-toolbar>
 </header>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay animate-fade-in" *ngIf="isMobileMenuOpen()">
+  <button mat-icon-button class="close-btn" (click)="closeMobileMenu()">
+    <mat-icon>close</mat-icon>
+  </button>
+  
+  <nav class="mobile-nav-links">
+    <a routerLink="/home" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'HOME' | translate }}</a>
+    <a routerLink="/rooms" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'ROOMS' | translate }}</a>
+    <a routerLink="/amenities" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'AMENITIES' | translate }}</a>
+    <a routerLink="/contact" routerLinkActive="active" (click)="closeMobileMenu()">{{ 'CONTACT' | translate }}</a>
+    <a routerLink="/admin" routerLinkActive="active" (click)="closeMobileMenu()">Admin</a>
+  </nav>
+
+  <div class="mobile-language">
+    <button (click)="switchLanguage('en')" [class.active]="currentLang() === 'en'">EN</button>
+    <button (click)="switchLanguage('vi')" [class.active]="currentLang() === 'vi'">VN</button>
+  </div>
+</div>

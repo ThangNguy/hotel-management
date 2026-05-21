@@ -1,26 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../../../material/material.module';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
+interface ContactFormControls {
+  fullName: FormControl<string | null>;
+  email: FormControl<string | null>;
+  phone: FormControl<string | null>;
+  message: FormControl<string | null>;
+}
 
 @Component({
   selector: 'app-contact',
   standalone: true,
   imports: [CommonModule, MaterialModule, ReactiveFormsModule],
   templateUrl: './contact.component.html',
-  styleUrl: './contact.component.scss'
+  styleUrl: './contact.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactComponent implements OnInit {
-  contactForm!: FormGroup;
+  contactForm!: FormGroup<ContactFormControls>;
   
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
   
   ngOnInit() {
-    this.contactForm = this.fb.group({
-      fullName: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]],
-      message: ['', [Validators.required, Validators.minLength(10)]]
+    this.contactForm = this.fb.group<ContactFormControls>({
+      fullName: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]),
+      message: new FormControl('', [Validators.required, Validators.minLength(10)])
     });
   }
   

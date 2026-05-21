@@ -1,5 +1,6 @@
 using System.Text;
 using FluentValidation;
+using MediatR;
 using HotelManagement.Application.Features.Auth.Commands;
 using HotelManagement.Core.Interfaces;
 using HotelManagement.Infrastructure.Data;
@@ -93,7 +94,10 @@ builder.Services.AddAuthentication(options =>
 
 // Configure MediatR
 builder.Services.AddMediatR(cfg => 
-    cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly));
+{
+    cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly);
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(HotelManagement.Application.Behaviors.ValidationBehavior<,>));
+});
 
 // Configure Validators
 builder.Services.AddValidatorsFromAssembly(typeof(LoginCommand).Assembly);
