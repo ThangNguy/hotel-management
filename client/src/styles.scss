@@ -1,143 +1,57 @@
-/* Global Styles */
+/* ============================================================
+   Global Styles — theme foundation
+   - Design tokens (CSS vars): src/tailwind.css (@theme)
+   - SCSS tokens/mixins      : src/styles/_variables.scss, _mixins.scss
+   - M3 color palettes       : src/styles/_theme-colors.scss (generated
+     via `ng generate @angular/material:theme-color`)
+   ============================================================ */
 @use '@angular/material' as mat;
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
-// Typography
-$font-primary: 'Playfair Display', serif;
-$font-secondary: 'Inter', sans-serif;
+@use './styles/theme-colors' as palettes;
+@use './styles/variables' as *;
+@use './styles/mixins' as *;
 
-// Color Palette - Premium Hotel Theme
-$color-primary: #0a1628;    // Deep Navy
-$color-primary-light: #1c2a48;
-$color-accent: #c9a84c;     // Elegant Gold
-$color-accent-hover: #e0bc55;
-$color-background: #faf8f5; // Warm White
-$color-surface: #ffffff;
-$color-text: #1e293b;       // Charcoal
-$color-text-light: #64748b;
-$color-text-inverse: #ffffff;
+/* ===== Angular Material — custom M3 theme ===== */
+html {
+  color-scheme: light;
 
-// Semantic Colors
-$color-success: #10b981;
-$color-warning: #f59e0b;
-$color-error: #ef4444;
-$color-info: #3b82f6;
+  @include mat.theme((
+    color: (
+      primary: palettes.$primary-palette,
+      tertiary: palettes.$tertiary-palette,
+      theme-type: light,
+    ),
+    typography: (
+      plain-family: 'Be Vietnam Pro, sans-serif',
+      brand-family: 'Playfair Display, serif',
+      regular-weight: 400,
+      medium-weight: 500,
+      bold-weight: 700,
+    ),
+    density: 0,
+  ));
 
-// Spacing scale
-$spacing-1: 0.25rem;  // 4px
-$spacing-2: 0.5rem;   // 8px
-$spacing-3: 1rem;     // 16px
-$spacing-4: 1.5rem;   // 24px
-$spacing-5: 2rem;     // 32px
-$spacing-6: 3rem;     // 48px
-$spacing-8: 4rem;     // 64px
-$spacing-12: 6rem;    // 96px
+  & {
+    /* Brand-exact colors on top of the seed-generated palette */
+    --mat-sys-primary: #{$color-primary};
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-tertiary: #{$color-accent};
+    --mat-sys-on-tertiary: #241a00;
 
-// Border Radius
-$radius-sm: 4px;
-$radius-md: 8px;
-$radius-lg: 16px;
-$radius-xl: 24px;
-$radius-full: 9999px;
+    /* Softer shape */
+    --mat-sys-corner-extra-small: 6px;
+    --mat-sys-corner-small: 10px;
+    --mat-sys-corner-medium: 12px;
+    --mat-sys-corner-large: 16px;
+    --mat-sys-corner-extra-large: 24px;
 
-// Shadows (Elevations)
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-$shadow-accent: 0 10px 25px -5px rgba(201, 168, 76, 0.4);
-
-// Z-index layers
-$z-negative: -1;
-$z-elevated: 10;
-$z-overlay: 100;
-$z-header: 1000;
-$z-modal: 2000;
-$z-toast: 3000;
-
-// Transitions
-$transition-fast: 0.15s ease-in-out;
-$transition-base: 0.3s ease-in-out;
-$transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-
-// Mixins
-@mixin glass-card($blur: 16px, $opacity: 0.7, $bg-color: $color-surface) {
-  background: rgba($bg-color, $opacity);
-  backdrop-filter: blur($blur);
-  -webkit-backdrop-filter: blur($blur);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: $shadow-lg;
-}
-
-@mixin hover-lift($distance: -8px, $shadow: $shadow-xl) {
-  transition: transform $transition-base, box-shadow $transition-base;
-  
-  &:hover {
-    transform: translateY($distance);
-    box-shadow: $shadow;
+    /* Soft layered elevation, navy-tinted */
+    --mat-sys-level1: 0 2px 8px rgba(10, 22, 40, 0.06), 0 1px 2px rgba(10, 22, 40, 0.04);
+    --mat-sys-level2: 0 6px 24px -8px rgba(10, 22, 40, 0.12), 0 2px 6px -2px rgba(10, 22, 40, 0.06);
+    --mat-sys-level3: 0 16px 32px -12px rgba(10, 22, 40, 0.16), 0 4px 10px -4px rgba(10, 22, 40, 0.08);
   }
 }
 
-@mixin responsive($breakpoint) {
-  @if $breakpoint == 'sm' { @media (max-width: 640px) { @content; } }
-  @else if $breakpoint == 'md' { @media (max-width: 768px) { @content; } }
-  @else if $breakpoint == 'lg' { @media (max-width: 1024px) { @content; } }
-  @else if $breakpoint == 'xl' { @media (max-width: 1280px) { @content; } }
-  @else if $breakpoint == '2xl' { @media (max-width: 1536px) { @content; } }
-  @else { @content; }
-}
-
-@mixin section-padding {
-  padding: $spacing-12 0;
-  
-  @include responsive('md') {
-    padding: $spacing-8 0;
-  }
-}
-
-@mixin image-overlay($opacity: 0.4) {
-  position: relative;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba($color-primary, 0) 0%, rgba($color-primary, $opacity) 100%);
-    pointer-events: none;
-  }
-}
-
-// Fade In Up
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Hover Glow
-@keyframes hoverGlow {
-  0% { box-shadow: 0 0 0 rgba(201, 168, 76, 0); }
-  50% { box-shadow: 0 0 15px rgba(201, 168, 76, 0.5); }
-  100% { box-shadow: 0 0 0 rgba(201, 168, 76, 0); }
-}
-
-// Shimmer (Skeleton Loaders)
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
-
-/* Reset & Base */
+/* ===== Reset & Base ===== */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -178,7 +92,7 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 $spacing-5;
-  
+
   @include responsive('md') {
     padding: 0 $spacing-4;
   }
@@ -188,12 +102,12 @@ h1, h2, h3, h4, h5, h6 {
 .section-header {
   text-align: center;
   margin-bottom: $spacing-8;
-  
+
   h2 {
     font-size: 2.5rem;
     position: relative;
     display: inline-block;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -205,7 +119,7 @@ h1, h2, h3, h4, h5, h6 {
       background-color: $color-accent;
     }
   }
-  
+
   p {
     font-size: 1.125rem;
     color: $color-text-light;
@@ -219,7 +133,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 80px; /* Accounts for fixed header */
 }
 
-/* Material Design Global Overrides - Premium Theme */
+/* ===== Material component tweaks ===== */
 .mat-mdc-card {
   border-radius: $radius-lg !important;
   box-shadow: $shadow-md !important;
@@ -253,18 +167,34 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* Common Utility Classes */
-.text-center { text-align: center; }
+/* ===== Keyframes (referenced globally) ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hoverGlow {
+  0% { box-shadow: 0 0 0 rgba(201, 168, 76, 0); }
+  50% { box-shadow: 0 0 15px rgba(201, 168, 76, 0.5); }
+  100% { box-shadow: 0 0 0 rgba(201, 168, 76, 0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* ===== Legacy utility classes =====
+   Spacing/layout utilities (mt-*, mb-*, w-full, text-center) were removed —
+   Tailwind provides them now. Only brand shortcuts without a Tailwind
+   default equivalent are kept. */
 .text-primary { color: $color-primary; }
 .text-accent { color: $color-accent; }
 .font-primary { font-family: $font-primary; }
 .font-secondary { font-family: $font-secondary; }
-.w-full { width: 100%; }
-
-/* Margin/Padding Utils */
-.mb-2 { margin-bottom: $spacing-2; }
-.mb-4 { margin-bottom: $spacing-4; }
-.mb-6 { margin-bottom: $spacing-6; }
-.mt-2 { margin-top: $spacing-2; }
-.mt-4 { margin-top: $spacing-4; }
-.mt-6 { margin-top: $spacing-6; }
