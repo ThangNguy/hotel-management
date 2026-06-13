@@ -8,17 +8,11 @@ using MediatR;
 
 namespace HotelManagement.Application.Features.Auth.Commands
 {
-    /// <summary>
-    /// Command for refreshing an access token using a refresh token
-    /// </summary>
     public class RefreshTokenCommand : IRequest<AuthResponse>
     {
         public string RefreshToken { get; set; }
     }
 
-    /// <summary>
-    /// Validator for RefreshTokenCommand
-    /// </summary>
     public class RefreshTokenCommandValidator : AbstractValidator<RefreshTokenCommand>
     {
         public RefreshTokenCommandValidator()
@@ -28,16 +22,13 @@ namespace HotelManagement.Application.Features.Auth.Commands
         }
     }
 
-    /// <summary>
-    /// Handler for RefreshTokenCommand
-    /// </summary>
     public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, AuthResponse>
     {
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IAuthService _authService;
 
         public RefreshTokenCommandHandler(
-            IRefreshTokenRepository refreshTokenRepository, 
+            IRefreshTokenRepository refreshTokenRepository,
             IAuthService authService)
         {
             _refreshTokenRepository = refreshTokenRepository;
@@ -48,45 +39,52 @@ namespace HotelManagement.Application.Features.Auth.Commands
         {
             var response = new AuthResponse();
 
-            // Find the refresh token
-            var refreshToken = await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken);
+            var presentedHash = _authService.HashRefreshToken(request.RefreshToken);
+            var stored = await _refreshTokenRepository.GetByHashAsync(presentedHash);
 
-            if (refreshToken == null)
+            if (stored == null)
             {
                 response.Success = false;
                 response.Message = "Invalid refresh token";
                 return response;
             }
 
-            // Check if token is active
-            if (!refreshToken.IsActive)
+            if (stored.IsExpired)
             {
                 response.Success = false;
-                response.Message = refreshToken.IsExpired ? "Refresh token has expired" : "Refresh token has been revoked";
+                response.Message = "Refresh token has expired";
                 return response;
             }
 
-            var user = refreshToken.User;
+            // Reuse detection: if a token that has already been revoked is presented again,
+            // treat it as a stolen token and revoke every active refresh token for this user.
+            if (stored.IsRevoked)
+            {
+                await _refreshTokenRepository.RevokeAllActiveForUserAsync(stored.UserId, "reuse_detected");
+                response.Success = false;
+                response.Message = "Refresh token has been revoked";
+                return response;
+            }
 
-            // Revoke the old refresh token
-            refreshToken.RevokedAt = DateTime.Now;
+            var user = stored.User;
 
-            // Generate new refresh token (rotation)
-            var newRefreshToken = _authService.GenerateRefreshToken(refreshToken.CreatedByIp);
-            newRefreshToken.UserId = user.Id;
-            refreshToken.ReplacedByToken = newRefreshToken.Token;
+            // Rotate: revoke the current token and issue a new one.
+            var (newEntity, newRawToken) = _authService.GenerateRefreshToken(stored.CreatedByIp);
+            newEntity.UserId = user.Id;
 
-            // Update old token and add new one
-            await _refreshTokenRepository.UpdateAsync(refreshToken);
-            await _refreshTokenRepository.AddAsync(newRefreshToken);
+            stored.RevokedAt = DateTime.UtcNow;
+            stored.RevocationReason = "rotated";
+            stored.ReplacedByToken = newEntity.Token; // stores the new token's hash
 
-            // Generate new access token
+            await _refreshTokenRepository.UpdateAsync(stored);
+            await _refreshTokenRepository.AddAsync(newEntity);
+
             var accessToken = _authService.GenerateJwtToken(user);
 
             response.Success = true;
             response.Message = "Token refreshed successfully";
             response.Token = accessToken;
-            response.RefreshToken = newRefreshToken.Token;
+            response.RefreshToken = newRawToken;
             response.User = new UserDto
             {
                 Id = user.Id,

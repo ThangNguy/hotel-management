@@ -18,7 +18,7 @@ namespace HotelManagement.Infrastructure.Repositories
 
         public async Task<User> GetByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User> GetByUsernameAsync(string username)
@@ -47,7 +47,7 @@ namespace HotelManagement.Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var userToDelete = await _context.Users.FindAsync(id);
+            var userToDelete = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (userToDelete == null)
                 return false;
 
@@ -63,7 +63,9 @@ namespace HotelManagement.Infrastructure.Repositories
 
         public async Task<bool> UsernameExistsAsync(string username)
         {
-            return await _context.Users.AnyAsync(u => u.Username == username);
+            // Username is globally unique (unique index on Users.Username);
+            // bypass the tenant filter so the existence check matches the index scope.
+            return await _context.Users.IgnoreQueryFilters().AnyAsync(u => u.Username == username);
         }
     }
 }

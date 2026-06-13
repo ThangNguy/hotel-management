@@ -76,16 +76,16 @@ namespace HotelManagement.Application.Features.Auth.Commands
 
             // Generate access token
             var accessToken = _authService.GenerateJwtToken(user);
-            
-            // Generate and save refresh token
-            var refreshToken = _authService.GenerateRefreshToken("unknown");
-            refreshToken.UserId = user.Id;
-            await _refreshTokenRepository.AddAsync(refreshToken);
+
+            // Generate refresh token (DB stores hash; raw is returned once to the client)
+            var (refreshTokenEntity, rawRefreshToken) = _authService.GenerateRefreshToken("unknown");
+            refreshTokenEntity.UserId = user.Id;
+            await _refreshTokenRepository.AddAsync(refreshTokenEntity);
 
             response.Success = true;
             response.Message = "Login successful";
             response.Token = accessToken;
-            response.RefreshToken = refreshToken.Token;
+            response.RefreshToken = rawRefreshToken;
             response.User = new UserDto
             {
                 Id = user.Id,

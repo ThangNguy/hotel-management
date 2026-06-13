@@ -23,7 +23,7 @@ namespace HotelManagement.API.Controllers
         /// Retrieves all bookings across the system. (Admin only)
         /// </summary>
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<List<BookingDto>>> GetAllBookings()
         {
             var bookings = await Mediator.Send(new GetBookingsListQuery());
@@ -34,7 +34,7 @@ namespace HotelManagement.API.Controllers
         /// Retrieves bookings within a specific date range.
         /// </summary>
         [HttpGet("range")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<List<BookingDto>>> GetBookingsByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             var bookings = await Mediator.Send(new GetBookingsByDateRangeQuery 
@@ -49,7 +49,7 @@ namespace HotelManagement.API.Controllers
         /// Retrieves the most recent bookings based on the provided count.
         /// </summary>
         [HttpGet("recent")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<List<BookingDto>>> GetRecentBookings([FromQuery] int count = 5)
         {
             var bookings = await Mediator.Send(new GetRecentBookingsQuery { Count = count });
@@ -60,7 +60,7 @@ namespace HotelManagement.API.Controllers
         /// Retrieves a specific booking along with its details.
         /// </summary>
         [HttpGet("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<BookingDto>> GetBookingById(int id)
         {
             var booking = await Mediator.Send(new GetBookingDetailQuery { Id = id });
@@ -87,7 +87,7 @@ namespace HotelManagement.API.Controllers
         /// Updates the entire entity of an existing booking.
         /// </summary>
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<BaseResponse>> UpdateBooking(int id, [FromBody] UpdateBookingCommand command)
         {
             if (id != command.Id)
@@ -106,7 +106,7 @@ namespace HotelManagement.API.Controllers
         /// Partially updates a booking's status.
         /// </summary>
         [HttpPatch("{id}/status")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<BaseResponse>> UpdateBookingStatus(int id, [FromBody] BookingStatus status)
         {
             var command = new UpdateBookingStatusCommand { Id = id, Status = status };
@@ -121,7 +121,7 @@ namespace HotelManagement.API.Controllers
         /// Removes a booking from the system.
         /// </summary>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<BaseResponse>> DeleteBooking(int id)
         {
             var response = await Mediator.Send(new DeleteBookingCommand { Id = id });

@@ -19,12 +19,10 @@ namespace HotelManagement.Infrastructure.Services
             _configuration = configuration;
         }
 
-        /// <summary>
-        /// Generate a JWT access token for the user
-        /// </summary>
         public string GenerateJwtToken(User user)
         {
-            var secretKey = _configuration["JWT:Secret"] ?? throw new InvalidOperationException("JWT Secret is not configured");
+            var secretKey = _configuration["JWT:Secret"]
+                ?? throw new InvalidOperationException("JWT:Secret is not configured.");
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -39,55 +37,57 @@ namespace HotelManagement.Infrastructure.Services
             };
 
             var expirationMinutes = GetAccessTokenExpirationMinutes();
-            
+
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:Issuer"],
                 audience: _configuration["JWT:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(expirationMinutes),
+                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        /// <summary>
-        /// Generate a refresh token
-        /// </summary>
-        public RefreshToken GenerateRefreshToken(string ipAddress)
+        public (RefreshToken Entity, string RawToken) GenerateRefreshToken(string ipAddress)
         {
             var refreshTokenDays = GetRefreshTokenExpirationDays();
-            
-            // Generate a secure random token
+
             var randomBytes = new byte[64];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomBytes);
-            
-            return new RefreshToken
+
+            var rawToken = Convert.ToBase64String(randomBytes);
+            var entity = new RefreshToken
             {
-                Token = Convert.ToBase64String(randomBytes),
-                ExpiresAt = DateTime.Now.AddDays(refreshTokenDays),
-                CreatedAt = DateTime.Now,
+                // Persist only the hash; the raw token is returned once to the caller
+                // and never re-derivable from the DB.
+                Token = HashRefreshToken(rawToken),
+                ExpiresAt = DateTime.UtcNow.AddDays(refreshTokenDays),
+                CreatedAt = DateTime.UtcNow,
                 CreatedByIp = ipAddress
             };
+
+            return (entity, rawToken);
         }
 
-        /// <summary>
-        /// Get the access token expiration in minutes from configuration
-        /// </summary>
+        public string HashRefreshToken(string rawToken)
+        {
+            var bytes = Encoding.UTF8.GetBytes(rawToken);
+            var hash = SHA256.HashData(bytes);
+            return Convert.ToBase64String(hash);
+        }
+
         public int GetAccessTokenExpirationMinutes()
         {
             var expirationStr = _configuration["JWT:AccessTokenExpirationMinutes"];
-            return int.TryParse(expirationStr, out var minutes) ? minutes : 60; // Default 60 minutes
+            return int.TryParse(expirationStr, out var minutes) ? minutes : 60;
         }
 
-        /// <summary>
-        /// Get the refresh token expiration in days from configuration
-        /// </summary>
         public int GetRefreshTokenExpirationDays()
         {
             var expirationStr = _configuration["JWT:RefreshTokenExpirationDays"];
-            return int.TryParse(expirationStr, out var days) ? days : 7; // Default 7 days
+            return int.TryParse(expirationStr, out var days) ? days : 7;
         }
     }
 }

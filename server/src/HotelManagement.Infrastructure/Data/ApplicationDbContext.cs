@@ -57,11 +57,12 @@ namespace HotelManagement.Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure Global Query Filters for Multi-Tenancy
-            // Allow Admins to see all data, otherwise filter by HotelId
-            modelBuilder.Entity<User>().HasQueryFilter(e => _tenantContext.IsAdmin || e.HotelId == _tenantContext.HotelId);
-            modelBuilder.Entity<Room>().HasQueryFilter(e => _tenantContext.IsAdmin || e.HotelId == _tenantContext.HotelId);
-            modelBuilder.Entity<Booking>().HasQueryFilter(e => _tenantContext.IsAdmin || e.HotelId == _tenantContext.HotelId);
+            // Global Query Filters for Multi-Tenancy.
+            // Only the platform-level "super_admin" role bypasses the filter.
+            // Per-tenant "admin" users are still scoped to their own HotelId.
+            modelBuilder.Entity<User>().HasQueryFilter(e => _tenantContext.IsSuperAdmin || e.HotelId == _tenantContext.HotelId);
+            modelBuilder.Entity<Room>().HasQueryFilter(e => _tenantContext.IsSuperAdmin || e.HotelId == _tenantContext.HotelId);
+            modelBuilder.Entity<Booking>().HasQueryFilter(e => _tenantContext.IsSuperAdmin || e.HotelId == _tenantContext.HotelId);
 
             // Configure Hotel entity
             modelBuilder.Entity<Hotel>(entity =>
@@ -69,6 +70,8 @@ namespace HotelManagement.Infrastructure.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Address).HasMaxLength(200);
+                entity.Property(e => e.Domain).HasMaxLength(255);
+                entity.HasIndex(e => e.Domain).IsUnique();
             });
 
             // Configure Room entity
@@ -77,7 +80,7 @@ namespace HotelManagement.Infrastructure.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Description).IsRequired();
-                entity.Property(e => e.Price).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.Price).HasPrecision(18, 2);
                 entity.Property(e => e.Beds).IsRequired().HasMaxLength(100);
                 
                 // Configure list of strings for Amenities with value converter and comparer
@@ -108,7 +111,7 @@ namespace HotelManagement.Infrastructure.Data
                 entity.Property(e => e.GuestName).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.GuestEmail).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.GuestPhone).IsRequired().HasMaxLength(20);
-                entity.Property(e => e.TotalPrice).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.TotalPrice).HasPrecision(18, 2);
                 entity.Property(e => e.SpecialRequests).HasMaxLength(500);
 
                 // Configure relationship with Room
@@ -147,9 +150,10 @@ namespace HotelManagement.Infrastructure.Data
             modelBuilder.Entity<RefreshToken>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Token).IsRequired();
+                entity.Property(e => e.Token).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.CreatedByIp).HasMaxLength(50);
-                entity.Property(e => e.ReplacedByToken).HasMaxLength(500);
+                entity.Property(e => e.ReplacedByToken).HasMaxLength(200);
+                entity.Property(e => e.RevocationReason).HasMaxLength(100);
                 
                 // Configure relationship with User
                 entity.HasOne(e => e.User)
@@ -161,34 +165,8 @@ namespace HotelManagement.Infrastructure.Data
                 entity.HasIndex(e => e.Token);
             });
 
-            // Seed initial admin user with fixed date and hash value
-            // Note: Data seeding might need adjustment for multi-tenancy as HotelId is required
-            modelBuilder.Entity<Hotel>().HasData(
-                new Hotel
-                {
-                    Id = 1,
-                    Name = "Default Hotel",
-                    Domain = "localhost",
-                    Address = "123 Main St",
-                    IsActive = true,
-                    CreatedAt = new DateTime(2025, 4, 19, 12, 0, 0)
-                }
-            );
-
-            // Ensure Admin user belongs to Default Hotel
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = 1,
-                    Username = "admin",
-                    Name = "Administrator",
-                    // Use a hardcoded hash for "Admin@123" instead of generating a new one each time
-                    PasswordHash = "$2a$11$jytGBLLdqQTgIh8htOjXzOx/QjXf2fFX/24bILVGUNdV.SOlV3ggy",
-                    Role = "admin",
-                    HotelId = 1,
-                    CreatedAt = new DateTime(2025, 4, 19, 12, 0, 0)
-                }
-            );
+            // Initial Hotel and admin user are now provisioned by HotelManagement.DatabaseSeeder,
+            // not via baked-in HasData seeds. This keeps password hashes out of migrations.
         }
     }
 }

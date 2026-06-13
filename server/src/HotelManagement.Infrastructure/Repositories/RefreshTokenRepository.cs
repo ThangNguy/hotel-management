@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using HotelManagement.Core.Entities;
@@ -7,9 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HotelManagement.Infrastructure.Repositories
 {
-    /// <summary>
-    /// Repository implementation for refresh token operations
-    /// </summary>
     public class RefreshTokenRepository : IRefreshTokenRepository
     {
         private readonly ApplicationDbContext _dbContext;
@@ -19,11 +17,15 @@ namespace HotelManagement.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<RefreshToken> GetByTokenAsync(string token)
+        public async Task<RefreshToken> GetByHashAsync(string tokenHash)
         {
+            // Refresh tokens are owned by users that may belong to any tenant.
+            // Token resolution must happen before tenant context is established,
+            // so we bypass the global query filter.
             return await _dbContext.RefreshTokens
+                .IgnoreQueryFilters()
                 .Include(rt => rt.User)
-                .FirstOrDefaultAsync(rt => rt.Token == token);
+                .FirstOrDefaultAsync(rt => rt.Token == tokenHash);
         }
 
         public async Task<RefreshToken> AddAsync(RefreshToken refreshToken)
@@ -40,10 +42,31 @@ namespace HotelManagement.Infrastructure.Repositories
             return refreshToken;
         }
 
+        public async Task RevokeAllActiveForUserAsync(int userId, string reason)
+        {
+            var now = DateTime.UtcNow;
+            var activeTokens = await _dbContext.RefreshTokens
+                .IgnoreQueryFilters()
+                .Where(rt => rt.UserId == userId && rt.RevokedAt == null && rt.ExpiresAt > now)
+                .ToListAsync();
+
+            foreach (var token in activeTokens)
+            {
+                token.RevokedAt = now;
+                token.RevocationReason = reason;
+            }
+
+            if (activeTokens.Count > 0)
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task RemoveOldRefreshTokensAsync(int userId, int keepCount = 5)
         {
             var oldTokens = await _dbContext.RefreshTokens
-                .Where(rt => rt.UserId == userId && (rt.RevokedAt != null || rt.ExpiresAt < System.DateTime.Now))
+                .IgnoreQueryFilters()
+                .Where(rt => rt.UserId == userId && (rt.RevokedAt != null || rt.ExpiresAt < DateTime.UtcNow))
                 .OrderByDescending(rt => rt.CreatedAt)
                 .Skip(keepCount)
                 .ToListAsync();

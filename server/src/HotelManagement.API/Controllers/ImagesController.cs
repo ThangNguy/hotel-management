@@ -18,7 +18,7 @@ namespace HotelManagement.API.Controllers
         }
 
         [HttpPost("upload")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<IActionResult> UploadImage([FromForm] UploadImageRequest request)
         {
             if (request.File == null || request.File.Length == 0)
@@ -36,7 +36,7 @@ namespace HotelManagement.API.Controllers
         }
 
         [HttpPost("upload-multiple")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<IActionResult> UploadMultipleImages([FromForm] UploadMultipleImagesRequest request)
         {
             if (request.Files == null || request.Files.Count == 0)
@@ -54,7 +54,7 @@ namespace HotelManagement.API.Controllers
         }
 
         [HttpDelete("{imageUrl}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public IActionResult DeleteImage(string imageUrl)
         {
             if (string.IsNullOrEmpty(imageUrl))

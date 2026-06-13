@@ -50,7 +50,8 @@ namespace HotelManagement.Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var roomToDelete = await _context.Rooms.FindAsync(id);
+            // FirstOrDefaultAsync respects global query filters; FindAsync does not.
+            var roomToDelete = await _context.Rooms.FirstOrDefaultAsync(r => r.Id == id);
             if (roomToDelete == null)
                 return false;
 

@@ -3,29 +3,21 @@ using HotelManagement.Core.Entities;
 
 namespace HotelManagement.Core.Interfaces
 {
-    /// <summary>
-    /// Repository interface for refresh token operations
-    /// </summary>
     public interface IRefreshTokenRepository
     {
         /// <summary>
-        /// Get a refresh token by its token string
+        /// Look up a refresh token by its already-hashed value.
         /// </summary>
-        Task<RefreshToken> GetByTokenAsync(string token);
-        
-        /// <summary>
-        /// Add a new refresh token
-        /// </summary>
+        Task<RefreshToken> GetByHashAsync(string tokenHash);
+
         Task<RefreshToken> AddAsync(RefreshToken refreshToken);
-        
-        /// <summary>
-        /// Update an existing refresh token
-        /// </summary>
         Task<RefreshToken> UpdateAsync(RefreshToken refreshToken);
-        
+
         /// <summary>
-        /// Remove old revoked or expired tokens for a user
+        /// Revoke every active refresh token for a user. Used when token reuse is detected.
         /// </summary>
+        Task RevokeAllActiveForUserAsync(int userId, string reason);
+
         Task RemoveOldRefreshTokensAsync(int userId, int keepCount = 5);
     }
 }

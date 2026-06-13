@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -NoProfile -Command \"[System.Guid]::NewGuid\\(\\).ToString\\(\\); [System.Guid]::NewGuid\\(\\).ToString\\(\\)\")",
+      "Bash(cd \"f:/Dev/apps/hotel-management/server/src/HotelManagement.Infrastructure/Migrations\" && rm -f *.cs && ls -la)",
+      "Bash(dotnet restore *)",
+      "Bash(dotnet build *)",
+      "Bash(dotnet ef *)"
+    ],
+    "additionalDirectories": [
+      "F:\\Dev\\apps\\hotel-management\\server\\src\\HotelManagement.Infrastructure\\Migrations"
+    ]
+  }
+}

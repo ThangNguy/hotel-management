@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -16,45 +17,44 @@ namespace HotelManagement.Api.Middleware
         private readonly IMemoryCache _cache;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<TenantMiddleware> _logger;
+        private readonly IHostEnvironment _environment;
 
-        public TenantMiddleware(RequestDelegate next, IMemoryCache cache, IServiceScopeFactory scopeFactory, ILogger<TenantMiddleware> logger)
+        public TenantMiddleware(
+            RequestDelegate next,
+            IMemoryCache cache,
+            IServiceScopeFactory scopeFactory,
+            ILogger<TenantMiddleware> logger,
+            IHostEnvironment environment)
         {
             _next = next;
             _cache = cache;
             _scopeFactory = scopeFactory;
             _logger = logger;
+            _environment = environment;
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            // If user is authenticated, we might rely on claims,
-            // but for mixed public/private usage, we should probably resolve tenant anyway.
-            // If the user's claim conflicts with the domain they are visiting, that's a security edge case.
-            // For now, let's allow the plan's logic: Auth > Domain.
-            // But actually, if an Admin from Hotel A visits Hotel B's domain, what happens?
-            // They shouldn't be logged in at Hotel B if cookies are domain-scoped?
-            // If using JWT in header, the client decides.
-            
-            // For this task, we focus on PUBLIC access (unauthenticated).
+            // Authenticated requests rely on the hotel_id claim resolved by TenantContext.
+            // We only resolve tenant from Host for anonymous public traffic.
             if (context.User.Identity?.IsAuthenticated == true)
             {
                 await _next(context);
                 return;
             }
 
-            // Get Host
             var host = context.Request.Host.Host;
-            
-            // Allow dev override
-            if (context.Request.Headers.TryGetValue("X-Tenant-Domain", out var devDomain))
+
+            // X-Tenant-Domain override is ONLY honored in Development for local testing.
+            // In production this header is ignored.
+            if (_environment.IsDevelopment() &&
+                context.Request.Headers.TryGetValue("X-Tenant-Domain", out var devDomain))
             {
-                 host = devDomain.ToString();
+                host = devDomain.ToString();
             }
 
-            // Check Cache
             if (!_cache.TryGetValue($"Tenant_{host}", out int hotelId))
             {
-                // Resolve from DB
                 using (var scope = _scopeFactory.CreateScope())
                 {
                     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -69,7 +69,7 @@ namespace HotelManagement.Api.Middleware
                     }
                     else
                     {
-                        hotelId = 0; 
+                        hotelId = 0;
                     }
                 }
             }

@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using HotelManagement.Core.Entities;
 using HotelManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using HotelManagement.Core.Common;
 using HotelManagement.Core.Interfaces;
 using HotelManagement.Infrastructure.Services;
 using BC = BCrypt.Net.BCrypt;
@@ -15,17 +17,28 @@ namespace HotelManagement.DatabaseSeeder
     {
         static async Task Main(string[] args)
         {
+            // Match the API's Npgsql behavior so DateTime values without explicit Kind work.
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             Console.WriteLine("Starting Hotel Management Database Seeder...");
-            
-            // Create services with database context
+
+            // Load configuration from env vars and user-secrets (no committed credentials).
+            var configuration = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddUserSecrets<Program>(optional: true)
+                .Build();
+
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                Console.WriteLine("ERROR: ConnectionStrings:DefaultConnection is not configured.");
+                Console.WriteLine("Set it via `dotnet user-secrets set ConnectionStrings:DefaultConnection \"...\"` or environment variable.");
+                return;
+            }
+
             var services = new ServiceCollection();
-            
-            // Use the connection string from appsettings.json
-            string connectionString = "Server=localhost;Database=HotelManagement;User Id=sa;Password=123456;TrustServerCertificate=True;Trusted_Connection=True;MultipleActiveResultSets=true;";
-            
-            // Register database context
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseNpgsql(connectionString));
             
             // Register Mock TenantContext for Seeder (Admin access)
             services.AddScoped<ITenantContext, SeederTenantContext>();
@@ -109,13 +122,11 @@ namespace HotelManagement.DatabaseSeeder
                 {
                     new Hotel
                     {
-                        // Id = 1, // Let Identity handle it or try to force if needed. With EF Core seeding we often force.
-                        // But for manual seeding, Identity is usually on.
-                        // Let's assume Identity is on (1,1). First insert gets 1.
                         Name = "Default Hotel",
+                        Domain = "localhost",
                         Address = "123 Main St",
                         IsActive = true,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.UtcNow
                     }
                 };
                 
@@ -149,20 +160,11 @@ namespace HotelManagement.DatabaseSeeder
             {
                 Console.WriteLine($"Found admin user. HotelId: {admin.HotelId}");
                 Console.WriteLine("Updating admin user...");
+                // The bootstrap admin is the platform super_admin (bypasses tenant filter).
                 admin.PasswordHash = BC.HashPassword("Admin@123");
-                admin.Role = "admin"; // Ensure lowercase "admin" or match Role logic
-                // HotelId is already 1 from migration
+                admin.Role = Roles.SuperAdmin;
                 await dbContext.SaveChangesAsync();
                 Console.WriteLine("Admin updated.");
-            }
-
-            var testUser = await dbContext.Users.IgnoreQueryFilters().FirstOrDefaultAsync(u => u.Username == "testuser_verif");
-            if (testUser != null)
-            {
-                Console.WriteLine("Updating testuser_verif...");
-                testUser.Role = "admin";
-                await dbContext.SaveChangesAsync();
-                Console.WriteLine("Test User updated to Admin.");
             }
             
             if (!await dbContext.Users.IgnoreQueryFilters().AnyAsync())
@@ -181,38 +183,38 @@ namespace HotelManagement.DatabaseSeeder
                     new User
                     {
                         Username = "admin",
-                        Name = "Admin User",
+                        Name = "Platform Admin",
                         PasswordHash = BC.HashPassword("Admin@123"),
-                        Role = "admin",
+                        Role = Roles.SuperAdmin,
                         HotelId = hotelId,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.UtcNow
+                    },
+                    new User
+                    {
+                        Username = "hoteladmin",
+                        Name = "Hotel Admin",
+                        PasswordHash = BC.HashPassword("Admin@123"),
+                        Role = Roles.Admin,
+                        HotelId = hotelId,
+                        CreatedAt = DateTime.UtcNow
                     },
                     new User
                     {
                         Username = "staff1",
                         Name = "Staff Member 1",
                         PasswordHash = BC.HashPassword("Staff@123"),
-                        Role = "Staff",
+                        Role = Roles.Staff,
                         HotelId = hotelId,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.UtcNow
                     },
                     new User
                     {
                         Username = "guest1",
                         Name = "John Doe",
                         PasswordHash = BC.HashPassword("Guest@123"),
-                        Role = "Guest",
+                        Role = Roles.Guest,
                         HotelId = hotelId,
-                        CreatedAt = DateTime.Now
-                    },
-                    new User
-                    {
-                        Username = "guest2",
-                        Name = "Jane Smith",
-                        PasswordHash = BC.HashPassword("Guest@123"),
-                        Role = "Guest",
-                        HotelId = hotelId,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.UtcNow
                     }
                 };
                 
@@ -418,7 +420,8 @@ namespace HotelManagement.DatabaseSeeder
 
     public class SeederTenantContext : ITenantContext
     {
-        public int HotelId => 0; // Admin sees all data or bypasses filter
-        public bool IsAdmin => true;
+        // Seeder operates with super-admin privileges to bypass tenant filters.
+        public int HotelId => 0;
+        public bool IsSuperAdmin => true;
     }
 }

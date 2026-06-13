@@ -57,7 +57,9 @@ namespace HotelManagement.Infrastructure.Repositories
 
         public async Task<Booking> UpdateStatusAsync(int id, BookingStatus status)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+            // FirstOrDefaultAsync respects global query filters (multi-tenant scoping);
+            // FindAsync does NOT and would allow cross-tenant access.
+            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == id);
             if (booking == null)
                 return null;
 
@@ -68,7 +70,7 @@ namespace HotelManagement.Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var bookingToDelete = await _context.Bookings.FindAsync(id);
+            var bookingToDelete = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == id);
             if (bookingToDelete == null)
                 return false;
 

@@ -32,7 +32,7 @@ namespace HotelManagement.Core.Entities
         /// <summary>
         /// When the token was created
         /// </summary>
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
         /// <summary>
         /// When the token was revoked (null if active)
@@ -45,23 +45,18 @@ namespace HotelManagement.Core.Entities
         public string CreatedByIp { get; set; } = string.Empty;
         
         /// <summary>
-        /// Token that replaced this one (if rotated)
+        /// Hash of the token that replaced this one during rotation. Used to walk
+        /// the chain when reuse is detected. Stores a SHA-256 hash, not the raw token.
         /// </summary>
         public string? ReplacedByToken { get; set; }
-        
+
         /// <summary>
-        /// Check if token is expired
+        /// Optional reason for revocation (e.g., "rotated", "reuse_detected").
         /// </summary>
-        public bool IsExpired => DateTime.Now >= ExpiresAt;
-        
-        /// <summary>
-        /// Check if token has been revoked
-        /// </summary>
+        public string? RevocationReason { get; set; }
+
+        public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
         public bool IsRevoked => RevokedAt != null;
-        
-        /// <summary>
-        /// Check if token is still active (not expired and not revoked)
-        /// </summary>
         public bool IsActive => !IsRevoked && !IsExpired;
     }
 }

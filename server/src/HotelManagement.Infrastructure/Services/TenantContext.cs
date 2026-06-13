@@ -1,8 +1,7 @@
-using System;
-using System.Linq;
-using System.Security.Claims;
+using HotelManagement.Core.Common;
 using HotelManagement.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace HotelManagement.Infrastructure.Services
 {
@@ -22,15 +21,13 @@ namespace HotelManagement.Infrastructure.Services
                 var context = _httpContextAccessor.HttpContext;
                 if (context == null) return 0;
 
-                // 1. Try to get from Items (set by middleware)
                 if (context.Items.TryGetValue("HotelId", out var hotelIdObj) && hotelIdObj is int hotelIdItem)
                 {
                     return hotelIdItem;
                 }
 
-                // 2. Try to get from User Claims (fallback)
                 var user = context.User;
-                if (user != null && user.Identity.IsAuthenticated)
+                if (user != null && user.Identity?.IsAuthenticated == true)
                 {
                     var hotelIdClaim = user.Claims.FirstOrDefault(c => c.Type == "hotel_id");
                     if (hotelIdClaim != null && int.TryParse(hotelIdClaim.Value, out int hotelId))
@@ -43,12 +40,12 @@ namespace HotelManagement.Infrastructure.Services
             }
         }
 
-        public bool IsAdmin
+        public bool IsSuperAdmin
         {
             get
             {
                 var user = _httpContextAccessor.HttpContext?.User;
-                return user != null && user.IsInRole("admin");
+                return user != null && user.IsInRole(Roles.SuperAdmin);
             }
         }
     }

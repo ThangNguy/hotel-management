@@ -60,7 +60,7 @@ namespace HotelManagement.API.Controllers
         /// Creates a new room in the system. Requires Admin privileges.
         /// </summary>
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<BaseResponse>> CreateRoom(CreateRoomCommand command)
         {
             var response = await Mediator.Send(command);
@@ -74,7 +74,7 @@ namespace HotelManagement.API.Controllers
         /// Updates an existing room's details. Requires Admin privileges.
         /// </summary>
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<BaseResponse>> UpdateRoom(int id, UpdateRoomCommand command)
         {
             command.Id = id;
@@ -89,7 +89,7 @@ namespace HotelManagement.API.Controllers
         /// Deletes a room from the system. Requires Admin privileges.
         /// </summary>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,super_admin")]
         public async Task<ActionResult<BaseResponse>> DeleteRoom(int id)
         {
             var response = await Mediator.Send(new DeleteRoomCommand { Id = id });
