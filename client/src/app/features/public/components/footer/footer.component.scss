@@ -2,12 +2,10 @@
 @use '../../../../../styles/mixins' as *;
 
 .footer {
-  background: linear-gradient(to bottom, $color-primary, #050b14);
-  color: $color-text-inverse;
-  padding-top: $spacing-12;
   position: relative;
-  overflow: hidden;
-  
+  background: $noc-deep;
+  padding-top: 88px;
+
   &::before {
     content: '';
     position: absolute;
@@ -15,186 +13,121 @@
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(to right, transparent, rgba($color-accent, 0.3), transparent);
+    background: linear-gradient(to right, transparent, rgba(176, 141, 79, 0.5), transparent);
   }
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: $spacing-8;
-  margin-bottom: $spacing-8;
-  
-  @include responsive('lg') {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  @include responsive('sm') {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
+  gap: 64px;
+  margin-bottom: 72px;
+
+  @include responsive('lg') { grid-template-columns: 1fr 1fr; gap: $spacing-6; }
+  @include responsive('sm') { grid-template-columns: 1fr; text-align: center; }
 }
 
 .footer-brand {
-  .logo-link {
-    display: inline-flex;
-    align-items: center;
+  .brand-link {
+    display: inline-block;
+    font-family: $font-primary;
+    font-size: 22px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: $noc-text;
     text-decoration: none;
-    color: $color-text-inverse;
-    margin-bottom: $spacing-4;
-    
-    mat-icon {
-      margin-right: $spacing-2;
-      font-size: 36px;
-      height: 36px;
-      width: 36px;
-      color: $color-accent;
-    }
-    
-    span {
-      font-size: 1.75rem;
-      font-weight: 600;
-      font-family: $font-primary;
-      letter-spacing: 1px;
-    }
+    margin-bottom: 20px;
   }
-  
+
   .tagline {
-    color: rgba($color-text-inverse, 0.7);
+    font-size: 14px;
+    font-weight: 300;
     line-height: 1.8;
-    margin-bottom: $spacing-5;
-    font-size: 1rem;
+    color: $noc-text-50;
+    margin: 0 0 32px;
     max-width: 300px;
-    
-    @include responsive('sm') {
-      margin-left: auto;
-      margin-right: auto;
-    }
+
+    @include responsive('sm') { margin-left: auto; margin-right: auto; }
   }
 }
 
 .social-links {
   display: flex;
-  gap: $spacing-3;
-  
-  @include responsive('sm') {
-    justify-content: center;
-  }
-  
+  gap: 12px;
+
+  @include responsive('sm') { justify-content: center; }
+
   .social-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background-color: rgba($color-text-inverse, 0.05);
-    color: $color-text-inverse;
+    width: 42px;
+    height: 42px;
+    color: rgba(236, 229, 216, 0.7);
     text-decoration: none;
+    border: 1px solid rgba(236, 229, 216, 0.15);
     transition: all $transition-base;
-    border: 1px solid rgba($color-text-inverse, 0.1);
-    
-    &:hover {
-      background-color: $color-accent;
-      color: $color-primary;
-      border-color: $color-accent;
-      transform: translateY(-4px);
-      box-shadow: $shadow-accent;
-    }
-    
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
+
+    &:hover { background: $noc-brass; color: $noc-on-brass; border-color: $noc-brass; }
+
+    mat-icon { font-size: 17px; height: 17px; width: 17px; }
   }
 }
 
 .link-column {
   h3 {
-    color: $color-text-inverse;
-    font-size: 1.125rem;
+    font-family: $font-secondary;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: $noc-brass;
     font-weight: 600;
-    margin-bottom: $spacing-5;
-    position: relative;
-    display: inline-block;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 40px;
-      height: 2px;
-      background-color: $color-accent;
-      
-      @include responsive('sm') {
-        left: 50%;
-        transform: translateX(-50%);
-      }
-    }
+    margin: 0 0 26px;
   }
-  
+
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    
-    li {
-      margin-bottom: $spacing-3;
-      
-      a {
-        color: rgba($color-text-inverse, 0.7);
-        text-decoration: none;
-        transition: all $transition-base;
-        font-size: 0.95rem;
-        display: inline-block;
-        
-        &:hover {
-          color: $color-accent;
-          transform: translateX(4px);
-        }
-      }
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    a {
+      color: $noc-text-60;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 300;
+      transition: color $transition-base;
+
+      &:hover { color: $noc-brass-hover; }
     }
   }
 }
 
 .footer-bottom {
-  padding: $spacing-5 0;
-  border-top: 1px solid rgba($color-text-inverse, 0.1);
+  padding: 26px 0;
+  border-top: 1px solid $noc-hairline;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
-  @include responsive('sm') {
-    flex-direction: column;
-    gap: $spacing-3;
-    text-align: center;
-  }
-  
-  .copyright {
-    color: rgba($color-text-inverse, 0.6);
-    font-size: 0.875rem;
-  }
-  
+
+  @include responsive('sm') { flex-direction: column; gap: $spacing-3; text-align: center; }
+
+  .copyright { color: $noc-text-40; font-size: 13px; font-weight: 300; }
+
   .footer-bottom-links {
     display: flex;
     align-items: center;
-    gap: $spacing-3;
-    
+    gap: 20px;
+
     a {
-      color: rgba($color-text-inverse, 0.6);
+      color: $noc-text-40;
       text-decoration: none;
-      font-size: 0.875rem;
+      font-size: 13px;
       transition: color $transition-base;
-      
-      &:hover {
-        color: $color-accent;
-      }
-    }
-    
-    .separator {
-      color: rgba($color-text-inverse, 0.3);
+
+      &:hover { color: $noc-brass-hover; }
     }
   }
 }

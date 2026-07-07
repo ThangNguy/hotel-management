@@ -2,220 +2,134 @@
 @use '../../../../../styles/mixins' as *;
 
 .hero {
-  min-height: 100vh;
   position: relative;
-  background-image: url('../../../../../assets/images/swimming-pool.png'); /* Or actual path */
+  min-height: 760px;
+  height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background-image: url('../../../../../assets/images/swimming-pool.png');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* Parallax effect */
-  color: $color-text-inverse;
-  display: flex;
-  align-items: center;
-  padding-top: 80px; /* Accounts for header */
+  color: $noc-text;
 }
 
 .hero-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba($color-primary, 0.85) 0%, rgba($color-primary, 0.4) 100%);
+  inset: 0;
+  background:
+    linear-gradient(to top, #16130f 4%, rgba(22, 19, 15, 0.25) 55%, rgba(22, 19, 15, 0.6) 100%),
+    rgba(22, 19, 15, 0.15);
   z-index: 1;
 }
 
 .hero-content {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: $spacing-6 $spacing-5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   position: relative;
   z-index: $z-elevated;
-  gap: $spacing-8;
-  
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 $spacing-6 72px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 64px;
+
   @include responsive('lg') {
     flex-direction: column;
-    text-align: center;
-    padding-top: $spacing-12;
-    padding-bottom: $spacing-12;
+    align-items: stretch;
+    gap: $spacing-6;
+    padding: 120px $spacing-5 $spacing-6;
+    justify-content: center;
   }
 }
 
 .hero-text {
-  flex: 1;
-  max-width: 600px;
-  
+  max-width: 660px;
+
+  .eyebrow { margin-bottom: $spacing-4; }
+
   h1 {
-    font-size: 4rem;
-    font-weight: 700;
-    margin-bottom: $spacing-4;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-    color: $color-text-inverse;
-    line-height: 1.1;
-    
-    @include responsive('md') {
-      font-size: 3rem;
-    }
+    font-family: $font-primary;
+    font-size: 66px;
+    font-weight: 400;
+    line-height: 1.08;
+    margin: 0 0 $spacing-4;
+    color: $noc-text;
+    text-wrap: balance;
+
+    @include responsive('lg') { font-size: 52px; }
+    @include responsive('sm') { font-size: 38px; }
   }
-  
+
   p {
-    font-size: 1.25rem;
-    line-height: 1.6;
-    margin-bottom: $spacing-6;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-    color: rgba($color-text-inverse, 0.9);
-    font-family: $font-secondary;
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: $noc-text-60;
+    margin: 0;
+    max-width: 480px;
   }
 }
 
-.hero-buttons {
-  display: flex;
-  gap: $spacing-4;
-  
+.booking-card {
+  flex-shrink: 0;
+  width: 360px;
+  box-sizing: border-box;
+  background: rgba(22, 19, 15, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid $noc-brass-border;
+  padding: 32px;
+
   @include responsive('lg') {
-    justify-content: center;
-  }
-  
-  @include responsive('md') {
-    flex-direction: column;
     width: 100%;
-    
-    a {
-      width: 100%;
-    }
+    max-width: 520px;
   }
-  
-  .cta-button {
-    background-color: $color-accent;
-    color: $color-primary;
-    font-family: $font-secondary;
-    font-weight: 600;
-    padding: 12px 32px;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: $radius-md;
-    transition: all $transition-base;
-    border: 2px solid $color-accent;
-    
-    &:hover {
-      background-color: $color-accent-hover;
-      border-color: $color-accent-hover;
-      transform: translateY(-2px);
-      box-shadow: $shadow-accent;
-    }
-  }
-  
-  .secondary-button {
-    background-color: transparent;
-    color: $color-text-inverse;
-    border: 2px solid rgba($color-text-inverse, 0.5);
-    font-family: $font-secondary;
-    font-weight: 600;
-    padding: 12px 32px;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: $radius-md;
-    transition: all $transition-base;
-    
-    &:hover {
-      background-color: rgba($color-text-inverse, 0.1);
-      border-color: $color-text-inverse;
-      transform: translateY(-2px);
-    }
-  }
-}
 
-.booking-form-container {
-  flex: 0 0 450px;
-  width: 100%;
-  
-  @include responsive('lg') {
-    flex: 0 0 auto;
-    max-width: 500px;
-  }
-}
-
-.booking-form-card {
-  @include glass-card(24px, 0.85);
-  border-radius: $radius-lg;
-  padding: $spacing-6;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  
-  mat-card-header {
-    margin-bottom: $spacing-5;
-    text-align: center;
-    
-    mat-card-title {
-      width: 100%;
-      color: $color-primary;
-      font-size: 1.75rem;
-      font-family: $font-primary;
-      font-weight: 600;
-      padding-bottom: $spacing-3;
-      border-bottom: 2px solid rgba($color-primary, 0.1);
-    }
-  }
-}
-
-.form-row {
-  display: flex;
-  gap: $spacing-4;
-  margin-bottom: $spacing-3;
-  
-  @include responsive('sm') {
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  mat-form-field {
-    flex: 1;
-    
-    ::ng-deep {
-      .mdc-text-field--outlined {
-        --mdc-outlined-text-field-container-shape: #{$radius-md};
-      }
-      .mat-mdc-form-field-infix {
-        padding-top: 12px;
-        padding-bottom: 12px;
-      }
-    }
-  }
-}
-
-.search-button {
-  width: 100%;
-  padding: 14px;
-  font-size: 1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: $spacing-2;
-  margin-top: $spacing-4;
-  background-color: $color-primary;
-  color: $color-text-inverse;
-  transition: all $transition-base;
-  border-radius: $radius-md;
-  box-shadow: $shadow-md;
-  border: none;
-  cursor: pointer;
-  
-  &:hover {
-    background-color: $color-primary-light;
-    transform: translateY(-2px);
-    box-shadow: $shadow-lg;
-  }
-  
-  mat-icon {
+  &__title {
+    font-family: $font-primary;
     font-size: 20px;
-    height: 20px;
-    width: 20px;
+    color: $noc-text;
+    margin-bottom: $spacing-4;
+  }
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 18px;
+  margin-bottom: $spacing-3;
+
+  @include responsive('sm') { grid-template-columns: 1fr; }
+}
+
+.check-btn {
+  width: 100%;
+  background: $noc-brass;
+  color: $noc-on-brass;
+  border: none;
+  font-family: $font-secondary;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 16px;
+  cursor: pointer;
+  transition: background $transition-base;
+
+  &:hover { background: $noc-brass-hover; }
+}
+
+// Compact dark Material fields inside the glass card
+.noc-field {
+  width: 100%;
+
+  ::ng-deep {
+    .mat-mdc-text-field-wrapper { background: transparent; }
+    .mat-mdc-form-field-infix { min-height: 44px; padding-top: 10px; padding-bottom: 10px; }
+    .mat-mdc-form-field-subscript-wrapper { font-size: 10px; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
   }
 }

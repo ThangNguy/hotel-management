@@ -1,12 +1,15 @@
 <section class="rooms-section" id="rooms">
   <div class="container">
-    <div class="section-header animate-fade-in-up">
-      <h2>Exclusive Suites & Rooms</h2>
-      <p>Experience unmatched luxury and comfort in our carefully designed accommodations.</p>
+    <div class="rooms-head animate-fade-in-up">
+      <div>
+        <div class="eyebrow">Accommodation</div>
+        <h2>Suites &amp; Rooms</h2>
+      </div>
+      <p class="rooms-head__desc">Each room is designed around light, quiet, and the view — from city-facing doubles to the full-floor Presidential Suite.</p>
     </div>
 
     <!-- Search Status -->
-    <div *ngIf="searchActive() && !loading() && !error()" class="search-status-container animate-fade-in-up delay-200">
+    <div *ngIf="searchActive() && !loading() && !error()" class="search-status">
       <div class="search-info">
         <mat-icon>event_available</mat-icon>
         <span>
@@ -16,22 +19,14 @@
           <span *ngIf="searchParams().children && searchParams().children > 0">, {{searchParams().children}} Children</span>
         </span>
       </div>
-      <button mat-stroked-button color="primary" (click)="clearSearch()">
-        Clear Search
-      </button>
+      <button class="ghost-btn" (click)="clearSearch()">Clear Search</button>
     </div>
 
     <!-- Error state -->
     <div *ngIf="error()" class="error-container">
-      <mat-card class="error-card">
-        <mat-card-content>
-          <mat-icon color="warn">error_outline</mat-icon>
-          <p>{{ error() }}</p>
-          <button mat-raised-button color="primary" (click)="retryLoading()">
-            Retry
-          </button>
-        </mat-card-content>
-      </mat-card>
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ error() }}</p>
+      <button class="ghost-btn" (click)="retryLoading()">Retry</button>
     </div>
 
     <!-- Skeletons state -->
@@ -48,44 +43,29 @@
 
     <!-- Rooms display -->
     <div *ngIf="!loading() && !error()" class="rooms-grid animate-fade-in-up delay-200">
-      <div *ngFor="let room of rooms(); trackBy: trackByRoomId" class="room-card" (click)="openRoomDetails(room)">
+      <article *ngFor="let room of rooms(); trackBy: trackByRoomId" class="room-card" (click)="openRoomDetails(room)">
         <div class="room-image-container">
-          <!-- Added loading="lazy" for performance -->
           <img [src]="room.images[0]" [alt]="room.name" class="room-image"
             loading="lazy"
             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=800&auto=format&fit=crop'">
-          <div class="hover-overlay">
-            <span>View Details</span>
-          </div>
+          <span class="badge" *ngIf="room.available !== false">Available</span>
+          <span class="rating" *ngIf="room.isVIP"><mat-icon>star</mat-icon>VIP</span>
         </div>
 
-        <mat-card-content>
-          <div class="room-header">
-            <h3 class="room-title">{{room.name}}</h3>
-            <div class="room-price">
-              <span class="price">{{formatPrice(room.price || room.pricePerNight || 0)}}</span>
-              <span class="night">/ night</span>
-            </div>
+        <div class="room-body">
+          <h3 class="room-title">{{ room.name }}</h3>
+          <div class="room-meta">
+            {{ room.capacity || room.maxOccupancy || 2 }} guests
+            <span class="dot">·</span>{{ room.beds || 'King bed' }}
+            <span class="dot">·</span>{{ room.size || room.sizeSqm || 35 }} m²
           </div>
-
-          <p class="room-description">{{room.description}}</p>
-
-          <div class="room-features">
-            <div class="feature" title="Capacity">
-              <mat-icon>group</mat-icon>
-              <span class="feature-text">{{room.capacity || 2}} Guests</span>
-            </div>
-            <div class="feature" title="Room Size">
-              <mat-icon>square_foot</mat-icon>
-              <span class="feature-text">{{room.size || 35}}m²</span>
-            </div>
-            <div class="feature" title="Beds">
-              <mat-icon>bed</mat-icon>
-              <span class="feature-text">{{room.beds || 'King'}}</span>
-            </div>
+          <p class="room-description">{{ room.description }}</p>
+          <div class="room-foot">
+            <span class="room-price">{{ formatPrice(room.price || room.pricePerNight || 0) }}<span class="per"> / night</span></span>
+            <span class="details">Details<mat-icon>arrow_forward</mat-icon></span>
           </div>
-        </mat-card-content>
-      </div>
+        </div>
+      </article>
     </div>
   </div>
 </section>

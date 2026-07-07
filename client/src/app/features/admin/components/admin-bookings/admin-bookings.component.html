@@ -63,7 +63,7 @@
           <!-- Total Price Column -->
           <ng-container matColumnDef="totalPrice">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Price</th>
-            <td mat-cell *matCellDef="let booking">{{getFormattedPrice(booking.totalPrice)}}</td>
+            <td mat-cell *matCellDef="let booking" class="price-cell">{{getFormattedPrice(booking.totalPrice)}}</td>
           </ng-container>
           
           <!-- Status Column -->

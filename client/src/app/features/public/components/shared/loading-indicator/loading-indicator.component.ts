@@ -19,25 +19,30 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       align-items: center;
       justify-content: center;
     }
-    
+
+    /* Spinner reads on dark: brass (Nocturne $noc-brass) */
+    mat-spinner {
+      --mdc-circular-progress-active-indicator-color: #b08d4f;
+    }
+
     .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255, 255, 255, 0.7);
+      background-color: rgba(22, 19, 15, 0.7);
       z-index: 1000;
     }
-    
+
     .inline {
       padding: 20px;
     }
-    
+
     .loading-message {
       margin-top: 16px;
       font-size: 16px;
-      color: #555;
+      color: #ece5d8;
     }
   `]
 })

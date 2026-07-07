@@ -1,13 +1,62 @@
+@use '../../../../../styles/variables' as *;
+
+// Dialog title — Marcellus (override MDC subhead which defaults to Archivo)
+h2[mat-dialog-title] {
+  font-family: $font-primary;
+  font-weight: 400;
+  color: $noc-text;
+  letter-spacing: 0.3px;
+}
+
+// Body copy
+[mat-dialog-content] p {
+  font-family: $font-secondary;
+  font-weight: 300;
+  color: $noc-text-60;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
 .warning {
-  color: #f44336;
+  color: $color-error;
+  font-family: $font-secondary;
   font-weight: 500;
   margin-top: 16px;
 }
 
+// Dialog surface / actions
 mat-dialog-actions {
-  margin-top: 24px;
-  
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid $noc-hairline;
+  gap: 8px;
+
   button {
     min-width: 100px;
+  }
+
+  // Cancel / secondary (plain text button)
+  .mat-mdc-button {
+    --mdc-text-button-label-text-color: #{$noc-text-60};
+    color: $noc-text-60;
+
+    &:hover {
+      --mdc-text-button-label-text-color: #{$noc-text};
+      color: $noc-text;
+    }
+  }
+
+  // Destructive confirm (color="warn") — clearly red
+  .mat-mdc-raised-button.mat-warn {
+    --mdc-protected-button-container-color: #{$color-error};
+    --mdc-protected-button-label-text-color: #ffffff;
+    background-color: $color-error;
+    color: #ffffff;
+    box-shadow: none;
+
+    &:hover {
+      --mdc-protected-button-container-color: #d0645b;
+      background-color: #d0645b;
+    }
   }
 }

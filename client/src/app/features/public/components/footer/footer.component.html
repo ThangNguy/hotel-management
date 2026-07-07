@@ -1,49 +1,39 @@
 <footer class="footer">
-  <div class="container animate-fade-in-up">
+  <div class="container">
     <div class="footer-content">
-      
+
       <div class="footer-brand">
-        <a [routerLink]="['/']" class="logo-link">
-          <mat-icon>hotel</mat-icon>
-          <span>Luxury Hotel</span>
-        </a>
-        <p class="tagline">Experience unparalleled luxury and comfort right in the heart of the city.</p>
+        <a [routerLink]="['/']" class="brand-link">Central Hotel</a>
+        <p class="tagline">Central Hotel and Residences Phu My Hung — a 3-star retreat in the heart of District 7, Ho Chi Minh City.</p>
         <div class="social-links">
-          <a href="https://facebook.com" target="_blank" aria-label="Facebook" class="social-icon">
-            <mat-icon>facebook</mat-icon>
-          </a>
-          <a href="https://twitter.com" target="_blank" aria-label="Twitter" class="social-icon">
-            <mat-icon>x</mat-icon>
-          </a>
-          <a href="https://instagram.com" target="_blank" aria-label="Instagram" class="social-icon">
-            <!-- Alternative fallback since Instagram isn't a mat-icon standard, photo_camera is good -->
-            <mat-icon>photo_camera</mat-icon>
-          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook" class="social-icon"><mat-icon>facebook</mat-icon></a>
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter" class="social-icon"><mat-icon>alternate_email</mat-icon></a>
+          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon"><mat-icon>photo_camera</mat-icon></a>
         </div>
       </div>
-      
+
       <div class="link-column">
         <h3>Explore</h3>
         <ul>
           <li><a routerLink="/about">About Us</a></li>
-          <li><a routerLink="/rooms">Rooms & Suites</a></li>
+          <li><a routerLink="/rooms">Rooms &amp; Suites</a></li>
           <li><a routerLink="/amenities">Amenities</a></li>
           <li><a routerLink="/contact">Contact Us</a></li>
         </ul>
       </div>
-      
+
       <div class="link-column">
         <h3>Services</h3>
         <ul>
           <li><a routerLink="/restaurant">Fine Dining</a></li>
-          <li><a routerLink="/spa">Spa & Wellness</a></li>
+          <li><a routerLink="/spa">Spa &amp; Wellness</a></li>
           <li><a routerLink="/gym">Fitness Center</a></li>
           <li><a routerLink="/pool">Swimming Pool</a></li>
         </ul>
       </div>
-      
+
       <div class="link-column">
-        <h3>Support & Policies</h3>
+        <h3>Support &amp; Policies</h3>
         <ul>
           <li><a routerLink="/faq">FAQ</a></li>
           <li><a routerLink="/terms">Terms of Service</a></li>
@@ -51,16 +41,13 @@
           <li><a routerLink="/careers">Careers</a></li>
         </ul>
       </div>
-      
+
     </div>
-    
+
     <div class="footer-bottom">
-      <div class="copyright">
-        &copy; {{ currentYear() }} Luxury Hotel & Resort. All rights reserved.
-      </div>
+      <div class="copyright">© {{ currentYear() }} Central Hotel and Residences Phu My Hung. All rights reserved.</div>
       <div class="footer-bottom-links">
         <a routerLink="/sitemap">Sitemap</a>
-        <span class="separator">|</span>
         <a routerLink="/admin">Admin Login</a>
       </div>
     </div>

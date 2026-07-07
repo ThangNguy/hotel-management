@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Archivo', sans-serif; font-size: 15px; line-height: 1.6; color: #ece5d8; background-color: #16130f; -webkit-font-smoothing: antialiased; }
+  </style>
+</helmet>
+
+<div style="display: flex; min-height: 100vh">
+
+  <!-- ============ SIDEBAR (nav items from admin-layout.component) ============ -->
+  <aside style="width: 260px; flex-shrink: 0; background: #100d0a; border-right: 1px solid rgba(236,229,216,0.08); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; box-sizing: border-box">
+    <div style="padding: 30px 28px 26px; border-bottom: 1px solid rgba(236,229,216,0.08)">
+<div style="font-family: 'Marcellus', serif; font-size: 17px; letter-spacing: 3px; text-transform: uppercase; color: #ece5d8">Central Hotel</div>
+      <div style="font-size: 9px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #b08d4f; margin-top: 4px">Admin</div>
+    </div>
+    <nav style="flex: 1; padding: 20px 16px; display: flex; flex-direction: column; gap: 3px">
+      <a href="#" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-decoration: none; color: #16130f; background: #b08d4f; font-weight: 600; font-size: 13px; letter-spacing: 0.5px">
+        <span style="font-family: 'Material Icons'; font-size: 19px">dashboard</span>Dashboard
+      </a>
+      <a href="#" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-decoration: none; color: rgba(236,229,216,0.65); font-weight: 400; font-size: 13px; letter-spacing: 0.5px; transition: all 0.2s" style-hover="background: rgba(236,229,216,0.05); color: #ece5d8">
+        <span style="font-family: 'Material Icons'; font-size: 19px">book_online</span>Bookings
+      </a>
+      <a href="#" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-decoration: none; color: rgba(236,229,216,0.65); font-weight: 400; font-size: 13px; letter-spacing: 0.5px; transition: all 0.2s" style-hover="background: rgba(236,229,216,0.05); color: #ece5d8">
+        <span style="font-family: 'Material Icons'; font-size: 19px">date_range</span>Booking Calendar
+      </a>
+      <a href="#" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-decoration: none; color: rgba(236,229,216,0.65); font-weight: 400; font-size: 13px; letter-spacing: 0.5px; transition: all 0.2s" style-hover="background: rgba(236,229,216,0.05); color: #ece5d8">
+        <span style="font-family: 'Material Icons'; font-size: 19px">grid_on</span>Booking Grid
+      </a>
+      <a href="#" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-decoration: none; color: rgba(236,229,216,0.65); font-weight: 400; font-size: 13px; letter-spacing: 0.5px; transition: all 0.2s" style-hover="background: rgba(236,229,216,0.05); color: #ece5d8">
+        <span style="font-family: 'Material Icons'; font-size: 19px">king_bed</span>Room Management
+      </a>
+    </nav>
+    <div style="padding: 16px; border-top: 1px solid rgba(236,229,216,0.08)">
+      <a href="#" style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; text-decoration: none; color: rgba(236,229,216,0.65); font-weight: 400; font-size: 13px; transition: all 0.2s" style-hover="background: rgba(236,229,216,0.05); color: #ece5d8">
+        <span style="font-family: 'Material Icons'; font-size: 19px">logout</span>Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main style="flex: 1; display: flex; flex-direction: column; min-width: 0">
+
+    <!-- Top bar -->
+    <div style="height: 66px; background: rgba(22,19,15,0.95); border-bottom: 1px solid rgba(236,229,216,0.08); display: flex; align-items: center; justify-content: flex-end; padding: 0 36px; gap: 16px; position: sticky; top: 0; z-index: 100">
+      <span style="font-size: 13px; font-weight: 300; color: rgba(236,229,216,0.6)">Hello, <strong style="color: #ece5d8; font-weight: 600">Admin</strong></span>
+      <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(176,141,79,0.15); border: 1px solid rgba(176,141,79,0.4); color: #b08d4f; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px; cursor: pointer">A</div>
+    </div>
+
+    <div style="padding: 36px; max-width: 1240px; width: 100%; box-sizing: border-box">
+
+      <!-- Page header -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; gap: 24px">
+        <div>
+          <h1 style="font-family: 'Marcellus', serif; font-size: 30px; font-weight: 400; color: #ece5d8; margin: 0 0 6px; line-height: 1.15">Dashboard Overview</h1>
+          <p style="color: rgba(236,229,216,0.55); margin: 0; font-size: 13px; font-weight: 300">Welcome back! Here's what's happening at your hotel.</p>
+        </div>
+        <button style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #16130f; background: #b08d4f; border: none; padding: 13px 24px; cursor: pointer; transition: background 0.2s" style-hover="background: #c9a86a">
+          <span style="font-family: 'Material Icons'; font-size: 17px; text-transform: none">add</span>New Booking
+        </button>
+      </div>
+
+      <!-- KPI cards (same 4 as admin-dashboard.component) -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 40px">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <div style="background: #1f1b15; border: 1px solid rgba(236,229,216,0.08); padding: 24px; display: flex; flex-direction: column; gap: 16px; transition: border-color 0.25s, transform 0.25s" style-hover="border-color: rgba(176,141,79,0.5); transform: translateY(-3px)">
+            <div style="display: flex; justify-content: space-between; align-items: center">
+              <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600">{{ s.label }}</span>
+              <span style="font-family: 'Material Icons'; font-size: 20px; color: #b08d4f">{{ s.icon }}</span>
+            </div>
+            <div>
+              <div style="font-family: 'Marcellus', serif; font-size: 28px; color: #ece5d8; line-height: 1.1">{{ s.value }}</div>
+              <div style="font-size: 12px; font-weight: 300; color: rgba(236,229,216,0.5); margin-top: 6px">{{ s.desc }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <!-- Recent bookings table (columns from admin-dashboard.component) -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
+        <h2 style="font-family: 'Marcellus', serif; font-size: 21px; font-weight: 400; color: #ece5d8; margin: 0">Recent Bookings</h2>
+        <a href="#" style="font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #b08d4f; text-decoration: none; display: flex; align-items: center; gap: 6px" style-hover="color: #c9a86a">View All<span style="font-family: 'Material Icons'; font-size: 15px; text-transform: none">arrow_forward</span></a>
+      </div>
+
+      <div style="background: #1f1b15; border: 1px solid rgba(236,229,216,0.08); overflow: hidden">
+        <div style="display: grid; grid-template-columns: 70px 1.6fr 1.3fr 1fr 1fr 1.1fr 0.9fr; padding: 14px 24px; background: rgba(236,229,216,0.04); border-bottom: 1px solid rgba(236,229,216,0.08)">
+          <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600">ID</span>
+          <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600">Guest Name</span>
+          <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600">Room</span>
+          <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600">Check In</span>
+          <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600">Check Out</span>
+          <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600">Status</span>
+          <span style="font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600; text-align: right">Total Price</span>
+        </div>
+        <sc-for list="{{ bookings }}" as="b" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 70px 1.6fr 1.3fr 1fr 1fr 1.1fr 0.9fr; padding: 16px 24px; border-bottom: 1px solid rgba(236,229,216,0.06); align-items: center; transition: background 0.15s; cursor: pointer" style-hover="background: rgba(236,229,216,0.03)">
+            <span style="font-size: 13px; font-weight: 300; color: rgba(236,229,216,0.5)">#{{ b.id }}</span>
+            <span style="font-size: 14px; font-weight: 600; color: #ece5d8">{{ b.guest }}</span>
+            <span style="font-size: 13px; font-weight: 300; color: rgba(236,229,216,0.8)">{{ b.room }}</span>
+            <span style="font-size: 13px; font-weight: 300; color: rgba(236,229,216,0.8)">{{ b.checkIn }}</span>
+            <span style="font-size: 13px; font-weight: 300; color: rgba(236,229,216,0.8)">{{ b.checkOut }}</span>
+            <span><span style="display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 12px; border: 1px solid {{ b.statusBorder }}; color: {{ b.statusColor }}"><span style="width: 5px; height: 5px; border-radius: 50%; background: {{ b.statusColor }}"></span>{{ b.status }}</span></span>
+            <span style="font-size: 14px; font-weight: 600; color: #b08d4f; text-align: right">{{ b.total }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const stats = [
+      { icon: 'hotel', label: 'Occupancy Rate', value: '78.5%', desc: '13 of 60 rooms available' },
+      { icon: 'payments', label: 'Monthly Revenue', value: '$48,250', desc: 'Current month to date' },
+      { icon: 'calendar_month', label: 'Total Bookings', value: '1,284', desc: 'Total across all time' },
+      { icon: 'meeting_room', label: 'Manage Facilities', value: 'Rooms', desc: 'Add, edit, or remove rooms' }
+    ];
+    const statusStyles = {
+      'Pending':     { border: 'rgba(245,158,11,0.4)', color: '#e5a53d' },
+      'Confirmed':   { border: 'rgba(16,185,129,0.4)', color: '#34c294' },
+      'Checked In':  { border: 'rgba(96,165,250,0.4)', color: '#7fb2f2' },
+      'Checked Out': { border: 'rgba(236,229,216,0.25)', color: 'rgba(236,229,216,0.6)' },
+      'Cancelled':   { border: 'rgba(239,68,68,0.4)', color: '#e5766c' }
+    };
+    const bookings = [
+      { id: 1042, guest: 'Nguyen Van An', room: 'Executive Suite', checkIn: 'Jul 8, 2026', checkOut: 'Jul 11, 2026', status: 'Confirmed', total: '$750' },
+      { id: 1041, guest: 'Sarah Mitchell', room: 'Deluxe King Room', checkIn: 'Jul 6, 2026', checkOut: 'Jul 9, 2026', status: 'Checked In', total: '$450' },
+      { id: 1040, guest: 'Tran Thi Mai', room: 'Ocean View Suite', checkIn: 'Jul 14, 2026', checkOut: 'Jul 16, 2026', status: 'Pending', total: '$640' },
+      { id: 1039, guest: 'James Okafor', room: 'Family Room', checkIn: 'Jul 3, 2026', checkOut: 'Jul 6, 2026', status: 'Checked Out', total: '$540' },
+      { id: 1038, guest: 'Le Hoang Phuc', room: 'Presidential Suite', checkIn: 'Jul 20, 2026', checkOut: 'Jul 23, 2026', status: 'Confirmed', total: '$1,500' },
+      { id: 1037, guest: 'Emma Larsson', room: 'Standard Twin Room', checkIn: 'Jul 5, 2026', checkOut: 'Jul 7, 2026', status: 'Cancelled', total: '$200' }
+    ].map(b => ({ ...b, statusBorder: statusStyles[b.status].border, statusColor: statusStyles[b.status].color }));
+    return { stats, bookings };
+  }
+}
+</script>
+</body>
+</html>

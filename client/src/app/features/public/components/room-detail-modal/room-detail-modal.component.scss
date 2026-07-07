@@ -1,3 +1,22 @@
+@use '../../../../../styles/variables' as *;
+
+:host {
+  display: block;
+  color: $noc-text;
+}
+
+.dialog-title {
+  font-family: $font-primary !important;
+  font-size: 30px !important;
+  font-weight: 400 !important;
+  color: $noc-text !important;
+  letter-spacing: 0.5px;
+  padding: 26px 32px 18px !important;
+  margin: 0 !important;
+  background: $noc-surface;
+  border-bottom: 1px solid $noc-hairline;
+}
+
 .room-detail-content {
   max-height: 80vh;
   display: flex;
@@ -6,89 +25,89 @@
   padding: 0;
   margin: 0;
   overflow: hidden;
+  background: $noc-surface;
 }
 
-// Custom Tab Styling to match theme
 ::ng-deep .mat-mdc-tab-group {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  --mat-tab-header-active-label-text-color: #{$noc-text};
+  --mat-tab-header-inactive-label-text-color: #{$noc-text-50};
+  --mat-tab-header-active-focus-label-text-color: #{$noc-text};
+  --mat-tab-header-active-hover-label-text-color: #{$noc-text};
+  --mdc-tab-indicator-active-indicator-color: #{$noc-brass};
+  --mat-tab-header-active-ripple-color: #{$noc-brass};
+  --mat-tab-header-inactive-ripple-color: #{$noc-brass};
 }
 
-::ng-deep .mat-mdc-tab-body-wrapper {
-  flex-grow: 1;
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  font-family: $font-secondary;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.room-details-container {
-  padding: 24px;
-  overflow-y: auto;
-  height: 100%;
-  box-sizing: border-box;
-}
+::ng-deep .mat-mdc-tab-body-wrapper { flex-grow: 1; }
 
+.room-details-container,
 .booking-container {
-  padding: 24px;
+  padding: 28px 32px;
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
 }
 
-// Hero Image
+// Hero image
 .room-image {
   width: 100%;
-  height: 350px;
+  height: 340px;
   overflow: hidden;
-  border-radius: 12px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 28px;
+  border: 1px solid $noc-hairline;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform $transition-slow;
 
-    &:hover {
-      transform: scale(1.03);
-    }
+    &:hover { transform: scale(1.04); }
   }
 }
 
-// Info Section
 .room-info {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
 }
 
 .price-section {
   display: flex;
   align-items: baseline;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #eee;
+  gap: 8px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid $noc-hairline;
 
   .price {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: #2c3e50;
-    margin-right: 8px;
+    font-family: $font-primary;
+    font-size: 2.25rem;
+    font-weight: 400;
+    color: $noc-brass;
   }
 
-  .per-night {
-    font-size: 1.1rem;
-    color: #7f8c8d;
-    font-weight: 500;
-  }
+  .per-night { font-size: 0.95rem; color: $noc-text-50; }
 }
 
 .details-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 20px;
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 12px;
+  gap: 4px;
+  background: rgba(236, 229, 216, 0.03);
+  border: 1px solid $noc-hairline;
+  padding: 22px;
 
   .detail-item {
     display: flex;
@@ -96,144 +115,112 @@
     gap: 12px;
 
     mat-icon {
-      color: #3498db;
-      background: #e1f0fa;
-      padding: 8px;
-      border-radius: 50%;
+      color: $noc-brass;
       width: 20px;
       height: 20px;
+      font-size: 20px;
     }
 
-    span {
-      color: #34495e;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
+    span { color: $noc-text; font-weight: 400; font-size: 0.9rem; }
   }
 }
 
-.description-section {
+.description-section,
+.amenities-section {
   h3 {
-    font-size: 1.3rem;
-    color: #2c3e50;
-    margin-bottom: 12px;
-    font-weight: 700;
+    font-family: $font-primary;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: $noc-text;
+    margin-bottom: 14px;
   }
 
   p {
-    color: #555;
-    line-height: 1.7;
-    font-size: 1rem;
-  }
-}
-
-.amenities-section {
-  h3 {
-    font-size: 1.3rem;
-    color: #2c3e50;
-    margin-bottom: 16px;
-    font-weight: 700;
+    color: $noc-text-60;
+    line-height: 1.75;
+    font-size: 0.95rem;
+    font-weight: 300;
   }
 }
 
 .amenities-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
+  gap: 12px;
 
   .amenity-item {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    transition: transform 0.2s ease;
+    padding: 12px 14px;
+    background: rgba(236, 229, 216, 0.02);
+    border: 1px solid $noc-hairline;
+    transition: border-color $transition-base;
 
-    &:hover {
-      transform: translateY(-2px);
-      border-color: #b2bec3;
-    }
+    &:hover { border-color: $noc-brass-border; }
 
-    mat-icon {
-      font-size: 20px;
-      height: 20px;
-      width: 20px;
-      color: #27ae60;
-    }
-
-    span {
-      color: #555;
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
+    mat-icon { font-size: 18px; height: 18px; width: 18px; color: $noc-brass; }
+    span { color: $noc-text-60; font-weight: 300; font-size: 0.9rem; }
   }
 }
 
-// Booking Form Styling
-.booking-container {
-  h3 {
-    font-size: 1.4rem;
-    color: #2c3e50;
-    margin-bottom: 24px;
-    font-weight: 700;
-    border-bottom: 2px solid #f1f1f1;
-    padding-bottom: 12px;
-  }
+.booking-container h3 {
+  font-family: $font-primary;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: $noc-text;
+  margin-bottom: 22px;
+  border-bottom: 1px solid $noc-hairline;
+  padding-bottom: 12px;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .form-row {
   display: flex;
-  gap: 16px;
+  gap: 20px;
 
-  mat-form-field {
-    flex: 1;
-    width: 100%;
-  }
-
-  &.full-width {
-    mat-form-field {
-      width: 100%;
-    }
-  }
+  mat-form-field { flex: 1; width: 100%; }
+  &.full-width mat-form-field { width: 100%; }
 }
 
 .pricing-summary {
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 12px;
-  border: 1px solid #e9ecef;
-  margin-top: 10px;
-  margin-bottom: 20px;
+  background: rgba(176, 141, 79, 0.07);
+  border: 1px solid rgba(176, 141, 79, 0.2);
+  padding: 22px;
+  margin: 10px 0 20px;
 
   h3 {
+    font-family: $font-primary;
     font-size: 1.1rem;
+    font-weight: 400;
     margin-bottom: 16px;
     border-bottom: none;
     padding-bottom: 0;
+    color: $noc-text;
   }
 
   .price-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-    color: #555;
-    font-size: 0.95rem;
+    color: $noc-text-60;
+    font-size: 0.9rem;
+    font-weight: 300;
 
     &.total {
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #dfe6e9;
-      font-weight: 800;
-      color: #2c3e50;
-      font-size: 1.2rem;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(176, 141, 79, 0.25);
+      font-weight: 600;
+      color: $noc-text;
+      font-size: 1.1rem;
+
+      span:last-child { color: $noc-brass; }
     }
   }
 }
@@ -244,35 +231,19 @@ form {
   gap: 16px;
   justify-content: flex-end;
 
-  button {
-    padding: 8px 32px;
-    font-size: 1.1rem;
-    height: 48px;
-    border-radius: 24px;
-  }
+  button { padding: 0 32px; height: 48px; }
 }
 
 mat-dialog-actions {
-  border-top: 1px solid #eee;
+  border-top: 1px solid $noc-hairline;
   padding: 16px 24px;
   margin: 0;
+  background: $noc-surface;
 }
 
 @media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .room-image {
-    height: 250px;
-  }
-
-  .price-section .price {
-    font-size: 2rem;
-  }
-
-  .amenities-grid {
-    grid-template-columns: 1fr;
-  }
+  .form-row { flex-direction: column; gap: 0; }
+  .room-image { height: 240px; }
+  .dialog-title { padding: 20px 20px 14px !important; font-size: 24px !important; }
+  .room-details-container, .booking-container { padding: 20px; }
 }

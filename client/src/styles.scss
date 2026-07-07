@@ -1,28 +1,27 @@
 /* ============================================================
-   Global Styles — theme foundation
+   Global Styles — Nocturne (boutique dark) theme foundation
    - Design tokens (CSS vars): src/tailwind.css (@theme)
    - SCSS tokens/mixins      : src/styles/_variables.scss, _mixins.scss
-   - M3 color palettes       : src/styles/_theme-colors.scss (generated
-     via `ng generate @angular/material:theme-color`)
+   - M3 color palettes       : src/styles/_theme-colors.scss
    ============================================================ */
 @use '@angular/material' as mat;
 @use './styles/theme-colors' as palettes;
 @use './styles/variables' as *;
 @use './styles/mixins' as *;
 
-/* ===== Angular Material — custom M3 theme ===== */
+/* ===== Angular Material — Nocturne dark M3 theme ===== */
 html {
-  color-scheme: light;
+  color-scheme: dark;
 
   @include mat.theme((
     color: (
-      primary: palettes.$primary-palette,
+      primary: palettes.$tertiary-palette,   // brass drives Material primary
       tertiary: palettes.$tertiary-palette,
-      theme-type: light,
+      theme-type: dark,
     ),
     typography: (
-      plain-family: 'Be Vietnam Pro, sans-serif',
-      brand-family: 'Playfair Display, serif',
+      plain-family: 'Archivo, sans-serif',
+      brand-family: 'Marcellus, serif',
       regular-weight: 400,
       medium-weight: 500,
       bold-weight: 700,
@@ -31,23 +30,42 @@ html {
   ));
 
   & {
-    /* Brand-exact colors on top of the seed-generated palette */
-    --mat-sys-primary: #{$color-primary};
-    --mat-sys-on-primary: #ffffff;
-    --mat-sys-tertiary: #{$color-accent};
-    --mat-sys-on-tertiary: #241a00;
+    /* Brass accent */
+    --mat-sys-primary: #{$noc-brass};
+    --mat-sys-on-primary: #{$noc-on-brass};
+    --mat-sys-tertiary: #{$noc-brass};
+    --mat-sys-on-tertiary: #{$noc-on-brass};
 
-    /* Softer shape */
-    --mat-sys-corner-extra-small: 6px;
-    --mat-sys-corner-small: 10px;
-    --mat-sys-corner-medium: 12px;
-    --mat-sys-corner-large: 16px;
-    --mat-sys-corner-extra-large: 24px;
+    /* Nocturne surfaces */
+    --mat-sys-background: #{$noc-bg};
+    --mat-sys-on-background: #{$noc-text};
+    --mat-sys-surface: #{$noc-surface};
+    --mat-sys-surface-dim: #{$noc-bg};
+    --mat-sys-surface-bright: #2a241b;
+    --mat-sys-surface-container-lowest: #{$noc-deep};
+    --mat-sys-surface-container-low: #1a1611;
+    --mat-sys-surface-container: #{$noc-surface};
+    --mat-sys-surface-container-high: #241f16;
+    --mat-sys-surface-container-highest: #2a241b;
+    --mat-sys-on-surface: #{$noc-text};
+    --mat-sys-on-surface-variant: #{$noc-text-60};
+    --mat-sys-outline: rgba(236, 229, 216, 0.28);
+    --mat-sys-outline-variant: rgba(236, 229, 216, 0.12);
+    --mat-sys-inverse-surface: #{$noc-text};
+    --mat-sys-inverse-on-surface: #{$noc-bg};
+    --mat-sys-error: #{$color-error};
 
-    /* Soft layered elevation, navy-tinted */
-    --mat-sys-level1: 0 2px 8px rgba(10, 22, 40, 0.06), 0 1px 2px rgba(10, 22, 40, 0.04);
-    --mat-sys-level2: 0 6px 24px -8px rgba(10, 22, 40, 0.12), 0 2px 6px -2px rgba(10, 22, 40, 0.06);
-    --mat-sys-level3: 0 16px 32px -12px rgba(10, 22, 40, 0.16), 0 4px 10px -4px rgba(10, 22, 40, 0.08);
+    /* Near-square boutique shape */
+    --mat-sys-corner-extra-small: 0px;
+    --mat-sys-corner-small: 0px;
+    --mat-sys-corner-medium: 2px;
+    --mat-sys-corner-large: 2px;
+    --mat-sys-corner-extra-large: 2px;
+
+    /* Deep warm-black elevation */
+    --mat-sys-level1: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --mat-sys-level2: 0 8px 24px -12px rgba(0, 0, 0, 0.55);
+    --mat-sys-level3: 0 18px 40px -16px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -68,11 +86,11 @@ html, body {
 
 body {
   font-family: $font-secondary;
-  font-weight: 400;
+  font-weight: 300;
   font-size: 16px;
   line-height: 1.6;
-  color: $color-text;
-  background-color: $color-background;
+  color: $noc-text;
+  background-color: $noc-bg;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -81,120 +99,144 @@ body {
 /* Typography Overrides */
 h1, h2, h3, h4, h5, h6 {
   font-family: $font-primary;
-  color: $color-primary;
-  font-weight: 600;
-  line-height: 1.2;
+  color: $noc-text;
+  font-weight: 400;
+  line-height: 1.15;
 }
 
-/* Global container */
+/* Global container — boutique 1400 / 56px gutters */
 .container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 $spacing-5;
+  padding: 0 $spacing-6;
 
-  @include responsive('md') {
-    padding: 0 $spacing-4;
+  @include responsive('lg') {
+    padding: 0 $spacing-5;
+  }
+  @include responsive('sm') {
+    padding: 0 $spacing-3;
   }
 }
 
-/* Section Common Styles */
+/* Nocturne eyebrow — thin brass rule + uppercase label */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: $font-secondary;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: $noc-brass;
+
+  &::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: $noc-brass;
+    flex-shrink: 0;
+  }
+
+  &.center {
+    justify-content: center;
+    &::after {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: $noc-brass;
+      flex-shrink: 0;
+    }
+  }
+}
+
+/* Section header (centered) — Nocturne */
 .section-header {
   text-align: center;
   margin-bottom: $spacing-8;
 
   h2 {
-    font-size: 2.5rem;
-    position: relative;
-    display: inline-block;
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -16px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 3px;
-      background-color: $color-accent;
-    }
+    font-family: $font-primary;
+    font-size: 2.75rem;
+    font-weight: 400;
+    color: $noc-text;
+    margin: 0 0 $spacing-3;
+    line-height: 1.1;
   }
 
   p {
-    font-size: 1.125rem;
-    color: $color-text-light;
-    max-width: 600px;
-    margin: $spacing-5 auto 0;
+    font-family: $font-secondary;
+    font-weight: 300;
+    font-size: 0.9375rem;
+    color: $noc-text-60;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.75;
   }
 }
 
-/* Main content spacing */
+/* Main content — no top offset (fixed header overlays full-bleed hero) */
 .main-content {
-  padding-top: 80px; /* Accounts for fixed header */
+  padding-top: 0;
 }
 
 /* ===== Material component tweaks ===== */
 .mat-mdc-card {
   border-radius: $radius-lg !important;
-  box-shadow: $shadow-md !important;
-  border: none !important;
-  background-color: $color-surface !important;
+  box-shadow: none !important;
+  border: 1px solid $noc-hairline !important;
+  background-color: $noc-surface !important;
+  color: $noc-text;
 }
 
 .mat-mdc-form-field {
   width: 100%;
 }
 
-.mdc-button, .mdc-raised-button, .mdc-outlined-button {
-  font-family: $font-secondary !important;
-  letter-spacing: 0.5px !important;
+/* Material Icons must never inherit uppercase (breaks ligatures → "ARROW_FORWARD") */
+mat-icon, .mat-icon, .material-icons {
   text-transform: none !important;
-  font-weight: 500 !important;
-  border-radius: $radius-md !important;
-  padding: 0 24px !important;
 }
 
-.mat-mdc-raised-button.mat-primary {
-  --mdc-protected-button-container-color: #{$color-primary} !important;
-  --mdc-protected-button-label-text-color: #{$color-text-inverse} !important;
+.mdc-button, .mdc-raised-button, .mdc-outlined-button, .mat-mdc-button, .mat-mdc-unelevated-button {
+  font-family: $font-secondary !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  border-radius: 0 !important;
 }
 
-.mat-mdc-raised-button.mat-accent {
-  --mdc-protected-button-container-color: #{$color-accent} !important;
-  --mdc-protected-button-label-text-color: #{$color-primary} !important;
+/* Brass filled button */
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-raised-button.mat-accent,
+.mat-mdc-unelevated-button.mat-accent {
+  --mdc-protected-button-container-color: #{$noc-brass};
+  --mdc-protected-button-label-text-color: #{$noc-on-brass};
+  --mdc-filled-button-container-color: #{$noc-brass};
+  --mdc-filled-button-label-text-color: #{$noc-on-brass};
+  box-shadow: none !important;
+
   &:hover {
-    --mdc-protected-button-container-color: #{$color-accent-hover} !important;
+    --mdc-protected-button-container-color: #{$noc-brass-hover};
+    --mdc-filled-button-container-color: #{$noc-brass-hover};
   }
 }
 
 /* ===== Keyframes (referenced globally) ===== */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes hoverGlow {
-  0% { box-shadow: 0 0 0 rgba(201, 168, 76, 0); }
-  50% { box-shadow: 0 0 15px rgba(201, 168, 76, 0.5); }
-  100% { box-shadow: 0 0 0 rgba(201, 168, 76, 0); }
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes shimmer {
-  0% { background-position: -1000px 0; }
+  0%   { background-position: -1000px 0; }
   100% { background-position: 1000px 0; }
 }
 
-/* ===== Legacy utility classes =====
-   Spacing/layout utilities (mt-*, mb-*, w-full, text-center) were removed —
-   Tailwind provides them now. Only brand shortcuts without a Tailwind
-   default equivalent are kept. */
-.text-primary { color: $color-primary; }
-.text-accent { color: $color-accent; }
+/* ===== Brand utility shortcuts ===== */
+.text-primary { color: $noc-text; }
+.text-accent { color: $noc-brass; }
 .font-primary { font-family: $font-primary; }
 .font-secondary { font-family: $font-secondary; }

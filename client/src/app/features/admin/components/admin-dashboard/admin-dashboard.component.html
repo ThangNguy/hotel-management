@@ -1,5 +1,5 @@
 <div class="dashboard-container">
-  
+
   <div class="dashboard-header animate-fade-in-up">
     <div>
       <h1 class="page-title">Dashboard Overview</h1>
@@ -17,120 +17,102 @@
     <mat-spinner diameter="48"></mat-spinner>
     <p>Loading your dashboard...</p>
   </div>
-  
+
   <div *ngIf="error()" class="error-state">
-    <mat-icon color="warn">error_outline</mat-icon>
+    <mat-icon>error_outline</mat-icon>
     <p>{{ error() }}</p>
     <button mat-stroked-button color="primary" (click)="retry()">Retry</button>
   </div>
 
   <ng-container *ngIf="!isLoading() && !error()">
-    <!-- Stats Cards -->
+    <!-- KPI Cards -->
     <div class="stats-grid animate-fade-in-up delay-100">
-      
-      <!-- Occupancy -->
-      <mat-card class="stat-card bg-gradient-blue premium-shadow">
-        <mat-card-content>
-          <div class="stat-icon">
-            <mat-icon>hotel</mat-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">Occupancy Rate</span>
-            <div class="stat-value">{{ occupancyRate() | number:'1.0-1' }}%</div>
-            <span class="stat-desc">{{ availableRooms() }} of {{ totalRooms() }} rooms available</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
 
-      <!-- Monthly Revenue -->
-      <mat-card class="stat-card bg-gradient-gold premium-shadow">
-        <mat-card-content>
-          <div class="stat-icon">
-            <mat-icon>payments</mat-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">Monthly Revenue</span>
-            <div class="stat-value">{{ monthlyRevenue() | currency:'USD':'symbol':'1.0-0' }}</div>
-            <span class="stat-desc">Current month to date</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Occupancy Rate</span>
+          <mat-icon>hotel</mat-icon>
+        </div>
+        <div>
+          <div class="kpi-value">{{ occupancyRate() | number:'1.0-1' }}%</div>
+          <div class="kpi-desc">{{ availableRooms() }} of {{ totalRooms() }} rooms available</div>
+        </div>
+      </div>
 
-      <!-- Total Bookings -->
-      <mat-card class="stat-card bg-gradient-purple premium-shadow">
-        <mat-card-content>
-          <div class="stat-icon">
-            <mat-icon>calendar_month</mat-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">Total Bookings</span>
-            <div class="stat-value">{{ totalBookings() }}</div>
-            <span class="stat-desc">Total across all time</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Monthly Revenue</span>
+          <mat-icon>payments</mat-icon>
+        </div>
+        <div>
+          <div class="kpi-value">{{ monthlyRevenue() | currency:'USD':'symbol':'1.0-0' }}</div>
+          <div class="kpi-desc">Current month to date</div>
+        </div>
+      </div>
 
-      <!-- Manage Rooms Shortcut -->
-      <mat-card class="stat-card bg-gradient-green premium-shadow action-card" routerLink="/admin/rooms">
-        <mat-card-content>
-          <div class="stat-icon">
-            <mat-icon> meeting_room </mat-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-label">Manage Facilities</span>
-            <div class="stat-value">Rooms</div>
-            <span class="stat-desc">Add, edit, or remove rooms</span>
-          </div>
-          <mat-icon class="arrow-icon">arrow_forward</mat-icon>
-        </mat-card-content>
-      </mat-card>
-      
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Total Bookings</span>
+          <mat-icon>calendar_month</mat-icon>
+        </div>
+        <div>
+          <div class="kpi-value">{{ totalBookings() }}</div>
+          <div class="kpi-desc">Total across all time</div>
+        </div>
+      </div>
+
+      <a class="kpi-card action-card" routerLink="/admin/rooms">
+        <div class="kpi-top">
+          <span class="kpi-label">Manage Facilities</span>
+          <mat-icon>meeting_room</mat-icon>
+        </div>
+        <div>
+          <div class="kpi-value">Rooms</div>
+          <div class="kpi-desc">Add, edit, or remove rooms</div>
+        </div>
+        <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+      </a>
+
     </div>
 
     <!-- Recent Bookings Table -->
     <div class="recent-bookings-section animate-fade-in-up delay-200">
       <div class="section-header-compact">
         <h2>Recent Bookings</h2>
-        <a mat-button color="primary" routerLink="/admin/bookings">View All</a>
+        <a class="view-all" routerLink="/admin/bookings">View All<mat-icon>arrow_forward</mat-icon></a>
       </div>
-      
-      <mat-card class="table-card premium-shadow">
+
+      <div class="table-card">
         <div class="table-container">
           <table mat-table [dataSource]="recentBookings()" class="modern-table">
-            
-            <!-- ID Column -->
+
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef> ID </th>
               <td mat-cell *matCellDef="let element"> #{{element.id}} </td>
             </ng-container>
 
-            <!-- Guest Name Column -->
             <ng-container matColumnDef="guestName">
               <th mat-header-cell *matHeaderCellDef> Guest Name </th>
-              <td mat-cell *matCellDef="let element"> 
-                <span class="font-medium">{{element.guestName}}</span> 
+              <td mat-cell *matCellDef="let element">
+                <span class="font-medium">{{element.guestName}}</span>
               </td>
             </ng-container>
 
-            <!-- Room Type Column -->
             <ng-container matColumnDef="roomType">
               <th mat-header-cell *matHeaderCellDef> Room </th>
               <td mat-cell *matCellDef="let element"> {{element.roomType}} </td>
             </ng-container>
 
-            <!-- Check In Column -->
             <ng-container matColumnDef="checkIn">
               <th mat-header-cell *matHeaderCellDef> Check In </th>
               <td mat-cell *matCellDef="let element"> {{element.checkInDate | date:'mediumDate'}} </td>
             </ng-container>
 
-            <!-- Check Out Column -->
             <ng-container matColumnDef="checkOut">
               <th mat-header-cell *matHeaderCellDef> Check Out </th>
               <td mat-cell *matCellDef="let element"> {{element.checkOutDate | date:'mediumDate'}} </td>
             </ng-container>
 
-            <!-- Status Column -->
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef> Status </th>
               <td mat-cell *matCellDef="let element">
@@ -140,24 +122,23 @@
               </td>
             </ng-container>
 
-            <!-- Total Price Column -->
             <ng-container matColumnDef="totalPrice">
-              <th mat-header-cell *matHeaderCellDef> Total Price </th>
-              <td mat-cell *matCellDef="let element" class="font-medium text-right"> 
-                {{element.totalPrice | currency:'USD':'symbol':'1.0-0'}} 
+              <th mat-header-cell *matHeaderCellDef class="text-right"> Total Price </th>
+              <td mat-cell *matCellDef="let element" class="price-cell text-right">
+                {{element.totalPrice | currency:'USD':'symbol':'1.0-0'}}
               </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row-hover"></tr>
           </table>
-          
+
           <div *ngIf="recentBookings().length === 0" class="empty-state">
             <mat-icon>inbox</mat-icon>
             <p>No recent bookings found.</p>
           </div>
         </div>
-      </mat-card>
+      </div>
     </div>
   </ng-container>
 </div>

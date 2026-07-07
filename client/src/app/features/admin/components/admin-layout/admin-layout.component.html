@@ -1,77 +1,62 @@
 <div class="admin-container" [class.drawer-open]="isDrawerOpen">
-  <!-- Sidebar / Drawer -->
-  <div class="sidebar-container" [class.open]="isDrawerOpen">
+  <!-- Sidebar -->
+  <aside class="sidebar-container" [class.open]="isDrawerOpen">
     <div class="sidebar-header">
-      <div class="logo-container">
-        <mat-icon>hotel</mat-icon>
+      <div class="brand">
+        <div class="brand-name">Central Hotel</div>
+        <div class="brand-sub">Admin</div>
       </div>
-      <button mat-icon-button class="close-button" (click)="toggleDrawer()" *ngIf="isDrawerOpen">
+      <button mat-icon-button class="close-button" (click)="toggleDrawer()" *ngIf="isDrawerOpen" aria-label="Collapse menu">
         <mat-icon>chevron_left</mat-icon>
       </button>
     </div>
-    
-    <div class="sidebar-content">
-      <div class="nav-section">
-        <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active" matTooltip="Dashboard" matTooltipPosition="right">
-          <mat-icon>dashboard</mat-icon>
-          <span>Dashboard</span>
-        </a>
 
-        <a mat-list-item routerLink="/admin/bookings" routerLinkActive="active" matTooltip="Bookings" matTooltipPosition="right">
-          <mat-icon>book_online</mat-icon>
-          <span>Bookings</span>
-        </a>
+    <nav class="nav-section">
+      <a routerLink="/admin/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon><span>Dashboard</span>
+      </a>
+      <a routerLink="/admin/bookings" routerLinkActive="active">
+        <mat-icon>book_online</mat-icon><span>Bookings</span>
+      </a>
+      <a routerLink="/admin/booking-calendar" routerLinkActive="active">
+        <mat-icon>date_range</mat-icon><span>Booking Calendar</span>
+      </a>
+      <a routerLink="/admin/booking-grid" routerLinkActive="active">
+        <mat-icon>grid_on</mat-icon><span>Booking Grid</span>
+      </a>
+      <a routerLink="/admin/rooms" routerLinkActive="active">
+        <mat-icon>king_bed</mat-icon><span>Room Management</span>
+      </a>
+    </nav>
 
-        <a mat-list-item routerLink="/admin/booking-calendar" routerLinkActive="active" matTooltip="Booking Calendar" matTooltipPosition="right">
-          <mat-icon>date_range</mat-icon>
-          <span>Booking Calendar</span>
-        </a>
-
-        <a mat-list-item routerLink="/admin/booking-grid" routerLinkActive="active" matTooltip="Booking Grid" matTooltipPosition="right">
-          <mat-icon>grid_on</mat-icon>
-          <span>Booking Grid</span>
-        </a>
-
-        <a mat-list-item routerLink="/admin/rooms" routerLinkActive="active" matTooltip="Room Management" matTooltipPosition="right">
-          <mat-icon>king_bed</mat-icon>
-          <span>Room Management</span>
-        </a>
-      </div>
-
-      <div class="nav-section user-section">
-        <a mat-list-item (click)="logout()" matTooltip="Logout" matTooltipPosition="right">
-          <mat-icon>logout</mat-icon>
-          <span>Logout</span>
-        </a>
-      </div>
+    <div class="user-section">
+      <a (click)="logout()" role="button" tabindex="0">
+        <mat-icon>logout</mat-icon><span>Logout</span>
+      </a>
     </div>
-  </div>
+  </aside>
 
   <!-- Main Content Area -->
   <div class="main-container">
     <!-- Top Bar -->
-    <mat-toolbar class="top-bar">
-      <button mat-icon-button class="menu-button" (click)="toggleDrawer()" *ngIf="!isDrawerOpen">
+    <div class="top-bar">
+      <button mat-icon-button class="menu-button" (click)="toggleDrawer()" *ngIf="!isDrawerOpen" aria-label="Open menu">
         <mat-icon>menu</mat-icon>
       </button>
-      
-      <h1 *ngIf="!isDrawerOpen" class="mobile-title">Admin</h1>
-      
+
       <span class="flex-spacer"></span>
-      
+
       <div class="user-info">
-        <span class="welcome-text">Hello, {{userName}}</span>
-        <button mat-icon-button [matMenuTriggerFor]="userMenu">
-          <mat-icon>account_circle</mat-icon>
-        </button>
-        <mat-menu #userMenu="matMenu">
+        <span class="welcome-text">Hello, <strong>{{ userName || 'Admin' }}</strong></span>
+        <button class="avatar" [matMenuTriggerFor]="userMenu" aria-label="Account menu">{{ (userName || 'Admin').charAt(0) }}</button>
+        <mat-menu #userMenu="matMenu" class="noc-menu">
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
           </button>
         </mat-menu>
       </div>
-    </mat-toolbar>
+    </div>
 
     <!-- Main Content -->
     <div class="content-container">

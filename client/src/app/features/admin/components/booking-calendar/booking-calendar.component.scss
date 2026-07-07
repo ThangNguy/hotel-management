@@ -1,189 +1,216 @@
-@use 'sass:color';
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
 
-// Color variables
-$primary-color: #3f51b5;
-$accent-color: #ff4081;
-$light-gray: #f5f5f5;
-$medium-gray: #e0e0e0;
-$dark-gray: #757575;
-$white: #ffffff;
-$shadow-color: rgba(0, 0, 0, 0.12);
+// ============================================================
+//  Booking Calendar — Nocturne boutique dark theme
+// ============================================================
 
-// Status colors with improved contrast
-$status-pending: #ff9800;       // Richer orange
-$status-confirmed: #2196f3;     // Darker blue
-$status-checked-in: #4caf50;    // Darker green
-$status-checked-out: #607d8b;   // Darker bluish-gray
-$status-cancelled: #f44336;     // Richer red
-
-// Gradient and shadow mixins
-@mixin card-shadow {
-  box-shadow: 0 4px 20px $shadow-color;
-}
-
-@mixin hover-effect {
-  transition: all 0.3s ease;
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-  }
-}
-
-// Main container styles
 .booking-calendar-container {
-  padding: 20px;
-  background-color: $light-gray;
-  min-height: calc(100vh - 64px); // Adjust based on header height
-  
+  padding: 36px;
+  background-color: $noc-bg;
+  min-height: calc(100vh - 66px);
+
+  @include responsive('sm') { padding: $spacing-3; }
+
   .main-card {
-    @include card-shadow;
-    border-radius: 8px;
+    background-color: $noc-surface;
+    border: 1px solid $noc-hairline;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
     overflow: hidden;
-    background-color: $white;
-    margin-bottom: 20px;
+    margin-bottom: $spacing-4;
+    padding: 0;
   }
 
-  // Calendar header styles
+  // ---------- Header ----------
   .calendar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 24px;
-    background: linear-gradient(45deg, $primary-color, color.adjust($primary-color, $lightness: 15%));
-    color: $white;
-    border-bottom: 1px solid $medium-gray;
-    
+    gap: 24px;
+    padding: 24px 28px;
+    background: $noc-section;
+    border-bottom: 1px solid $noc-hairline;
+
+    @include responsive('md') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-3;
+    }
+
     .header-title {
       .page-title {
+        font-family: $font-primary;
         font-size: 28px;
-        font-weight: 500;
-        margin: 0 0 8px;
-        color: $white;
-      }
-      
-      .page-subtitle {
-        font-size: 16px;
         font-weight: 400;
+        line-height: 1.15;
+        margin: 0 0 6px;
+        color: $noc-text;
+      }
+
+      .page-subtitle {
+        font-size: 13px;
+        font-weight: 300;
         margin: 0;
-        opacity: 0.9;
+        color: $noc-text-50;
       }
     }
-    
+
     .header-actions {
+      @include responsive('md') { width: 100%; }
+
+      // Primary button colour comes from the global dark (brass) theme.
       .add-booking-btn {
-        background-color: $accent-color;
-        color: $white;
-        font-weight: 500;
-        @include hover-effect;
+        font-family: $font-secondary;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+
+        mat-icon { margin-right: 6px; font-size: 18px; height: 18px; width: 18px; }
       }
     }
   }
-  
-  // Filter section styles
+
+  // ---------- Filter section ----------
   .filter-section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    background-color: $white;
-    border-bottom: 1px solid $medium-gray;
-    
+    gap: $spacing-3;
+    padding: 16px 28px;
+    background-color: $noc-surface;
+    border-bottom: 1px solid $noc-hairline;
+
+    @include responsive('md') {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $spacing-3;
+    }
+
     .filter-controls {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      
+
       .status-filter {
         min-width: 220px;
       }
-      
+
       .reset-filters-btn {
-        color: $accent-color;
+        color: $noc-brass;
+        font-family: $font-secondary;
+
+        mat-icon { margin-right: 4px; }
+        &:hover { color: $noc-brass-hover; }
       }
     }
-    
+
     .view-modes {
+      @include responsive('md') { width: 100%; }
+
       .btn-group {
-        background-color: $light-gray;
-        border-radius: 4px;
-        overflow: hidden;
         display: flex;
-        
+        overflow: hidden;
+        border: 1px solid $noc-brass-border;
+        border-radius: $radius-md;
+
         button {
-          padding: 0 16px;
+          padding: 0 18px;
           height: 36px;
           line-height: 36px;
           margin: 0;
+          min-width: 0;
           border-radius: 0;
-          
+          border-right: 1px solid $noc-brass-border;
+          background: transparent;
+          color: $noc-text-60;
+          font-family: $font-secondary;
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          transition: $transition-base;
+
+          @include responsive('md') { flex: 1; }
+
+          &:last-child { border-right: none; }
+
+          &:hover {
+            background: rgba(176, 141, 79, 0.12);
+            color: $noc-text;
+          }
+
           &.active {
-            background-color: $primary-color;
-            color: $white;
+            background-color: $noc-brass;
+            color: $noc-on-brass;
           }
         }
       }
     }
   }
 
-  // Calendar content
+  // ---------- Calendar content ----------
   mat-card-content {
     padding: 0;
-    
+    display: block;
+
     .calendar-wrapper {
       position: relative;
-      padding: 20px;
-      
+      padding: 24px;
+
       .loading-overlay {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.7);
+        inset: 0;
+        background-color: rgba(16, 19, 15, 0.6);
+        backdrop-filter: blur(2px);
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 10;
+        z-index: $z-elevated;
       }
-      
+
       .calendar-legend {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         gap: 16px;
-        margin-bottom: 16px;
-        padding: 10px 16px;
-        background-color: $light-gray;
-        border-radius: 4px;
-        
+        margin-bottom: 20px;
+        padding: 12px 16px;
+        background-color: $noc-section;
+        border: 1px solid $noc-hairline;
+        border-radius: $radius-md;
+
         .legend-title {
+          font-family: $font-secondary;
           font-weight: 600 !important;
-          color: $dark-gray;
+          font-size: 10px;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: $noc-text-50;
           margin-right: 8px;
         }
-        
+
         .legend-items {
           display: flex;
           flex-wrap: wrap;
-          gap: 16px;
-          
+          gap: 12px;
+
           .legend-item {
             display: flex;
             align-items: center;
-            font-size: 14px;
+            font-size: 12px;
+            color: $noc-text-60;
             padding: 4px 8px;
-            border-radius: 4px;
-            background-color: rgba(0,0,0,0.03);
-            
+            border-radius: $radius-md;
+            background-color: rgba(236, 229, 216, 0.04);
+
             .status-dot {
               display: inline-block;
-              width: 12px;
-              height: 12px;
+              width: 10px;
+              height: 10px;
               border-radius: 50%;
               margin-right: 6px;
-              box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             }
           }
         }
@@ -192,212 +219,294 @@ $status-cancelled: #f44336;     // Richer red
   }
 }
 
-// Status dot in select dropdown - improved size and visibility
+// Status dot in the mat-select dropdown (rendered in an overlay).
+// Colour is applied inline from the component, so only shape is themed here.
 .status-dot {
   display: inline-block;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   margin-right: 8px;
-  border: 1px solid rgba(0,0,0,0.1);
 }
 
-// Full Calendar Customization
-::ng-deep {
-  .fc {
-    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
-    
-    // Improved calendar title styling
-    .fc-toolbar-title {
-      font-size: 22px;
+// ============================================================
+//  FullCalendar — Nocturne theming
+//  The .fc elements are rendered by the library, so ::ng-deep is
+//  required. The --fc-* custom properties are set directly on the
+//  .fc root to override FullCalendar's own defaults.
+// ============================================================
+::ng-deep .fc {
+  // ---- FullCalendar custom properties ----
+  --fc-border-color: #{$noc-hairline-strong};
+  --fc-page-bg-color: #{$noc-surface};
+  --fc-neutral-bg-color: rgba(236, 229, 216, 0.04);
+  --fc-neutral-text-color: #{$noc-text-60};
+  --fc-today-bg-color: rgba(176, 141, 79, 0.12);
+  --fc-highlight-color: rgba(176, 141, 79, 0.12);
+  --fc-list-event-hover-bg-color: rgba(236, 229, 216, 0.05);
+  --fc-event-bg-color: #{$noc-brass};
+  --fc-event-border-color: #{$noc-brass};
+  --fc-event-text-color: #{$noc-on-brass};
+  --fc-more-link-bg-color: rgba(176, 141, 79, 0.15);
+  --fc-more-link-text-color: #{$noc-brass};
+  --fc-now-indicator-color: #{$noc-brass};
+
+  // ---- FullCalendar button custom properties ----
+  --fc-button-text-color: #{$noc-text};
+  --fc-button-bg-color: transparent;
+  --fc-button-border-color: #{$noc-brass-border};
+  --fc-button-hover-bg-color: rgba(176, 141, 79, 0.15);
+  --fc-button-hover-border-color: #{$noc-brass-border-2};
+  --fc-button-active-bg-color: #{$noc-brass};
+  --fc-button-active-border-color: #{$noc-brass};
+
+  font-family: $font-secondary;
+  color: $noc-text-60;
+
+  // ---- Toolbar title ----
+  .fc-toolbar-title {
+    font-family: $font-primary;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: $noc-text;
+  }
+
+  // ---- Toolbar buttons (kill the default blue) ----
+  .fc-button {
+    text-transform: uppercase;
+    font-family: $font-secondary;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    padding: 7px 14px;
+    background-color: transparent;
+    border: 1px solid $noc-brass-border;
+    color: $noc-text;
+    border-radius: $radius-md;
+    box-shadow: none !important;
+    text-shadow: none;
+    transition: $transition-base;
+
+    .fc-icon { color: $noc-text; }
+
+    &:hover {
+      background-color: rgba(176, 141, 79, 0.15);
+      border-color: $noc-brass-border-2;
+      color: $noc-text;
+    }
+
+    &:focus,
+    &:focus-visible {
+      box-shadow: none !important;
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: transparent;
+      border-color: $noc-hairline;
+      color: $noc-text-40;
+      opacity: 1;
+
+      .fc-icon { color: $noc-text-40; }
+    }
+
+    // Active / pressed state → brass
+    &.fc-button-active,
+    &:not(:disabled):active {
+      background-color: $noc-brass !important;
+      border-color: $noc-brass !important;
+      color: $noc-on-brass !important;
+
+      .fc-icon { color: $noc-on-brass; }
+    }
+  }
+
+  // ---- Column headers (weekday names) ----
+  .fc-col-header-cell {
+    background-color: rgba(236, 229, 216, 0.04);
+    border-color: $noc-hairline-strong;
+
+    .fc-col-header-cell-cushion {
+      padding: 10px 8px;
+      font-family: $font-secondary;
+      font-size: 11px;
       font-weight: 600;
-      color: $primary-color;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: $noc-text-60;
     }
-    
-    // Improved button styles
-    .fc-button-primary {
-      background-color: $primary-color;
-      border-color: $primary-color;
+  }
+
+  // ---- Day numbers ----
+  .fc-daygrid-day-number {
+    font-size: 13px;
+    font-weight: 400;
+    padding: 8px;
+    color: $noc-text-60;
+  }
+
+  .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+    color: $noc-brass;
+    font-weight: 600;
+  }
+
+  // ---- Day cells ----
+  .fc-daygrid-day {
+    transition: background-color 0.2s ease;
+
+    &:hover { background-color: rgba(236, 229, 216, 0.03); }
+  }
+
+  .fc-daygrid-day-frame { min-height: 100px; }
+
+  // Subtle weekend tint
+  .fc-day-sat,
+  .fc-day-sun {
+    background-color: rgba(236, 229, 216, 0.015);
+  }
+
+  // ---- Time-grid labels / axis ----
+  .fc-timegrid-axis-cushion,
+  .fc-timegrid-slot-label-cushion,
+  .fc-list-day-text,
+  .fc-list-day-side-text {
+    color: $noc-text-60;
+  }
+
+  // ---- Events ----
+  .fc-event {
+    border-radius: $radius-md;
+    padding: 3px 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-left-width: 3px;
+    box-shadow: none;
+    transition: filter 0.2s ease;
+
+    &:hover { filter: brightness(1.2); }
+
+    // Inherit the per-status colour set on the event root.
+    .fc-event-main,
+    .fc-event-title,
+    .fc-event-time {
+      color: inherit !important;
       font-weight: 500;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      
-      &:hover {
-        background-color: color.adjust($primary-color, $lightness: -10%);
-        border-color: color.adjust($primary-color, $lightness: -10%);
-      }
-      
-      &:disabled {
-        background-color: color.adjust($primary-color, $lightness: 20%);
-        border-color: color.adjust($primary-color, $lightness: 20%);
-      }
+      text-shadow: none;
+      padding: 0 2px;
     }
-    
-    // Today's date highlight with stronger color
-    .fc-day-today {
-      background-color: rgba($primary-color, 0.15) !important;
+
+    &.status-pending {
+      background-color: rgba(245, 158, 11, 0.15) !important;
+      border-color: $status-pending-border !important;
+      border-left-color: $status-pending-fg !important;
+      color: $status-pending-fg !important;
     }
-    
-    // Make weekend days slightly different color
-    .fc-day-sat, .fc-day-sun {
-      background-color: #f9f9f9;
+
+    &.status-confirmed {
+      background-color: rgba(16, 185, 129, 0.15) !important;
+      border-color: $status-confirmed-border !important;
+      border-left-color: $status-confirmed-fg !important;
+      color: $status-confirmed-fg !important;
     }
-    
-    // Add subtle borders to all days
-    .fc-daygrid-day {
-      border: 1px solid $light-gray !important;
-      transition: background-color 0.2s;
-      
-      &:hover {
-        background-color: #eef5ff;
-      }
+
+    &.status-checked-in {
+      background-color: rgba(96, 165, 250, 0.15) !important;
+      border-color: $status-checkedin-border !important;
+      border-left-color: $status-checkedin-fg !important;
+      color: $status-checkedin-fg !important;
     }
-    
-    // Style for day number
-    .fc-daygrid-day-number {
-      font-size: 14px;
-      font-weight: 500;
-      padding: 8px;
-      color: $dark-gray;
+
+    &.status-checked-out {
+      background-color: rgba(236, 229, 216, 0.08) !important;
+      border-color: $status-checkedout-border !important;
+      border-left-color: $status-checkedout-fg !important;
+      color: $status-checkedout-fg !important;
     }
-    
-    // Header styling
-    .fc-col-header-cell {
-      background-color: color.adjust($primary-color, $lightness: 35%);
-      
-      .fc-col-header-cell-cushion {
-        font-weight: 600;
-        color: $primary-color;
-        padding: 8px;
-      }
+
+    &.status-cancelled {
+      background-color: rgba(239, 68, 68, 0.15) !important;
+      border-color: $status-cancelled-border !important;
+      border-left-color: $status-cancelled-fg !important;
+      color: $status-cancelled-fg !important;
     }
-    
-    // Better event styling with more contrast
-    .fc-event {
-      border-radius: 4px;
-      padding: 4px;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      border-width: 0;
-      @include hover-effect;
-      
-      &.status-pending {
-        background-color: $status-pending !important;
-        border-left: 3px solid color.adjust($status-pending, $lightness: -15%);
-      }
-      
-      &.status-confirmed {
-        background-color: $status-confirmed !important;
-        border-left: 3px solid color.adjust($status-confirmed, $lightness: -15%);
-      }
-      
-      &.status-checked-in {
-        background-color: $status-checked-in !important;
-        border-left: 3px solid color.adjust($status-checked-in, $lightness: -15%);
-      }
-      
-      &.status-checked-out {
-        background-color: $status-checked-out !important;
-        border-left: 3px solid color.adjust($status-checked-out, $lightness: -15%);
-      }
-      
-      &.status-cancelled {
-        background-color: $status-cancelled !important;
-        border-left: 3px solid color.adjust($status-cancelled, $lightness: -15%);
-      }
+  }
+
+  // ---- "more events" link ----
+  .fc-daygrid-more-link {
+    color: $noc-brass;
+    font-weight: 600;
+    font-size: 11px;
+    background-color: rgba(176, 141, 79, 0.1);
+    padding: 2px 6px;
+    border-radius: $radius-md;
+    margin-top: 3px;
+
+    &:hover {
+      background-color: rgba(176, 141, 79, 0.2);
+      color: $noc-brass-hover;
     }
-    
-    // Improve event title contrast
-    .fc-h-event .fc-event-title {
-      padding: 0 4px;
-      color: white;
-      font-weight: 500;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  // ---- "more events" popover ----
+  .fc-popover {
+    background-color: $noc-surface;
+    border: 1px solid $noc-hairline-strong !important;
+    box-shadow: $shadow-lg;
+
+    .fc-popover-header {
+      background-color: $noc-section;
+      color: $noc-text;
     }
-    
-    // Fix hover color for dates with events
-    .fc-daygrid-day.fc-day-today:hover {
-      background-color: rgba($primary-color, 0.2) !important;
+
+    .fc-popover-title {
+      font-family: $font-secondary;
+      color: $noc-text;
     }
-    
-    // Add more spacing in month view
-    .fc-daygrid-day-frame {
-      min-height: 100px;
-    }
-    
-    // "more events" button styling
-    .fc-daygrid-more-link {
-      color: $primary-color;
-      font-weight: 500;
-      background-color: rgba($primary-color, 0.1);
-      padding: 2px 4px;
-      border-radius: 4px;
-      margin-top: 3px;
-    }
+
+    .fc-popover-close { color: $noc-text-50; }
   }
 }
 
-// Booking dialog form styles
+// ============================================================
+//  Booking dialog form (rendered from this component's template)
+// ============================================================
+h2[mat-dialog-title] {
+  font-family: $font-primary;
+  font-weight: 400;
+  color: $noc-text;
+}
+
 .form-row {
   margin-bottom: 16px;
   width: 100%;
-  
+
   mat-form-field {
     width: 100%;
   }
-  
+
   &.dates {
     display: flex;
     gap: 16px;
-    
+
     mat-form-field {
       flex: 1;
     }
   }
-  
+
   .full-width {
     width: 100%;
   }
 }
 
-// Media queries for responsiveness
+// ============================================================
+//  Responsive
+// ============================================================
 @media (max-width: 768px) {
-  .booking-calendar-container {
-    padding: 12px;
-    
-    .calendar-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-      
-      .header-actions {
-        width: 100%;
-      }
-    }
-    
-    .filter-section {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 16px;
-      
-      .view-modes {
-        width: 100%;
-        margin-top: 8px;
-        
-        .btn-group {
-          width: 100%;
-          
-          button {
-            flex: 1;
-          }
-        }
-      }
-    }
-    
-    .form-row.dates {
-      flex-direction: column;
-      gap: 0;
-    }
+  .form-row.dates {
+    flex-direction: column;
+    gap: 0;
   }
 }

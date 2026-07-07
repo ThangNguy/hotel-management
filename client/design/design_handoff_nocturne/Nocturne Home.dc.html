@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Archivo', sans-serif; font-size: 16px; line-height: 1.6; color: #ece5d8; background-color: #16130f; -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; }
+  </style>
+</helmet>
+
+<!-- ============ HEADER ============ -->
+<header style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: linear-gradient(to bottom, rgba(22,19,15,0.85), rgba(22,19,15,0)); height: 92px">
+  <div style="width: 100%; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 56px; height: 100%; box-sizing: border-box">
+    <a href="#" style="font-family: 'Marcellus', serif; font-size: 22px; letter-spacing: 4px; text-transform: uppercase; color: #ece5d8; text-decoration: none">Central Hotel</a>
+    <nav style="display: flex; align-items: center; gap: 40px">
+      <a href="#rooms" style="font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: rgba(236,229,216,0.75); text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent; transition: all 0.3s" style-hover="color: #ece5d8; border-bottom: 1px solid #b08d4f">Rooms</a>
+      <a href="#amenities" style="font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: rgba(236,229,216,0.75); text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent; transition: all 0.3s" style-hover="color: #ece5d8; border-bottom: 1px solid #b08d4f">Amenities</a>
+      <a href="#contact" style="font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: rgba(236,229,216,0.75); text-decoration: none; padding: 6px 0; border-bottom: 1px solid transparent; transition: all 0.3s" style-hover="color: #ece5d8; border-bottom: 1px solid #b08d4f">Contact</a>
+      <span style="width: 1px; height: 20px; background: rgba(236,229,216,0.2)"></span>
+      <button style="font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #16130f; background: #b08d4f; border: none; padding: 14px 30px; cursor: pointer; transition: background 0.3s" style-hover="background: #c9a86a">Book Now</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section style="position: relative; height: 100vh; min-height: 760px; display: flex; align-items: flex-end">
+  <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=1920&auto=format&fit=crop" alt="Suite at night" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85">
+  <div style="position: absolute; inset: 0; background: linear-gradient(to top, #16130f 4%, rgba(22,19,15,0.25) 55%, rgba(22,19,15,0.55) 100%)"></div>
+  <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 56px 72px; position: relative; z-index: 10; display: flex; justify-content: space-between; align-items: flex-end; gap: 64px; box-sizing: border-box">
+    <div style="max-width: 660px">
+      <div style="display: flex; align-items: center; gap: 14px; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #b08d4f; margin-bottom: 24px"><span style="width: 40px; height: 1px; background: #b08d4f"></span>Central Hotel and Residences Phu My Hung</div>
+      <h1 style="font-family: 'Marcellus', serif; font-size: 66px; font-weight: 400; line-height: 1.08; margin: 0 0 24px; color: #ece5d8; text-wrap: balance">Stay where the night feels tailored</h1>
+      <p style="font-size: 17px; font-weight: 300; line-height: 1.75; color: rgba(236,229,216,0.75); margin: 0; max-width: 480px">Quiet rooms in the heart of Phu My Hung, District 7, with considered service and a rooftop pool that glows until late.</p>
+    </div>
+
+    <!-- Search card (same fields as current booking form) -->
+    <div style="flex-shrink: 0; background: rgba(22,19,15,0.88); backdrop-filter: blur(14px); border: 1px solid rgba(176,141,79,0.35); padding: 32px; width: 340px; box-sizing: border-box">
+      <div style="font-family: 'Marcellus', serif; font-size: 20px; color: #ece5d8; margin-bottom: 24px">Find your room</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px 18px; margin-bottom: 26px">
+        <div style="cursor: pointer"><div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); margin-bottom: 6px">Check-in</div><div style="font-size: 14px; color: #ece5d8; border-bottom: 1px solid rgba(236,229,216,0.25); padding-bottom: 9px">Add date</div></div>
+        <div style="cursor: pointer"><div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); margin-bottom: 6px">Check-out</div><div style="font-size: 14px; color: #ece5d8; border-bottom: 1px solid rgba(236,229,216,0.25); padding-bottom: 9px">Add date</div></div>
+        <div style="cursor: pointer"><div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); margin-bottom: 6px">Adults</div><div style="font-size: 14px; color: #ece5d8; border-bottom: 1px solid rgba(236,229,216,0.25); padding-bottom: 9px">2</div></div>
+        <div style="cursor: pointer"><div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); margin-bottom: 6px">Children</div><div style="font-size: 14px; color: #ece5d8; border-bottom: 1px solid rgba(236,229,216,0.25); padding-bottom: 9px">0</div></div>
+      </div>
+      <button style="width: 100%; background: #b08d4f; color: #16130f; border: none; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 16px; cursor: pointer; transition: background 0.3s" style-hover="background: #c9a86a">Check Availability</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROOMS ============ -->
+<section id="rooms" style="padding: 120px 0 104px">
+  <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 56px; box-sizing: border-box">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; gap: 48px">
+      <div>
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #b08d4f; margin-bottom: 18px"><span style="width: 40px; height: 1px; background: #b08d4f"></span>Accommodation</div>
+        <h2 style="font-family: 'Marcellus', serif; font-size: 44px; font-weight: 400; color: #ece5d8; margin: 0; line-height: 1.1">Suites &amp; Rooms</h2>
+      </div>
+      <p style="font-size: 15px; font-weight: 300; color: rgba(236,229,216,0.6); max-width: 420px; margin: 0; line-height: 1.75">Each room is designed around light, quiet, and the view — from city-facing doubles to the full-floor Presidential Suite.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px">
+      <sc-for list="{{ rooms }}" as="room" hint-placeholder-count="6">
+        <article style="background: #1f1b15; border: 1px solid rgba(236,229,216,0.08); cursor: pointer; display: flex; flex-direction: column; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), border-color 0.35s" style-hover="transform: translateY(-6px); border-color: rgba(176,141,79,0.5)">
+          <div style="position: relative; overflow: hidden">
+            <img src="{{ room.image }}" alt="{{ room.name }}" style="width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1)" style-hover="transform: scale(1.05)">
+            <span style="position: absolute; top: 14px; left: 14px; font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; background: rgba(22,19,15,0.82); color: #b08d4f; padding: 7px 11px; border: 1px solid rgba(176,141,79,0.4)">{{ room.badge }}</span>
+            <span style="position: absolute; top: 14px; right: 14px; display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; background: rgba(22,19,15,0.82); color: #ece5d8; padding: 6px 10px"><span style="font-family: 'Material Icons'; font-size: 13px; color: #b08d4f; text-transform: none">star</span>{{ room.rating }}</span>
+          </div>
+          <div style="padding: 26px 26px 28px; display: flex; flex-direction: column; flex: 1">
+            <h3 style="font-family: 'Marcellus', serif; font-size: 22px; font-weight: 400; color: #ece5d8; margin: 0 0 8px">{{ room.name }}</h3>
+            <div style="font-size: 12px; letter-spacing: 1px; color: rgba(236,229,216,0.5); margin-bottom: 16px">{{ room.meta }}</div>
+            <p style="font-size: 14px; font-weight: 300; line-height: 1.7; color: rgba(236,229,216,0.65); margin: 0 0 22px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{ room.description }}</p>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid rgba(236,229,216,0.1); padding-top: 18px">
+              <span style="font-size: 19px; font-weight: 600; color: #b08d4f">{{ room.priceLabel }}<span style="font-size: 12px; color: rgba(236,229,216,0.5); font-weight: 400"> / night</span></span>
+              <span style="font-size: 11px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.75); display: flex; align-items: center; gap: 6px">Details<span style="font-family: 'Material Icons'; font-size: 15px; color: #b08d4f; text-transform: none">arrow_forward</span></span>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- ============ AMENITIES ============ -->
+<section id="amenities" style="padding: 104px 0; background: #1a1611; border-top: 1px solid rgba(236,229,216,0.07); border-bottom: 1px solid rgba(236,229,216,0.07)">
+  <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 56px; box-sizing: border-box">
+    <div style="text-align: center; margin-bottom: 72px">
+      <div style="display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #b08d4f; margin-bottom: 18px"><span style="width: 40px; height: 1px; background: #b08d4f"></span>The Hotel<span style="width: 40px; height: 1px; background: #b08d4f"></span></div>
+      <h2 style="font-family: 'Marcellus', serif; font-size: 44px; font-weight: 400; color: #ece5d8; margin: 0 0 18px; line-height: 1.1">Luxurious Amenities</h2>
+      <p style="font-size: 15px; font-weight: 300; color: rgba(236,229,216,0.6); max-width: 480px; margin: 0 auto">Elevate your stay with our premium facilities tailored to your every need.</p>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(236,229,216,0.08); border: 1px solid rgba(236,229,216,0.08)">
+      <sc-for list="{{ amenities }}" as="a" hint-placeholder-count="8">
+        <div style="background: #1a1611; padding: 40px 32px; text-align: center; display: flex; flex-direction: column; align-items: center; transition: background 0.3s" style-hover="background: #1f1b15">
+          <span style="font-family: 'Material Icons'; font-size: 30px; color: #b08d4f; margin-bottom: 18px">{{ a.icon }}</span>
+          <h3 style="font-family: 'Marcellus', serif; font-size: 17px; font-weight: 400; color: #ece5d8; margin: 0 0 10px">{{ a.name }}</h3>
+          <p style="font-size: 13px; font-weight: 300; line-height: 1.7; color: rgba(236,229,216,0.55); margin: 0; max-width: 230px">{{ a.description }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" style="padding: 120px 0">
+  <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 56px; box-sizing: border-box">
+    <div style="display: grid; grid-template-columns: 5fr 7fr; gap: 96px; align-items: start">
+      <div>
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: #b08d4f; margin-bottom: 18px"><span style="width: 40px; height: 1px; background: #b08d4f"></span>Contact</div>
+        <h2 style="font-family: 'Marcellus', serif; font-size: 44px; font-weight: 400; color: #ece5d8; margin: 0 0 22px; line-height: 1.1">Get in Touch</h2>
+        <p style="font-size: 15px; font-weight: 300; color: rgba(236,229,216,0.6); margin: 0 0 44px; max-width: 380px; line-height: 1.75">We are here to assist you with any inquiries or requests. Contact our dedicated team 24/7.</p>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{ contactItems }}" as="c" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 20px; padding: 20px 0; border-top: 1px solid rgba(236,229,216,0.1)">
+              <span style="font-family: 'Material Icons'; font-size: 21px; color: #b08d4f">{{ c.icon }}</span>
+              <div>
+                <div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600; margin-bottom: 2px">{{ c.title }}</div>
+                <div style="font-size: 15px; color: #ece5d8">{{ c.value }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="background: #1f1b15; border: 1px solid rgba(236,229,216,0.08); padding: 52px; box-sizing: border-box">
+        <div style="font-family: 'Marcellus', serif; font-size: 26px; color: #ece5d8; margin-bottom: 40px">Send us a Message</div>
+        <div style="display: flex; flex-direction: column; gap: 32px">
+          <div>
+            <div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600; margin-bottom: 9px">Full Name</div>
+            <div style="border-bottom: 1px solid rgba(236,229,216,0.25); padding: 6px 0 12px; color: rgba(236,229,216,0.4); font-size: 15px">John Doe</div>
+          </div>
+          <div style="display: flex; gap: 40px">
+            <div style="flex: 1">
+              <div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600; margin-bottom: 9px">Email</div>
+              <div style="border-bottom: 1px solid rgba(236,229,216,0.25); padding: 6px 0 12px; color: rgba(236,229,216,0.4); font-size: 15px">john@example.com</div>
+            </div>
+            <div style="flex: 1">
+              <div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600; margin-bottom: 9px">Phone Number</div>
+              <div style="border-bottom: 1px solid rgba(236,229,216,0.25); padding: 6px 0 12px; color: rgba(236,229,216,0.4); font-size: 15px">0123456789</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(236,229,216,0.5); font-weight: 600; margin-bottom: 9px">How can we help you?</div>
+            <div style="border-bottom: 1px solid rgba(236,229,216,0.25); padding: 6px 0 44px; color: rgba(236,229,216,0.4); font-size: 15px">Write your message here...</div>
+          </div>
+          <button style="align-self: flex-start; display: flex; align-items: center; gap: 10px; background: #b08d4f; color: #16130f; border: none; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; padding: 17px 38px; cursor: pointer; transition: background 0.3s" style-hover="background: #c9a86a">Send Message<span style="font-family: 'Material Icons'; font-size: 17px; text-transform: none">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer style="background: #100d0a; padding: 88px 0 0; position: relative">
+  <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(176,141,79,0.5), transparent)"></div>
+  <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 56px; box-sizing: border-box">
+    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 72px">
+      <div>
+        <div style="font-family: 'Marcellus', serif; font-size: 22px; letter-spacing: 4px; text-transform: uppercase; color: #ece5d8; margin-bottom: 20px">Central Hotel</div>
+        <p style="font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(236,229,216,0.5); margin: 0 0 32px; max-width: 300px">Central Hotel and Residences Phu My Hung — a 3-star retreat in the heart of District 7, Ho Chi Minh City.</p>
+        <div style="display: flex; gap: 12px">
+          <a href="#" aria-label="Facebook" style="display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; color: rgba(236,229,216,0.7); text-decoration: none; border: 1px solid rgba(236,229,216,0.15); transition: all 0.3s" style-hover="background: #b08d4f; color: #16130f; border-color: #b08d4f"><span style="font-family: 'Material Icons'; font-size: 17px">facebook</span></a>
+          <a href="#" aria-label="Twitter" style="display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; color: rgba(236,229,216,0.7); text-decoration: none; border: 1px solid rgba(236,229,216,0.15); transition: all 0.3s" style-hover="background: #b08d4f; color: #16130f; border-color: #b08d4f"><span style="font-family: 'Material Icons'; font-size: 17px">alternate_email</span></a>
+          <a href="#" aria-label="Instagram" style="display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; color: rgba(236,229,216,0.7); text-decoration: none; border: 1px solid rgba(236,229,216,0.15); transition: all 0.3s" style-hover="background: #b08d4f; color: #16130f; border-color: #b08d4f"><span style="font-family: 'Material Icons'; font-size: 17px">photo_camera</span></a>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #b08d4f; font-weight: 600; margin: 0 0 26px">Explore</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px">
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">About Us</a></li>
+          <li><a href="#rooms" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Rooms &amp; Suites</a></li>
+          <li><a href="#amenities" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Amenities</a></li>
+          <li><a href="#contact" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #b08d4f; font-weight: 600; margin: 0 0 26px">Services</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px">
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Fine Dining</a></li>
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Spa &amp; Wellness</a></li>
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Fitness Center</a></li>
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Swimming Pool</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #b08d4f; font-weight: 600; margin: 0 0 26px">Support &amp; Policies</h3>
+        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px">
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">FAQ</a></li>
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Terms of Service</a></li>
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Privacy Policy</a></li>
+          <li><a href="#" style="color: rgba(236,229,216,0.6); text-decoration: none; font-size: 14px; font-weight: 300; transition: color 0.3s" style-hover="color: #c9a86a">Careers</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="padding: 26px 0; border-top: 1px solid rgba(236,229,216,0.08); display: flex; justify-content: space-between; align-items: center">
+      <div style="color: rgba(236,229,216,0.4); font-size: 13px; font-weight: 300">© 2026 Central Hotel and Residences Phu My Hung. All rights reserved.</div>
+      <div style="display: flex; align-items: center; gap: 20px">
+        <a href="#" style="color: rgba(236,229,216,0.4); text-decoration: none; font-size: 13px; transition: color 0.3s" style-hover="color: #c9a86a">Sitemap</a>
+        <a href="Nocturne Admin.dc.html" style="color: rgba(236,229,216,0.4); text-decoration: none; font-size: 13px; transition: color 0.3s" style-hover="color: #c9a86a">Admin Login</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const fmt = (p) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(p);
+    const rooms = [
+      { name: 'Deluxe King Room', price: 150, rating: '4.8', badge: 'Available', meta: '2 guests · King bed · 35 m²', description: 'Spacious room with a king-size bed, city views and a marble bathroom.', image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=800&auto=format&fit=crop' },
+      { name: 'Executive Suite', price: 250, rating: '4.9', badge: 'Available', meta: '3 guests · King bed · 55 m²', description: 'Elegant suite with separate living area and panoramic windows.', image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=800&auto=format&fit=crop' },
+      { name: 'Presidential Suite', price: 500, rating: '5.0', badge: '1 left', meta: '4 guests · 2 King beds · 120 m²', description: 'The pinnacle of luxury with private terrace and butler service.', image: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=800&auto=format&fit=crop' },
+      { name: 'Standard Twin Room', price: 100, rating: '4.7', badge: 'Available', meta: '2 guests · Twin beds · 28 m²', description: 'Comfortable room with two twin beds, ideal for friends or colleagues.', image: 'https://images.unsplash.com/photo-1595576508898-0ad5c879a061?q=80&w=800&auto=format&fit=crop' },
+      { name: 'Family Room', price: 180, rating: '4.8', badge: 'Available', meta: '5 guests · King + Twin · 65 m²', description: 'Generous space for the whole family with connecting sleeping areas.', image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=800&auto=format&fit=crop' },
+      { name: 'Ocean View Suite', price: 320, rating: '4.9', badge: '2 left', meta: '2 guests · King bed · 60 m²', description: 'Wake up to breathtaking ocean views from your private balcony.', image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=800&auto=format&fit=crop' }
+    ].map(r => ({ ...r, priceLabel: fmt(r.price) }));
+
+    const amenities = [
+      { icon: 'wifi', name: 'Free Wi-Fi', description: 'High-speed internet access throughout the property.' },
+      { icon: 'restaurant', name: 'Fine Dining', description: 'International cuisines prepared by our expert chefs.' },
+      { icon: 'local_bar', name: 'Lounge Bar', description: 'Signature cocktails in our elegant lounge.' },
+      { icon: 'pool', name: 'Infinity Pool', description: 'Outdoor infinity pool with panoramic city views.' },
+      { icon: 'spa', name: 'Premium Spa', description: 'Rejuvenate body and mind with exclusive treatments.' },
+      { icon: 'fitness_center', name: 'Fitness Center', description: 'State-of-the-art gym and personal trainers.' },
+      { icon: 'room_service', name: '24/7 Room Service', description: 'In-room dining available day and night.' },
+      { icon: 'local_parking', name: 'Valet Parking', description: 'Complimentary secure valet for all guests.' }
+    ];
+
+    const contactItems = [
+      { icon: 'location_on', title: 'Address', value: 'Hưng Phước 4/34, Khu phố Hưng Phước 1, Tân Hưng, Quận 7, TP. Hồ Chí Minh' },
+      { icon: 'phone', title: 'Phone', value: '0964 254 450' },
+      { icon: 'email', title: 'Email', value: 'contact@centralhotelpmh.com' },
+      { icon: 'access_time', title: 'Working Hours', value: '24/7 — Always ready to serve you' }
+    ];
+
+    return { rooms, amenities, contactItems };
+  }
+}
+</script>
+</body>
+</html>

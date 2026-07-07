@@ -2,78 +2,85 @@
 @use '../../../../../styles/mixins' as *;
 
 .amenities-section {
-  @include section-padding;
-  background: linear-gradient(to bottom, $color-surface, $color-background);
+  padding: 104px 0;
+  background: $noc-section;
+  border-top: 1px solid rgba(236, 229, 216, 0.07);
+  border-bottom: 1px solid rgba(236, 229, 216, 0.07);
+
+  @include responsive('md') { padding: 72px 0; }
+}
+
+.amenities-head {
+  text-align: center;
+  margin-bottom: 72px;
+
+  .eyebrow { margin-bottom: 18px; }
+
+  h2 {
+    font-family: $font-primary;
+    font-size: 44px;
+    font-weight: 400;
+    color: $noc-text;
+    margin: 0 0 18px;
+    line-height: 1.1;
+
+    @include responsive('sm') { font-size: 34px; }
+  }
+
+  p {
+    font-size: 15px;
+    font-weight: 300;
+    color: $noc-text-60;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
 }
 
 .amenities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: $spacing-6;
-  
-  @include responsive('sm') {
-    grid-template-columns: 1fr;
-    gap: $spacing-4;
-  }
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: $noc-hairline;
+  border: 1px solid $noc-hairline;
+
+  @include responsive('lg') { grid-template-columns: repeat(2, 1fr); }
+  @include responsive('sm') { grid-template-columns: 1fr; }
 }
 
-.amenity-card {
-  @include glass-card(8px, 0.95);
-  padding: $spacing-6;
-  border-radius: $radius-lg;
+.amenity-cell {
+  background: $noc-section;
+  padding: 40px 32px;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  @include hover-lift;
-  
   display: flex;
   flex-direction: column;
   align-items: center;
-  
-  &:hover {
-    .amenity-icon-wrapper {
-      background: $color-primary;
-      transform: scale(1.1);
-      
-      .amenity-icon {
-        color: $color-accent;
-      }
-    }
-  }
-}
+  transition: background $transition-base;
 
-.amenity-icon-wrapper {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: rgba($color-accent, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: $spacing-4;
-  transition: all $transition-base;
-  
+  &:hover { background: $noc-surface; }
+
   .amenity-icon {
-    font-size: 32px;
-    height: 32px;
-    width: 32px;
-    color: $color-primary;
-    transition: color $transition-base;
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+    color: $noc-brass;
+    margin-bottom: 18px;
   }
-}
 
-.amenity-content {
   h3 {
-    font-size: 1.25rem;
     font-family: $font-primary;
-    color: $color-primary;
-    margin-bottom: $spacing-3;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 400;
+    color: $noc-text;
+    margin: 0 0 10px;
   }
-  
+
   p {
-    color: $color-text-light;
-    font-size: 0.95rem;
-    line-height: 1.6;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(236, 229, 216, 0.55);
     margin: 0;
+    max-width: 230px;
   }
 }

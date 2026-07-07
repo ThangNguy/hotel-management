@@ -1,121 +1,86 @@
 <section class="contact-section" id="contact">
   <div class="container animate-fade-in-up">
     <div class="contact-wrapper">
-      
-      <!-- Split Panel: Left Side Info -->
+
+      <!-- Left: info -->
       <div class="contact-info-panel">
-        <div class="section-header align-left">
-          <h2>Get in Touch</h2>
-          <p>We are here to assist you with any inquiries or requests. Contact our dedicated team 24/7.</p>
-        </div>
-        
+        <div class="eyebrow">Contact</div>
+        <h2>Get in Touch</h2>
+        <p class="lead">We are here to assist you with any inquiries or requests. Contact our dedicated team 24/7.</p>
+
         <div class="contact-info-list">
           <div class="contact-info-item">
-            <div class="icon-circle">
-              <mat-icon>location_on</mat-icon>
-            </div>
+            <mat-icon>location_on</mat-icon>
             <div class="info-content">
-              <h3>Address</h3>
-              <p>123 Le Loi Street, District 1, Ho Chi Minh City</p>
+              <div class="label">Address</div>
+              <div class="value">Hưng Phước 4/34, Khu phố Hưng Phước 1, Tân Hưng, Quận 7, TP. Hồ Chí Minh</div>
             </div>
           </div>
-          
+
           <div class="contact-info-item">
-            <div class="icon-circle">
-              <mat-icon>phone</mat-icon>
-            </div>
+            <mat-icon>phone</mat-icon>
             <div class="info-content">
-              <h3>Phone</h3>
-              <p>+84 28 1234 5678</p>
+              <div class="label">Phone</div>
+              <div class="value">0964 254 450</div>
             </div>
           </div>
-          
+
           <div class="contact-info-item">
-            <div class="icon-circle">
-              <mat-icon>email</mat-icon>
-            </div>
+            <mat-icon>email</mat-icon>
             <div class="info-content">
-              <h3>Email</h3>
-              <p>contact&#64;luxuryhotel.com</p>
+              <div class="label">Email</div>
+              <div class="value">contact&#64;centralhotelpmh.com</div>
             </div>
           </div>
-          
+
           <div class="contact-info-item">
-            <div class="icon-circle">
-              <mat-icon>access_time</mat-icon>
-            </div>
+            <mat-icon>access_time</mat-icon>
             <div class="info-content">
-              <h3>Working Hours</h3>
-              <p>24/7 - Always ready to serve you</p>
+              <div class="label">Working Hours</div>
+              <div class="value">24/7 — Always ready to serve you</div>
             </div>
           </div>
         </div>
       </div>
-      
-      <!-- Split Panel: Right Side Form -->
+
+      <!-- Right: form -->
       <div class="contact-form-panel">
-        <mat-card class="glassmorphic-card">
-          <mat-card-header>
-            <mat-card-title>Send us a Message</mat-card-title>
-          </mat-card-header>
-          
-          <mat-card-content>
-            <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Full Name</mat-label>
-                <input matInput formControlName="fullName" placeholder="John Doe">
-                <mat-error *ngIf="contactForm.controls.fullName.hasError('required')">
-                  Please enter your name
-                </mat-error>
-                <mat-error *ngIf="contactForm.controls.fullName.hasError('minlength')">
-                  Name must be at least 3 characters
-                </mat-error>
-              </mat-form-field>
-              
-              <div class="form-row">
-                <mat-form-field appearance="outline">
-                  <mat-label>Email</mat-label>
-                  <input matInput type="email" formControlName="email" placeholder="john@example.com">
-                  <mat-error *ngIf="contactForm.controls.email.hasError('required')">
-                    Please enter your email
-                  </mat-error>
-                  <mat-error *ngIf="contactForm.controls.email.hasError('email')">
-                    Invalid email format
-                  </mat-error>
-                </mat-form-field>
-                
-                <mat-form-field appearance="outline">
-                  <mat-label>Phone Number</mat-label>
-                  <input matInput type="tel" formControlName="phone" placeholder="0123456789">
-                  <mat-error *ngIf="contactForm.controls.phone.hasError('required')">
-                    Please enter your phone number
-                  </mat-error>
-                  <mat-error *ngIf="contactForm.controls.phone.hasError('pattern')">
-                    Must be 10-11 digits
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>How can we help you?</mat-label>
-                <textarea matInput rows="4" formControlName="message" placeholder="Write your message here..."></textarea>
-                <mat-error *ngIf="contactForm.controls.message.hasError('required')">
-                  Please enter your message
-                </mat-error>
-                <mat-error *ngIf="contactForm.controls.message.hasError('minlength')">
-                  Message must be at least 10 characters
-                </mat-error>
-              </mat-form-field>
-              
-              <button mat-raised-button color="primary" type="submit" class="submit-button mt-4 w-full">
-                <mat-icon>send</mat-icon>
-                Send Message
-              </button>
-            </form>
-          </mat-card-content>
-        </mat-card>
+        <div class="form-title">Send us a Message</div>
+        <form [formGroup]="contactForm" (ngSubmit)="submitForm()">
+          <mat-form-field appearance="outline" class="full-width noc-field">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName" placeholder="John Doe">
+            <mat-error *ngIf="contactForm.controls.fullName.hasError('required')">Please enter your name</mat-error>
+            <mat-error *ngIf="contactForm.controls.fullName.hasError('minlength')">Name must be at least 3 characters</mat-error>
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="noc-field">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" placeholder="john@example.com">
+              <mat-error *ngIf="contactForm.controls.email.hasError('required')">Please enter your email</mat-error>
+              <mat-error *ngIf="contactForm.controls.email.hasError('email')">Invalid email format</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="noc-field">
+              <mat-label>Phone Number</mat-label>
+              <input matInput type="tel" formControlName="phone" placeholder="0123456789">
+              <mat-error *ngIf="contactForm.controls.phone.hasError('required')">Please enter your phone number</mat-error>
+              <mat-error *ngIf="contactForm.controls.phone.hasError('pattern')">Must be 10-11 digits</mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width noc-field">
+            <mat-label>How can we help you?</mat-label>
+            <textarea matInput rows="4" formControlName="message" placeholder="Write your message here..."></textarea>
+            <mat-error *ngIf="contactForm.controls.message.hasError('required')">Please enter your message</mat-error>
+            <mat-error *ngIf="contactForm.controls.message.hasError('minlength')">Message must be at least 10 characters</mat-error>
+          </mat-form-field>
+
+          <button type="submit" class="send-btn">Send Message<mat-icon>arrow_forward</mat-icon></button>
+        </form>
       </div>
-      
+
     </div>
   </div>
 </section>

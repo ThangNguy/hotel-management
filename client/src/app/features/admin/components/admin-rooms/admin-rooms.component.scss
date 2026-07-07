@@ -1,110 +1,179 @@
+@use '../../../../../styles/variables' as *;
+@use '../../../../../styles/mixins' as *;
+
 .rooms-container {
+  padding: 36px;
+  max-width: 1240px;
+  margin: 0 auto;
+
+  @include responsive('sm') { padding: $spacing-4; }
+
+  /* ===== Header ===== */
   .header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    
+    gap: 24px;
+    margin-bottom: 32px;
+
+    @include responsive('sm') {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-3;
+    }
+
     .page-title {
       margin: 0;
-      color: #333;
-      font-weight: 500;
+      font-family: $font-primary;
+      font-size: 30px;
+      font-weight: 400;
+      color: $noc-text;
+      line-height: 1.15;
     }
-    
+
     button {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 8px;
+
+      mat-icon {
+        font-size: 18px;
+        height: 18px;
+        width: 18px;
+      }
     }
   }
-  
+
+  /* ===== Card / panel ===== */
   .table-card {
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    background: $noc-surface;
+    border: 1px solid $noc-hairline;
+    border-radius: $radius-lg;
+    box-shadow: none;
     overflow: hidden;
   }
-  
+
+  /* ===== Filter ===== */
   .filter-section {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    margin-bottom: 20px;
-    
+    margin-bottom: 24px;
+
     mat-form-field {
       width: 100%;
       max-width: 400px;
     }
   }
-  
+
+  /* ===== Loading ===== */
   .loading-indicator {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px 0;
-    
+    padding: $spacing-8 0;
+
     span {
       margin-top: 16px;
-      color: #666;
+      font-family: $font-secondary;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: $noc-text-50;
     }
   }
-  
+
+  /* ===== Table ===== */
   table {
     width: 100%;
-    
-    .mat-cell, .mat-header-cell {
-      padding: 12px 16px;
+    background: transparent;
+
+    .mat-mdc-header-cell,
+    th.mat-header-cell {
+      background: rgba(236, 229, 216, 0.04);
+      color: $noc-text-50;
+      font-family: $font-secondary;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 14px 16px;
+      border-bottom: 1px solid $noc-hairline;
     }
-    
-    .room-name-cell {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      
-      .room-thumbnail {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 4px;
-      }
-      
-      span {
-        font-weight: 500;
-      }
+
+    .mat-mdc-cell,
+    td.mat-cell {
+      padding: 16px;
+      border-bottom: 1px solid rgba(236, 229, 216, 0.06);
+      color: $noc-text-60;
+      font-family: $font-secondary;
+      font-size: 13px;
+      font-weight: 300;
     }
-    
-    .capacity-cell {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      
-      mat-icon {
-        font-size: 16px;
-        height: 16px;
-        width: 16px;
-        color: #666;
-      }
+
+    .mat-mdc-row {
+      transition: background-color 0.15s ease;
+      &:hover { background-color: rgba(236, 229, 216, 0.03); }
     }
-    
-    .amenities-list {
+
+    /* Name — display serif, primary ink */
+    td.mat-column-name {
+      font-family: $font-primary;
+      font-weight: 400;
+      color: $noc-text;
+      font-size: 15px;
+    }
+
+    /* Price — brass accent */
+    td.mat-column-price {
+      color: $noc-brass;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* ID — muted */
+    td.mat-column-id {
+      color: $noc-text-50;
+    }
+
+    .amenities-cell {
       max-width: 300px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      color: #666;
-      font-size: 0.9em;
+      color: $noc-text-50;
     }
-    
+
+    /* ===== Row actions ===== */
+    .mat-column-actions {
+      white-space: nowrap;
+      width: 1%;
+      text-align: right;
+    }
+
+    .action-btn {
+      mat-icon {
+        color: $noc-text-60;
+        transition: color $transition-base;
+      }
+    }
+
+    .edit-btn:hover mat-icon { color: $noc-brass; }
+    .delete-btn:hover mat-icon { color: $color-error; }
+
     .no-data {
       text-align: center;
-      padding: 24px;
-      color: #888;
+      padding: $spacing-6 $spacing-4;
+      color: $noc-text-50;
       font-style: italic;
     }
   }
-  
+
+  /* ===== Paginator ===== */
   mat-paginator {
-    margin-top: 20px;
-    border-top: 1px solid #eee;
+    background: transparent;
+    border-top: 1px solid $noc-hairline;
+    color: $noc-text-60;
   }
 }

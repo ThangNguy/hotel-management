@@ -11,58 +11,48 @@
 @import "tailwindcss/utilities.css" layer(utilities);
 
 @theme static {
-  /* ----- Brand palette: Deep Navy + Elegant Gold on warm cream ----- */
-  --color-navy-50: #ecf0ff;
-  --color-navy-100: #d7e3fc;
-  --color-navy-200: #bbc7df;
-  --color-navy-300: #a0abc3;
-  --color-navy-400: #8691a8;
-  --color-navy-500: #6c778e;
-  --color-navy-600: #535f74;
-  --color-navy-700: #3c475b;
-  --color-navy-800: #253144;
-  --color-navy-900: #101c2e;
-  --color-navy-950: #0a1628;
-  --color-navy: #0a1628;
+  /* ----- Nocturne surfaces: warm charcoal (dark) ----- */
+  --color-noc-bg: #16130f;       /* main background */
+  --color-noc-section: #1a1611;  /* section background */
+  --color-noc-surface: #1f1b15;  /* card / panel */
+  --color-noc-deep: #100d0a;     /* footer / sidebar */
 
-  --color-gold-100: #ffefce;
-  --color-gold-200: #ffe08f;
-  --color-gold-300: #e6c364;
-  --color-gold-400: #c9a84c;
-  --color-gold-500: #ac8d34;
-  --color-gold-600: #90741b;
-  --color-gold-700: #755b00;
-  --color-gold-800: #584400;
-  --color-gold-900: #3d2e00;
-  --color-gold: #c9a84c;
-  --color-gold-hover: #e0bc55;
+  /* ----- Ink ----- */
+  --color-noc-text: #ece5d8;
+  --color-noc-text-60: rgba(236, 229, 216, 0.6);
+  --color-noc-text-50: rgba(236, 229, 216, 0.5);
+  --color-noc-text-40: rgba(236, 229, 216, 0.4);
 
-  /* Warm neutrals (generated M3 neutral tones) */
-  --color-cream: #faf8f5;
-  --color-sand-50: #fff8f2;
-  --color-sand-100: #fbefe0;
-  --color-sand-200: #f2e7d8;
-  --color-sand-300: #ece1d2;
-  --color-ink: #1e293b;
-  --color-ink-soft: #64748b;
+  /* ----- Brass accent ----- */
+  --color-brass-100: #efe0c4;
+  --color-brass-300: #d8bc84;
+  --color-brass: #b08d4f;
+  --color-brass-hover: #c9a86a;
+  --color-brass-700: #8a6c39;
+  --color-on-brass: #16130f;
+
+  /* ----- Hairlines ----- */
+  --color-hairline: rgba(236, 229, 216, 0.08);
+  --color-hairline-strong: rgba(236, 229, 216, 0.1);
+  --color-brass-border: rgba(176, 141, 79, 0.35);
 
   /* Semantic (booking states, alerts) */
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-danger: #ef4444;
-  --color-info: #3b82f6;
+  --color-success: #34c294;
+  --color-warning: #e5a53d;
+  --color-danger: #e5766c;
+  --color-info: #7fb2f2;
 
   /* ----- Typography ----- */
-  --font-display: "Playfair Display", "Times New Roman", serif;
-  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Marcellus", "Times New Roman", serif;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
 
-  /* ----- Shape ----- */
-  --radius-button: 0.5rem;
-  --radius-card: 1rem;
+  /* ----- Shape — boutique: near-square ----- */
+  --radius-button: 0px;
+  --radius-card: 2px;
 
-  /* ----- Elevation: soft, layered, navy-tinted ----- */
-  --shadow-soft: 0 2px 8px rgba(10, 22, 40, 0.06), 0 1px 2px rgba(10, 22, 40, 0.04);
-  --shadow-card: 0 6px 24px -8px rgba(10, 22, 40, 0.12), 0 2px 6px -2px rgba(10, 22, 40, 0.06);
-  --shadow-lifted: 0 24px 48px -12px rgba(10, 22, 40, 0.18), 0 8px 16px -8px rgba(10, 22, 40, 0.08);
-  --shadow-gold: 0 10px 25px -5px rgba(201, 168, 76, 0.4);
+  /* ----- Elevation: deep, warm-black ----- */
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-card: 0 8px 24px -12px rgba(0, 0, 0, 0.55), 0 2px 6px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lifted: 0 28px 60px -20px rgba(0, 0, 0, 0.7), 0 8px 16px -8px rgba(0, 0, 0, 0.4);
+  --shadow-gold: 0 12px 30px -8px rgba(176, 141, 79, 0.35);
 }

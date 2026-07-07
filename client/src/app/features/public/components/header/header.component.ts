@@ -16,7 +16,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit {
-  title = signal('Luxury Hotel & Resort');
+  title = signal('Central Hotel');
   isScrolled = signal(false);
   isMobileMenuOpen = signal(false);
   currentLang = signal('en');
